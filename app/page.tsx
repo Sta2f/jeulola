@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Crown, Gamepad2, Map, Palette, Sparkles, TrafficCone } from 'lucide-react';
+import { Crown, Dog, Gamepad2, Map, Palette, Sparkles, TrafficCone } from 'lucide-react';
 import { TrafficLightGame } from './TrafficLightGame';
 import { MazeGame } from './MazeGame';
 import { ColoringGame } from './ColoringGame';
+import { EclairMazeGame } from './EclairMazeGame';
 
-type GameScreen = 'home' | 'traffic' | 'maze' | 'coloring';
+type GameScreen = 'home' | 'traffic' | 'maze' | 'coloring' | 'eclair-maze';
 
 export default function Home() {
   const [screen, setScreen] = useState<GameScreen>('home');
@@ -12,12 +13,13 @@ export default function Home() {
   if (screen === 'traffic') return <TrafficLightGame onBack={() => setScreen('home')} />;
   if (screen === 'maze') return <MazeGame onBack={() => setScreen('home')} />;
   if (screen === 'coloring') return <ColoringGame onBack={() => setScreen('home')} />;
+  if (screen === 'eclair-maze') return <EclairMazeGame onBack={() => setScreen('home')} />;
 
   return (
     <main className="games-home">
       <nav className="home-nav" aria-label="Navigation principale">
         <a className="home-brand" href="#games" aria-label="Le monde de Lola — accueil"><Crown /><span>Le monde de Lola</span></a>
-        <span className="game-count"><Gamepad2 /> 3 jeux</span>
+        <span className="game-count"><Gamepad2 /> 4 jeux</span>
       </nav>
 
       <section className="park-hero" id="games" aria-label="Choisir un jeu">
@@ -46,10 +48,14 @@ export default function Home() {
             <span className="sign-icon"><Palette /></span>
             <span><strong>Les coloriages</strong><small>Crée avec les couleurs</small></span>
           </button>
+          <button className="wood-sign sign-green" onClick={() => setScreen('eclair-maze')}>
+            <span className="sign-icon"><Dog /></span>
+            <span><strong>Éclair cherche Lola</strong><small>Le labyrinthe expert</small></span>
+          </button>
         </div>
       </section>
 
-      <footer className="home-footer"><span>Trois aventures sont déjà ouvertes</span><span>D’autres jeux arrivent bientôt</span></footer>
+      <footer className="home-footer"><span>Quatre aventures sont déjà ouvertes</span><span>D’autres jeux arrivent bientôt</span></footer>
     </main>
   );
 }
