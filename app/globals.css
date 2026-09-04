@@ -323,6 +323,8 @@ button { font: inherit; }
 .drawing-list button:hover { transform: translateX(3px); background: rgba(255,255,255,.7); }
 .drawing-list button.selected { color: #713667; background: linear-gradient(105deg,#ffd8eb,#f1ddff); box-shadow: inset 0 0 0 2px rgba(218,82,151,.18),0 7px 18px rgba(125,72,129,.1); }
 .drawing-list button > span:first-child { display: grid; width: 43px; height: 43px; border-radius: 13px; place-items: center; background: rgba(255,255,255,.68); box-shadow: inset 0 1px #fff; font-size: 1.45rem; }
+.drawing-list button > span:first-child { overflow: hidden; }
+.drawing-list button img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.08); }
 .drawing-list button > span:last-child { display: flex; min-width: 0; flex-direction: column; }
 .drawing-list strong { overflow: hidden; font-size: .83rem; text-overflow: ellipsis; white-space: nowrap; }
 .drawing-list small { overflow: hidden; margin-top: 3px; color: #9d7ba1; font-size: .7rem; text-overflow: ellipsis; white-space: nowrap; }
@@ -334,7 +336,7 @@ button { font: inherit; }
 .canvas-actions button { border-color: rgba(101,60,113,.18); color: #70467a; background: rgba(255,255,255,.57); }
 .magic-canvas { position: relative; width: min(100%,940px); margin: 0 auto; overflow: hidden; border: 7px solid rgba(255,255,255,.9); border-radius: 30px; background: #fffaf3; box-shadow: 0 27px 70px rgba(92,57,119,.2),inset 0 0 0 1px rgba(99,61,108,.1); isolation: isolate; }
 .magic-canvas::before { content: ''; position: absolute; z-index: 4; inset: 8px; border: 2px dashed rgba(202,98,157,.22); border-radius: 19px; pointer-events: none; }
-.magic-canvas svg { display: block; width: 100%; height: auto; touch-action: manipulation; }
+.magic-canvas canvas { display: block; width: 100%; height: auto; cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Ctext y='22' font-size='21'%3E🖌️%3C/text%3E%3C/svg%3E") 4 23,pointer; touch-action: manipulation; }
 .page-decor { fill: rgba(255,255,255,.78); stroke: rgba(102,73,122,.2); stroke-width: 3; }
 .color-zones path { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Ctext y='22' font-size='21'%3E🖌️%3C/text%3E%3C/svg%3E") 4 23,pointer; transition: fill 250ms ease,filter 250ms ease,transform 250ms ease; transform-origin: center; }
 .color-zones path:hover { filter: brightness(1.04) drop-shadow(0 3px 2px rgba(77,47,87,.18)); }
@@ -399,7 +401,7 @@ button { font: inherit; }
   .canvas-actions svg { width: 18px; height: 18px; }
   .magic-canvas { width: calc(100% + 2px); border-width: 3px; border-radius: 15px; box-shadow: 0 14px 35px rgba(92,57,119,.16); }
   .magic-canvas::before { inset: 4px; border-width: 1px; border-radius: 10px; }
-  .magic-canvas svg { touch-action: none; }
+  .magic-canvas canvas { touch-action: none; }
   .color-zones path { stroke-width: 3; }
   .palette-board { position: fixed; z-index: 30; right: 6px; bottom: max(6px,env(safe-area-inset-bottom)); left: 6px; gap: 8px; width: auto; margin: 0; padding: 9px 10px 10px; border-radius: 18px; background: rgba(255,246,252,.94); box-shadow: 0 8px 35px rgba(78,43,96,.25); }
   .palette-label { width: auto; min-height: 36px; font-size: .75rem; }
