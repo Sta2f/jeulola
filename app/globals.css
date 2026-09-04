@@ -52,14 +52,14 @@ button { font: inherit; }
 .park-hero { position: relative; width: min(1480px,100%); min-height: min(770px,calc(100svh - 135px)); margin: 0 auto; overflow: hidden; border: 4px solid #fffaf0; border-radius: 34px; box-shadow: 0 28px 70px rgba(74,82,115,.25),inset 0 0 0 2px rgba(89,55,100,.08); isolation: isolate; }
 .park-hero > img { position: absolute; inset: 0; z-index: -3; width: 100%; height: 100%; object-fit: cover; object-position: center; animation: banner-arrive 1.2s cubic-bezier(.2,.8,.2,1) both; }
 .park-vignette { position: absolute; inset: 0; z-index: -2; background: linear-gradient(90deg,rgba(61,33,61,.2),transparent 34%,transparent 60%,rgba(65,33,63,.13)),linear-gradient(0deg,rgba(45,28,50,.18),transparent 32%); pointer-events: none; }
-.welcome-board { position: absolute; left: clamp(24px,4.2vw,70px); top: clamp(32px,7vh,88px); width: min(390px,35vw); padding: clamp(23px,3vw,38px); border: 4px solid #7c4b31; border-radius: 22px 15px 24px 17px; color: #5d294e; background: linear-gradient(91deg,rgba(255,255,255,.08),transparent 15%),#fff0c7; box-shadow: 0 16px 0 #5c3827,0 25px 40px rgba(81,49,43,.28),inset 0 0 0 3px rgba(255,255,255,.48); transform: rotate(-2deg); }
+.welcome-board { position: absolute; right: clamp(22px,4vw,70px); top: 26px; width: min(330px,30vw); padding: 20px 25px; border: 4px solid #7c4b31; border-radius: 22px 15px 24px 17px; color: #5d294e; background: linear-gradient(91deg,rgba(255,255,255,.08),transparent 15%),#fff0c7; box-shadow: 0 12px 0 #5c3827,0 20px 35px rgba(81,49,43,.25),inset 0 0 0 3px rgba(255,255,255,.48); transform: rotate(1.5deg); }
 .welcome-board::before,.welcome-board::after { content: ''; position: absolute; top: 17px; width: 10px; height: 10px; border-radius: 50%; background: #8b5b39; box-shadow: inset 1px 1px 2px rgba(255,255,255,.5); }
 .welcome-board::before { left: 17px; }.welcome-board::after { right: 17px; }
 .welcome-board p { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; color: #e05592; font-size: .78rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
 .welcome-board p svg { width: 17px; }
-.welcome-board h1 { margin: 0; font-family: Georgia,serif; font-size: clamp(2.7rem,5vw,5.4rem); font-weight: 700; letter-spacing: -.075em; line-height: .82; text-shadow: 0 3px #fff9e9; }
-.welcome-board > span { display: block; margin-top: 20px; color: #7b5c62; font-family: "Trebuchet MS",sans-serif; font-size: .85rem; font-weight: 800; letter-spacing: .08em; }
-.signpost { position: absolute; z-index: 2; top: 50%; right: clamp(22px,4vw,70px); display: flex; width: min(390px,34vw); flex-direction: column; align-items: stretch; gap: 13px; transform: translateY(-47%); }
+.welcome-board h1 { margin: 0; font-family: Georgia,serif; font-size: clamp(2.4rem,3.5vw,3.8rem); font-weight: 700; letter-spacing: -.075em; line-height: .84; text-shadow: 0 3px #fff9e9; }
+.welcome-board > span { display: block; margin-top: 13px; color: #7b5c62; font-family: "Trebuchet MS",sans-serif; font-size: .78rem; font-weight: 800; letter-spacing: .08em; }
+.signpost { position: absolute; z-index: 2; top: 61%; right: clamp(22px,4vw,70px); display: flex; width: min(390px,34vw); flex-direction: column; align-items: stretch; gap: 13px; transform: translateY(-47%); }
 .signpost-pole { position: absolute; z-index: -1; top: 26px; bottom: -100px; left: 50%; width: 38px; border: 3px solid #754528; border-radius: 9px; background: linear-gradient(90deg,#74472d,#a76b3d 45%,#694028); box-shadow: 7px 9px 16px rgba(86,50,36,.28); transform: translateX(-50%); }
 .signpost-top { align-self: center; display: flex; align-items: center; gap: 10px; margin-bottom: 3px; padding: 12px 25px; border: 3px solid #713d56; border-radius: 15px; color: #4e2845; background: #ff71aa; box-shadow: 0 7px 0 #a73968,0 12px 25px rgba(91,47,70,.25),inset 0 2px rgba(255,255,255,.4); font-weight: 900; letter-spacing: .05em; text-transform: uppercase; }
 .signpost-top svg { width: 24px; }
@@ -176,9 +176,7 @@ button { font: inherit; }
   .park-hero { min-height: 800px; border-width: 3px; border-radius: 24px; }
   .park-hero > img { object-position: 32% center; }
   .park-vignette { background: linear-gradient(180deg,rgba(40,20,45,.04),transparent 30%,rgba(44,21,41,.22)); }
-  .welcome-board { top: 26px; left: 18px; width: min(310px,calc(100% - 36px)); padding: 21px 24px; }
-  .welcome-board h1 { font-size: clamp(2.8rem,15vw,4.2rem); }
-  .welcome-board > span { margin-top: 14px; }
+  .welcome-board { display: none; }
   .signpost { top: auto; right: 20px; bottom: 32px; width: min(350px,calc(100% - 50px)); transform: none; }
   .signpost-top { padding: 10px 20px; }
   .signpost-pole { bottom: -55px; }
