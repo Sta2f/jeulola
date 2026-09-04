@@ -109,6 +109,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   const [walking, setWalking] = useState(false);
   const walkTimers = useRef<number[]>([]);
   const boneCelebrationTimer = useRef<number | null>(null);
+  const dogStepCounter = useRef(0);
   const maze = useMemo(() => createHardMaze(LEVELS[level].seed), [level]);
 
   const fullPathLength = useMemo(() => findPath(maze, START, GOAL).length, [maze]);
@@ -138,7 +139,9 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
     setPosition((current) => {
       const next = { row: current.row + delta[0], col: current.col + delta[1] };
       if (maze[next.row]?.[next.col] !== 0) return current;
-      playSfx('sniff');
+      dogStepCounter.current += 1;
+      playSfx('step');
+      if (dogStepCounter.current % 5 === 0) playSfx('sniff');
       const key = cellKey(next);
       setMoves((count) => count + 1);
       setVisited((cells) => new Set(cells).add(key));
@@ -179,7 +182,8 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
     walkTimers.current = path.map((next, index) => window.setTimeout(() => {
       const key = cellKey(next);
       setPosition(next);
-      playSfx('step');
+      if (index % 3 === 0) playSfx('step');
+      if (index > 0 && index % 8 === 0) playSfx('sniff');
       setMoves((count) => count + 1);
       setVisited((cells) => new Set(cells).add(key));
       setBones((currentBones) => {
@@ -281,7 +285,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
           <div className="eclair-level-track" aria-label={`Progression : niveau ${level + 1} sur ${LEVELS.length}`}>
             {LEVELS.map((item, index) => <span key={item.seed} className={index < level ? 'complete' : index === level ? 'current' : ''}>{index + 1}</span>)}
           </div>
-          <div className="eclair-meter"><span style={{ width: `${progress}%` }} /><div><small>Exploration</small><strong>{progress}%</strong></div></div>
+          <div className="eclair-meter"><span style={{ transform: `scaleX(${progress / 100})` }} /><div><small>Exploration</small><strong>{progress}%</strong></div></div>
           <Button className="hint-button" onClick={addHint}><Lightbulb /> Indice : pose un os</Button>
           <p className="hint-copy"><Bone /> Chaque os apparaît sur le bon chemin.</p>
           <Button variant="outline" className="eclair-reset" onClick={resetLevel}><RotateCcw /> Recommencer</Button>

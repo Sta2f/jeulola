@@ -65,15 +65,14 @@ function noiseAt(x: number, y: number) {
   return value - Math.floor(value);
 }
 
-function paintColor(paint: Paint, x: number, y: number, width: number, height: number) {
-  const colors = paint.colors.map(hexToRgb);
-  if (paint.effect === 'solid') return colors[0];
-  if (paint.effect === 'rainbow') {
+function paintColor(effect: PaintEffect, colors: readonly (readonly number[])[], x: number, y: number, width: number, height: number) {
+  if (effect === 'solid') return colors[0];
+  if (effect === 'rainbow') {
     const position = ((x / width) * .72 + (y / height) * .28) * (colors.length - 1);
     const index = Math.min(colors.length - 2, Math.floor(position));
     return mixColors(colors[index], colors[index + 1], position - index);
   }
-  if (paint.effect === 'glitter') {
+  if (effect === 'glitter') {
     const grain = noiseAt(x, y);
     if (grain > .975 || (x + y * 3) % 67 === 0) return [255, 255, 255, 255];
     if (grain > .91) return colors[1];
@@ -97,6 +96,7 @@ function floodFill(imageData: ImageData, startX: number, startY: number, paint: 
   const tolerance = 22;
   const seen = new Uint8Array(width * height);
   const stack: number[] = [];
+  const colors = paint.colors.map(hexToRgb);
   const matchesTarget = (pixel: number) => {
     const index = pixel * 4;
     return Math.abs(data[index] - target[0]) <= tolerance
@@ -116,7 +116,7 @@ function floodFill(imageData: ImageData, startX: number, startY: number, paint: 
     const pixel = stack.pop()!;
     const index = pixel * 4;
     const x = pixel % width;
-    const color = paintColor(paint, x, Math.floor(pixel / width), width, height);
+    const color = paintColor(paint.effect, colors, x, Math.floor(pixel / width), width, height);
     data[index] = color[0];
     data[index + 1] = color[1];
     data[index + 2] = color[2];
@@ -273,7 +273,7 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
           </div>
 
           <div className="magic-canvas">
-            <canvas ref={canvasRef} width="1000" height="720" onPointerDown={paintAt} aria-label={`Coloriage interactif : ${drawing.title}`} />
+            <canvas ref={canvasRef} width="800" height="576" onPointerDown={paintAt} aria-label={`Coloriage interactif : ${drawing.title}`} />
             <div className="sparkle-burst" key={sparkle} aria-hidden="true">
               {sparkleDots.map((dot, index) => <i key={index} style={{ '--x': `${Math.cos(dot.angle) * dot.distance}px`, '--y': `${Math.sin(dot.angle) * dot.distance}px`, '--delay': `${index * 12}ms` } as React.CSSProperties}>✦</i>)}
             </div>

@@ -131,7 +131,7 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
     setWalking(true);
     walkTimers.current = path.map((next, index) => window.setTimeout(() => {
       setPosition(next);
-      playSfx('step');
+      if (index % 2 === 0) playSfx('step');
       setMoves((count) => count + 1);
       setVisited((cells) => new Set(cells).add(`${next.row}-${next.col}`));
       if (next.row === level.goal.row && next.col === level.goal.col) {

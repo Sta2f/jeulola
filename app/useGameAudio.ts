@@ -9,6 +9,7 @@ const MUSIC_NOTES: Record<MusicTheme, number[]> = {
   coloring: [329.63, 392, 493.88, 659.25, 523.25, 392],
   traffic: [220, 277.18, 329.63, 277.18],
 };
+const noiseBuffers = new WeakMap<AudioContext, AudioBuffer>();
 
 function audioContextClass() {
   return window.AudioContext ?? (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
@@ -28,9 +29,13 @@ function tone(context: AudioContext, frequency: number, start: number, duration:
 }
 
 function noise(context: AudioContext, start: number, duration: number, frequency: number, volume: number) {
-  const buffer = context.createBuffer(1, Math.ceil(context.sampleRate * duration), context.sampleRate);
-  const channel = buffer.getChannelData(0);
-  for (let index = 0; index < channel.length; index += 1) channel[index] = Math.random() * 2 - 1;
+  let buffer = noiseBuffers.get(context);
+  if (!buffer) {
+    buffer = context.createBuffer(1, Math.ceil(context.sampleRate * .45), context.sampleRate);
+    const channel = buffer.getChannelData(0);
+    for (let index = 0; index < channel.length; index += 1) channel[index] = Math.random() * 2 - 1;
+    noiseBuffers.set(context, buffer);
+  }
   const source = context.createBufferSource();
   const filter = context.createBiquadFilter();
   const gain = context.createGain();
@@ -42,7 +47,7 @@ function noise(context: AudioContext, start: number, duration: number, frequency
   gain.gain.exponentialRampToValueAtTime(volume, start + .012);
   gain.gain.exponentialRampToValueAtTime(.0001, start + duration);
   source.connect(filter).connect(gain).connect(context.destination);
-  source.start(start);
+  source.start(start, 0, duration);
 }
 
 export function useGameAudio(theme: MusicTheme) {
