@@ -10,11 +10,18 @@ type Scene = {
   crop: string;
   atlasX: number;
   atlasY: number;
+  difficulty?: string;
+  hitRadius?: number;
+  rabbitSize?: number;
+  hintSize?: number;
+  hintDuration?: number;
+  hotDistance?: number;
+  warmDistance?: number;
 };
 
 const SCENES: Scene[] = [
   { name: 'Le jardin géant', clue: 'Regarde près du petit tunnel, sous les fleurs.', x: 19, y: 72, crop: 'inset(0 0 46% 0)', atlasX: 0, atlasY: 0 },
-  { name: 'La chambre cabane', clue: 'Une oreille dépasse près des coussins de la cabane.', x: 58, y: 62, crop: 'inset(0 0 43% 0)', atlasX: 1, atlasY: 0 },
+  { name: 'La chambre cabane', clue: 'Betty s’est rapprochée d’un autre animal… observe les petits détails.', x: 84, y: 67, crop: 'inset(0 58% 72% 0)', atlasX: 1, atlasY: 0, difficulty: 'Difficile', hitRadius: 6.2, rabbitSize: 13, hintSize: 18, hintDuration: 2100, hotDistance: 13, warmDistance: 23 },
   { name: 'Le village bonbon', clue: 'Cherche du côté des tonneaux remplis de gourmandises.', x: 82, y: 72, crop: 'inset(0 42% 0 0)', atlasX: 2, atlasY: 0 },
   { name: 'La forêt des lucioles', clue: 'Betty adore les champignons qui brillent.', x: 27, y: 69, crop: 'inset(0 0 50% 0)', atlasX: 3, atlasY: 0 },
   { name: 'La ferme ensoleillée', clue: 'Il y a quelque chose de touffu près des bottes de foin.', x: 62, y: 47, crop: 'inset(0 0 48% 0)', atlasX: 4, atlasY: 0 },
@@ -58,7 +65,7 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
     const x = ((event.clientX - rect.left) / rect.width) * 100;
     const y = ((event.clientY - rect.top) / rect.height) * 100;
     const distance = Math.hypot(x - scene.x, y - scene.y);
-    if (distance <= 10.5) {
+    if (distance <= (scene.hitRadius ?? 10.5)) {
       setFound(true);
       setMarker(null);
       playSfx('win');
@@ -66,7 +73,7 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
     }
     const nextChances = chances - 1;
     setChances(nextChances);
-    setMarker({ x, y, warmth: distance < 19 ? 'hot' : distance < 32 ? 'warm' : 'cold', id: Date.now() });
+    setMarker({ x, y, warmth: distance < (scene.hotDistance ?? 19) ? 'hot' : distance < (scene.warmDistance ?? 32) ? 'warm' : 'cold', id: Date.now() });
     playSfx('wrong');
     if (nextChances === 0) setLost(true);
   };
@@ -77,7 +84,7 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
     setHintUsed(true);
     setHintActive(true);
     playSfx('hint');
-    hintTimer.current = window.setTimeout(() => setHintActive(false), 3800);
+    hintTimer.current = window.setTimeout(() => setHintActive(false), scene.hintDuration ?? 3800);
   };
 
   const resetRound = () => {
@@ -125,7 +132,7 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
       </div>
     </section> : <section className="betty-game">
       <aside className="betty-panel">
-        <span className="betty-level">Décor {level + 1} sur 10</span>
+        <span className="betty-level">Décor {level + 1} sur 10{scene.difficulty ? ` · ${scene.difficulty}` : ''}</span>
         <h2>{scene.name}</h2>
         <p>Regarde partout, puis touche l’endroit où Betty pourrait être cachée.</p>
         <div className="betty-hearts" aria-label={`${chances} chances restantes`}>
@@ -143,8 +150,8 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
           aria-label={`Chercher Betty dans ${scene.name}`}
         >
           {/* oxlint-disable-next-line next/no-img-element -- Optimized project-local generated character in a Vite app. */}
-          <img className={`hidden-betty ${found ? 'is-found' : ''}`} style={{ left: `${scene.x}%`, top: `${scene.y}%`, clipPath: found ? 'none' : scene.crop }} src="/assets/betty-rabbit.webp" alt="" />
-          {hintActive && <span className="betty-hint-ring" style={{ left: `${scene.x}%`, top: `${scene.y}%` }}><Lightbulb /></span>}
+          <img className={`hidden-betty ${found ? 'is-found' : ''}`} style={{ left: `${scene.x}%`, top: `${scene.y}%`, width: found ? '18%' : `${scene.rabbitSize ?? 18}%`, clipPath: found ? 'none' : scene.crop }} src="/assets/betty-rabbit.webp" alt="" />
+          {hintActive && <span className="betty-hint-ring" style={{ left: `${scene.x}%`, top: `${scene.y}%`, width: `${scene.hintSize ?? 32}%` }}><Lightbulb /></span>}
           {marker && <span key={marker.id} className={`betty-marker ${marker.warmth}`} style={{ left: `${marker.x}%`, top: `${marker.y}%` }}><span>{marker.warmth === 'hot' ? 'Très chaud !' : marker.warmth === 'warm' ? 'Tu chauffes…' : 'C’est froid !'}</span></span>}
         </button>
 
