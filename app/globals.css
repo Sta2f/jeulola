@@ -49,6 +49,8 @@ button { font: inherit; }
 .home-brand svg { width: 23px; color: #ef9f27; }
 .game-count { display: flex; align-items: center; gap: 7px; padding: 8px 12px; border-radius: 10px; color: #63345f; background: #ffe1ee; font-size: .8rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .game-count svg { width: 17px; }
+.home-nav-actions { display: flex; align-items: center; gap: 9px; }
+.home-sound-toggle { width: 38px; height: 38px; border-radius: 10px; }
 .park-hero { position: relative; width: min(1480px,100%); min-height: min(770px,calc(100svh - 135px)); margin: 0 auto; overflow: hidden; border: 4px solid #fffaf0; border-radius: 34px; box-shadow: 0 28px 70px rgba(74,82,115,.25),inset 0 0 0 2px rgba(89,55,100,.08); isolation: isolate; }
 .park-hero > img { position: absolute; inset: 0; z-index: -3; width: 100%; height: 100%; object-fit: cover; object-position: center; animation: banner-arrive 1.2s cubic-bezier(.2,.8,.2,1) both; }
 .park-vignette { position: absolute; inset: 0; z-index: -2; background: linear-gradient(90deg,rgba(61,33,61,.2),transparent 34%,transparent 60%,rgba(65,33,63,.13)),linear-gradient(0deg,rgba(45,28,50,.18),transparent 32%); pointer-events: none; }

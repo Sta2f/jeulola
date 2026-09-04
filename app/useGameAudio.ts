@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export type SoundEffect = 'step' | 'sniff' | 'bark' | 'bone' | 'sparkle' | 'paint' | 'erase' | 'select' | 'traffic' | 'win' | 'wrong' | 'hint';
-type MusicTheme = 'forest' | 'dog' | 'coloring' | 'traffic' | 'hide';
+type MusicTheme = 'forest' | 'dog' | 'coloring' | 'traffic' | 'hide' | 'home';
 
 const MUSIC_NOTES: Record<MusicTheme, number[]> = {
   forest: [261.63, 329.63, 392, 523.25, 392, 329.63],
@@ -9,6 +9,11 @@ const MUSIC_NOTES: Record<MusicTheme, number[]> = {
   coloring: [329.63, 392, 493.88, 659.25, 523.25, 392],
   traffic: [220, 277.18, 329.63, 277.18],
   hide: [293.66, 369.99, 440, 587.33, 493.88, 369.99],
+  home: [261.63, 329.63, 392, 523.25],
+};
+const FILE_MUSIC: Partial<Record<MusicTheme, { src: string; volume: number }>> = {
+  forest: { src: '/assets/audio/glowing-maze-path.mp3', volume: .34 },
+  home: { src: '/assets/audio/miniature-wonderland.mp3', volume: .3 },
 };
 const noiseBuffers = new WeakMap<AudioContext, AudioBuffer>();
 
@@ -54,7 +59,7 @@ function noise(context: AudioContext, start: number, duration: number, frequency
 export function useGameAudio(theme: MusicTheme) {
   const [soundOn, setSoundOn] = useState(true);
   const contextRef = useRef<AudioContext | null>(null);
-  const forestMusicRef = useRef<HTMLAudioElement | null>(null);
+  const fileMusicRef = useRef<HTMLAudioElement | null>(null);
   const musicTimer = useRef<number | null>(null);
   const noteIndex = useRef(0);
 
@@ -68,13 +73,14 @@ export function useGameAudio(theme: MusicTheme) {
   const stopMusic = useCallback(() => {
     if (musicTimer.current !== null) window.clearInterval(musicTimer.current);
     musicTimer.current = null;
-    forestMusicRef.current?.pause();
+    fileMusicRef.current?.pause();
   }, []);
 
   const beginMusic = useCallback(() => {
-    if (theme === 'forest') {
-      forestMusicRef.current ??= Object.assign(new Audio('/assets/audio/glowing-maze-path.mp3'), { loop: true, volume: .34, preload: 'auto' });
-      if (forestMusicRef.current.paused) void forestMusicRef.current.play().catch(() => undefined);
+    const fileMusic = FILE_MUSIC[theme];
+    if (fileMusic) {
+      fileMusicRef.current ??= Object.assign(new Audio(fileMusic.src), { loop: true, volume: fileMusic.volume, preload: 'auto' });
+      if (fileMusicRef.current.paused) void fileMusicRef.current.play().catch(() => undefined);
       return;
     }
     if (musicTimer.current !== null) return;
@@ -139,7 +145,7 @@ export function useGameAudio(theme: MusicTheme) {
 
   const toggleSound = useCallback(() => {
     setSoundOn((current) => {
-      const context = theme === 'forest' ? null : ensureContext();
+      const context = FILE_MUSIC[theme] ? null : ensureContext();
       if (current) {
         stopMusic();
         if (context) void context.suspend();
@@ -154,9 +160,9 @@ export function useGameAudio(theme: MusicTheme) {
 
   useEffect(() => () => {
     stopMusic();
-    if (forestMusicRef.current) forestMusicRef.current.currentTime = 0;
+    if (fileMusicRef.current) fileMusicRef.current.currentTime = 0;
     if (contextRef.current) void contextRef.current.close();
   }, [stopMusic]);
 
-  return { soundOn, startAudio: startMusic, playSfx, toggleSound };
+  return { soundOn, startAudio: startMusic, stopAudio: stopMusic, playSfx, toggleSound };
 }
