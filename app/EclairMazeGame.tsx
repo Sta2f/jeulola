@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Bone, ChevronLeft, Footprints, Heart, Lightbulb, RotateCcw, Sparkles } from 'lucide-react';
 import { Button } from '../components/ui/button';
 
@@ -91,6 +91,8 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   const [boneFound, setBoneFound] = useState('');
   const [won, setWon] = useState(false);
   const [showWinCard, setShowWinCard] = useState(false);
+  const [walking, setWalking] = useState(false);
+  const walkTimers = useRef<number[]>([]);
 
   const fullPathLength = useMemo(() => findPath(START, GOAL).length, []);
   const progress = Math.min(100, Math.round((visited.size / fullPathLength) * 100));
@@ -102,7 +104,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   }, [won]);
 
   const move = useCallback((direction: Direction) => {
-    if (won) return;
+    if (won || walking) return;
     const delta = { up: [-1, 0], down: [1, 0], left: [0, -1], right: [0, 1] }[direction];
     setPosition((current) => {
       const next = { row: current.row + delta[0], col: current.col + delta[1] };
@@ -121,7 +123,61 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
       if (next.row === GOAL.row && next.col === GOAL.col) setWon(true);
       return next;
     });
-  }, [won]);
+  }, [walking, won]);
+
+  const walkStraight = useCallback((targetRow: number, targetCol: number) => {
+    if (won || walking || (targetRow !== position.row && targetCol !== position.col)) return;
+    const rowStep = Math.sign(targetRow - position.row);
+    const colStep = Math.sign(targetCol - position.col);
+    const path: Position[] = [];
+    let cursor = position;
+    while (cursor.row !== targetRow || cursor.col !== targetCol) {
+      const next = { row: cursor.row + rowStep, col: cursor.col + colStep };
+      if (HARD_MAZE[next.row]?.[next.col] !== 0) break;
+      path.push(next);
+      cursor = next;
+      if (next.row === GOAL.row && next.col === GOAL.col) break;
+    }
+    if (!path.length) return;
+
+    setWalking(true);
+    walkTimers.current = path.map((next, index) => window.setTimeout(() => {
+      const key = cellKey(next);
+      setPosition(next);
+      setMoves((count) => count + 1);
+      setVisited((cells) => new Set(cells).add(key));
+      setBones((currentBones) => {
+        if (!currentBones.has(key)) return currentBones;
+        const remaining = new Set(currentBones);
+        remaining.delete(key);
+        setBoneFound(key);
+        window.setTimeout(() => setBoneFound(''), 650);
+        return remaining;
+      });
+      if (next.row === GOAL.row && next.col === GOAL.col) setWon(true);
+      if (index === path.length - 1) {
+        walkTimers.current = [];
+        setWalking(false);
+      }
+    }, (index + 1) * 95));
+  }, [position, walking, won]);
+
+  const onBoardPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === 'mouse') return;
+    event.preventDefault();
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const targetCol = Math.min(COLS - 1, Math.max(0, Math.floor((event.clientX - bounds.left) / bounds.width * COLS)));
+    const targetRow = Math.min(ROWS - 1, Math.max(0, Math.floor((event.clientY - bounds.top) / bounds.height * ROWS)));
+    walkStraight(targetRow, targetCol);
+  };
+
+  const stopWalking = useCallback(() => {
+    walkTimers.current.forEach((timer) => window.clearTimeout(timer));
+    walkTimers.current = [];
+    setWalking(false);
+  }, []);
+
+  useEffect(() => stopWalking, [stopWalking]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -146,6 +202,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   };
 
   const reset = () => {
+    stopWalking();
     setPosition(START);
     setMoves(0);
     setVisited(new Set([cellKey(START)]));
@@ -175,7 +232,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
         </aside>
 
         <div className="eclair-stage">
-          <div className="eclair-board" style={{ '--cols': COLS, '--rows': ROWS } as React.CSSProperties} aria-label="Labyrinthe expert d’Éclair">
+          <div className={`eclair-board ${walking ? 'is-walking' : ''}`} onPointerDown={onBoardPointerDown} style={{ '--cols': COLS, '--rows': ROWS } as React.CSSProperties} aria-label="Labyrinthe expert d’Éclair">
             {/* oxlint-disable-next-line next/no-img-element -- Project-local generated game artwork. */}
             <img className="eclair-backdrop" src="/assets/eclair-forest.webp" alt="" aria-hidden="true" />
             <div className="eclair-grid">
@@ -199,6 +256,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
             </div>
           </div>
 
+          <p className="tap-to-walk eclair-tap-help">Touche une case en ligne droite : Éclair suit le chemin et s’arrête devant les arbres.</p>
           <div className="eclair-controls" aria-label="Commandes directionnelles">
             <button className="touch-up" onClick={() => move('up')} aria-label="Aller vers le haut"><ArrowUp /></button>
             <button className="touch-left" onClick={() => move('left')} aria-label="Aller à gauche"><ArrowLeft /></button>

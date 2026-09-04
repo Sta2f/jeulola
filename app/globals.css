@@ -113,6 +113,8 @@ button { font: inherit; }
 .maze-reset { height: 43px; margin-top: 20px; padding: 0 15px; border-color: rgba(255,255,255,.15); color: #e6ece8; background: rgba(255,255,255,.04); }
 .maze-stage { min-width: 0; }
 .maze-board { position: relative; width: 100%; overflow: hidden; border: 1px solid rgba(235,213,153,.25); border-radius: 25px; background: #173126; box-shadow: 0 40px 110px rgba(0,0,0,.54), inset 0 0 0 1px rgba(255,255,255,.05); isolation: isolate; }
+.maze-board,.eclair-board { touch-action: manipulation; }
+.maze-board.is-walking,.eclair-board.is-walking { box-shadow: 0 38px 100px rgba(0,0,0,.5),0 0 0 3px rgba(234,190,94,.22); }
 .maze-backdrop { position: absolute; inset: 0; z-index: -3; width: 100%; height: 100%; object-fit: cover; }
 .maze-shade { position: absolute; inset: 0; z-index: -2; background: linear-gradient(rgba(4,18,13,.23),rgba(3,16,11,.52)), radial-gradient(circle at 80% 8%, transparent 0,rgba(2,13,9,.3) 55%); }
 .maze-grid { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(var(--cols),1fr); grid-template-rows: repeat(var(--rows),1fr); }
@@ -131,6 +133,7 @@ button { font: inherit; }
 .touch-controls button:active { transform: translateY(2px) scale(.96); background: rgba(205,179,102,.2); }
 .touch-controls svg { width: 21px; }
 .touch-up { grid-column: 2; }.touch-left { grid-row: 2; grid-column: 1; }.touch-down { grid-row: 2; grid-column: 2; }.touch-right { grid-row: 2; grid-column: 3; }
+.tap-to-walk { display: none; margin: 11px auto 0; color: #a5b4ad; font-size: .78rem; font-weight: 700; text-align: center; }
 .win-screen { position: fixed; z-index: 20; inset: 0; display: grid; width: 100%; max-width: none; height: 100%; max-height: none; margin: 0; padding: 24px; border: 0; place-items: center; color: #f9f2de; background: rgba(3,12,8,.8); backdrop-filter: blur(16px); }
 .win-card { width: min(520px,100%); padding: clamp(34px,7vw,58px); border: 1px solid rgba(232,207,134,.28); border-radius: 28px; background: radial-gradient(circle at 50% 0,rgba(178,147,68,.2),transparent 40%),#11251c; box-shadow: 0 45px 120px rgba(0,0,0,.55); text-align: center; }
 .win-crown { display: grid; width: 72px; height: 72px; margin: 0 auto 22px; border-radius: 50%; place-items: center; color: #efd071; background: rgba(228,197,111,.1); box-shadow: 0 0 45px rgba(228,197,111,.18); }
@@ -155,6 +158,7 @@ button { font: inherit; }
   .key-hint { display: none; }
   .maze-reset { grid-row: 2 / 4; grid-column: 2; }
   .touch-controls { display: grid; }
+  .tap-to-walk { display: block; }
 }
 
 @media (max-width: 600px) {
@@ -498,6 +502,7 @@ button { font: inherit; }
   .hint-copy { grid-row: 4; grid-column: 2; }
   .eclair-reset { grid-row: 4; grid-column: 1; justify-self: start; margin-top: 0; }
   .eclair-controls { display: grid; }
+  .eclair-tap-help { display: block; color: #a5b7af; }
 }
 
 @media (max-width: 620px) {
