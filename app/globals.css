@@ -421,7 +421,7 @@ button { font: inherit; }
 @keyframes complete-arrive { from { opacity: 0; transform: translate(-50%,-50%) scale(.7) rotate(-3deg); } }
 @keyframes magic-paint-flow { 0%,100% { background-position: 0 50%; } 50% { background-position: 100% 50%; } }
 
-@media (max-width: 980px) {
+@media (max-width: 1180px) {
   .coloring-page { padding-bottom: 190px; }
   .coloring-workshop { grid-template-columns: minmax(0,1fr); }
   .drawing-picker { min-width: 0; overflow: hidden; }
@@ -534,7 +534,7 @@ button { font: inherit; }
 @keyframes betty-peek { 50% { transform: translateY(-9px) rotate(2deg); } }
 @keyframes betty-confetti-fall { to { transform: translateY(900px) rotate(var(--spin)); } }
 
-@media (max-width: 900px) {
+@media (max-width: 1180px) {
   .betty-header { grid-template-columns: auto 1fr auto; min-height: 68px; padding: 8px 12px; }.betty-header p { display: none; }.betty-header h1 { font-size: 1.15rem; }
   .betty-intro { grid-template-columns: minmax(250px,.8fr) 1.2fr; min-height: calc(100svh - 68px); gap: 25px; padding: 24px 0 32px; }.betty-intro-art { min-height: 450px; }.betty-intro-copy h2 { font-size: clamp(2.4rem,6vw,4rem); }
   .betty-game { grid-template-columns: minmax(190px,270px) minmax(300px,480px); min-height: calc(100svh - 68px); gap: 25px; padding: 18px 0 28px; }.betty-panel h2 { font-size: 2.5rem; }.betty-panel > p { font-size: .88rem; }.betty-hearts { grid-template-columns: repeat(5,27px); margin: 15px 0; }.betty-hearts svg { width: 23px; }.betty-scene { border-width: 4px; border-radius: 24px; }
@@ -622,7 +622,7 @@ button { font: inherit; }
 @keyframes bone-celebration-zoom { 0% { opacity: 0; transform: scale(.18) rotate(-7deg); } 35% { opacity: 1; transform: scale(.72) rotate(3deg); } 75% { transform: scale(.92) rotate(-2deg); } 100% { opacity: 0; transform: scale(1.08) translateY(5%); } }
 @keyframes bone-celebration-copy { 0%,18% { opacity: 0; transform: translateY(15px) scale(.8); } 35%,78% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-10px); } }
 
-@media (max-width: 1050px) {
+@media (max-width: 1050px) and (orientation: portrait) {
   .eclair-layout { grid-template-columns: 1fr; width: min(920px,calc(100% - 28px)); }
   .eclair-story { display: grid; grid-template-columns: 1fr minmax(220px,300px); gap: 8px 24px; align-items: end; }
   .expert-mark,.eclair-story h2,.eclair-story > p:first-of-type { grid-column: 1; }
@@ -672,6 +672,90 @@ button { font: inherit; }
   .betty-scene { contain: layout paint; }
   .hidden-betty,.betty-result > img,.betty-intro-art img { filter: none; }
   .betty-confetti i:nth-child(even) { display: none; }
+}
+
+/* Tablet tuning: keep the games large enough to play without clipping the controls. */
+@media (min-width: 701px) and (max-width: 1180px) {
+  .games-home { overflow-x: hidden; overflow-y: auto; padding: 10px 12px 18px; }
+  .home-nav { min-height: 54px; margin-bottom: 10px; }
+  .park-hero { min-height: max(620px,calc(100dvh - 112px)); border-radius: 26px; }
+  .welcome-board { top: 8px; right: 14px; width: min(350px,38vw); }
+  .signpost { top: auto; right: 26px; bottom: 22px; width: min(350px,38vw); gap: 7px; transform: none; }
+  .signpost-top { min-height: 45px; margin-bottom: 1px; padding: 8px 18px; }
+  .signpost-top svg { width: 21px; }
+  .signpost-pole { top: 18px; bottom: -55px; width: 31px; }
+  .wood-sign { grid-template-columns: 43px 1fr; gap: 9px; min-height: 58px; padding: 7px 36px 7px 12px; }
+  .wood-sign::after { right: -26px; border-top-width: 27px; border-bottom-width: 27px; border-left-width: 27px; }
+  .sign-icon { width: 40px; height: 40px; }
+  .sign-icon svg { width: 22px; height: 22px; }
+  .wood-sign strong { font-size: clamp(.9rem,1.7vw,1.08rem); }
+  .wood-sign small { font-size: .66rem; }
+
+  .topbar { min-height: 68px; padding: 9px 18px; }
+  .simulation { width: min(960px,calc(100% - 28px)); min-height: calc(100dvh - 68px); gap: clamp(24px,5vw,54px); padding: 22px 0 28px; }
+  .traffic-scene { min-height: auto; }
+  .traffic-light { width: clamp(165px,20vw,205px); gap: 11px; padding: 21px; border-radius: 31px; }
+  .pole { width: 38px; height: 88px; }
+  .pole-base { width: 116px; height: 20px; }
+  .control-panel h2 { font-size: clamp(3.2rem,7vw,5.4rem); }
+  .phase-copy { margin: 16px 0 20px; }
+  .countdown { width: 124px; height: 124px; margin-bottom: 20px; }
+  .countdown::before { width: 108px; height: 108px; }
+  .countdown strong { font-size: 3rem; }
+
+  .maze-page { overflow-x: hidden; overflow-y: auto; }
+  .maze-header { min-height: 70px; padding: 9px 16px; }
+  .level-trail { padding: 8px 14px; }
+  .level-trail button { width: 30px; height: 30px; }
+  .maze-layout { gap: 18px; width: min(1080px,calc(100% - 24px)); min-height: auto; padding: 15px 0 24px; }
+  .maze-story h2 { font-size: clamp(1.75rem,3.6vw,2.65rem); }
+  .maze-story > p { margin: 12px 0 14px; font-size: .86rem; line-height: 1.48; }
+  .chapter-mark { margin-bottom: 10px; }
+  .difficulty-badge { margin: 0 0 12px; }
+  .key-hint { padding: 10px 0; }
+  .maze-reset { margin-top: 12px; }
+  .maze-board { max-width: 100%; border-radius: 19px; }
+
+  .maze-menu-content { gap: 18px; width: min(1050px,calc(100% - 24px)); }
+  .maze-adventure { height: min(590px,calc(100dvh - 110px)); min-height: 390px; border-radius: 24px; }
+  .maze-adventure > span { padding: 22px 24px 28px; }
+  .maze-adventure strong { font-size: clamp(1.8rem,3.5vw,2.7rem); }
+
+  .coloring-workshop { gap: 12px; padding: 14px 0 34px; }
+  .drawing-list button { flex-basis: 168px; }
+  .magic-canvas { width: min(100%,820px); }
+  .palette-board { bottom: max(8px,env(safe-area-inset-bottom)); max-height: 168px; overflow-y: auto; }
+
+  .betty-game { grid-template-columns: minmax(205px,290px) minmax(320px,520px); gap: 24px; width: min(930px,calc(100% - 24px)); padding: 16px 0 24px; }
+  .betty-stage-wrap { width: min(100%,calc(65dvh - 56px)); }
+  .betty-panel h2 { font-size: clamp(2rem,4vw,2.8rem); }
+  .betty-panel > p { margin: 8px 0; }
+}
+
+@media (min-width: 701px) and (max-width: 1180px) and (orientation: landscape) {
+  .simulation { grid-template-columns: minmax(230px,.75fr) minmax(350px,1.25fr); }
+  .maze-layout { grid-template-columns: minmax(205px,.4fr) minmax(0,1.6fr); align-items: center; }
+  .maze-stage { min-width: 0; }
+  .eclair-header { min-height: 70px; padding: 9px 16px; }
+  .eclair-layout { grid-template-columns: minmax(220px,.42fr) minmax(0,1.58fr); gap: 22px; width: min(1100px,calc(100% - 24px)); min-height: calc(100dvh - 70px); padding: 15px 0 22px; }
+  .eclair-story h2 { font-size: clamp(2rem,4.2vw,3.2rem); }
+  .eclair-story > p:first-of-type { margin: 12px 0; font-size: .86rem; line-height: 1.45; }
+  .expert-mark { margin-bottom: 10px; }
+  .eclair-meter { height: 38px; margin-bottom: 10px; }
+  .hint-button { height: 43px; }
+  .hint-copy { margin-top: 6px; }
+  .eclair-reset { margin-top: 10px; }
+  .eclair-board { border-radius: 18px; }
+}
+
+@media (min-width: 701px) and (max-width: 900px) and (orientation: portrait) {
+  .welcome-board { width: min(360px,50vw); }
+  .signpost { width: min(350px,47vw); }
+  .maze-page { overflow-y: auto; }
+  .maze-layout { grid-template-columns: 1fr; }
+  .maze-story { display: grid; grid-template-columns: 1fr auto; }
+  .maze-board { width: min(100%,690px); margin-inline: auto; }
+  .betty-game { grid-template-columns: minmax(190px,255px) minmax(300px,430px); }
 }
 
 @media (prefers-reduced-motion: reduce) {

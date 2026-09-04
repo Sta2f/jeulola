@@ -63,7 +63,7 @@ export default function Home() {
             <span className="sign-icon"><Palette /></span>
             <span><strong>Les coloriages</strong><small>Crée avec les couleurs</small></span>
           </button>
-          <button className="wood-sign sign-green" onClick={() => setScreen('betty-hide')}>
+          <button className="wood-sign sign-green" onClick={() => { startFileMusic('hide'); setScreen('betty-hide'); }}>
             <span className="sign-icon"><Rabbit /></span>
             <span><strong>Cache-cache avec Betty</strong><small>Retrouve la lapine touffue</small></span>
           </button>

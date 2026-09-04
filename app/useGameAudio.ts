@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 export type SoundEffect = 'step' | 'sniff' | 'bark' | 'bone' | 'sparkle' | 'paint' | 'erase' | 'select' | 'traffic' | 'win' | 'wrong' | 'hint';
 type MusicTheme = 'forest' | 'dog' | 'coloring' | 'traffic' | 'hide' | 'home';
-export type FileMusicTheme = 'forest' | 'dog' | 'coloring' | 'home';
+export type FileMusicTheme = 'forest' | 'dog' | 'coloring' | 'hide' | 'home';
 
 const MUSIC_NOTES: Record<MusicTheme, number[]> = {
   forest: [261.63, 329.63, 392, 523.25, 392, 329.63],
@@ -16,6 +16,7 @@ const FILE_MUSIC: Partial<Record<MusicTheme, { src: string; volume: number }>> =
   forest: { src: '/assets/audio/glowing-maze-path.mp3', volume: .34 },
   dog: { src: '/assets/audio/the-lost-path-found.mp3', volume: .32 },
   coloring: { src: '/assets/audio/colorful-quiet-time.mp3', volume: .3 },
+  hide: { src: '/assets/audio/tiptoe-through-the-corners.mp3', volume: .31 },
   home: { src: '/assets/audio/miniature-wonderland.mp3', volume: .3 },
 };
 const fileMusicCache = new Map<FileMusicTheme, HTMLAudioElement>();
@@ -36,7 +37,7 @@ function getFileMusic(theme: FileMusicTheme) {
 export function preloadFileMusic() {
   getFileMusic('home').load();
   window.setTimeout(() => {
-    (['forest', 'dog', 'coloring'] as FileMusicTheme[]).forEach((theme) => getFileMusic(theme).load());
+    (['forest', 'dog', 'coloring', 'hide'] as FileMusicTheme[]).forEach((theme) => getFileMusic(theme).load());
   }, 300);
 }
 
