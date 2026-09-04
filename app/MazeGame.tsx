@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronLeft, Crown, Footprints, LockKeyhole, RotateCcw, Sparkles } from 'lucide-react';
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronLeft, Crown, Footprints, LockKeyhole, RotateCcw, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '../components/ui/button';
+import { useGameAudio } from './useGameAudio';
 
 type Direction = 'up' | 'down' | 'left' | 'right';
 type Position = { row: number; col: number };
@@ -66,6 +67,7 @@ const LEVELS: Level[] = LEVEL_SETTINGS.map((settings) => ({
 }));
 
 export function MazeGame({ onBack }: { onBack: () => void }) {
+  const { soundOn, startAudio, playSfx, toggleSound } = useGameAudio('forest');
   const [levelIndex, setLevelIndex] = useState(0);
   const [highestUnlocked, setHighestUnlocked] = useState(0);
   const level = LEVELS[levelIndex];
@@ -90,7 +92,8 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
     setMoves(0);
     setWon(false);
     setVisited(new Set([`${nextLevel.start.row}-${nextLevel.start.col}`]));
-  }, [stopWalking]);
+    playSfx('select');
+  }, [playSfx, stopWalking]);
 
   const move = useCallback((direction: Direction) => {
     if (won || walking) return;
@@ -98,15 +101,17 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
     setPosition((current) => {
       const next = { row: current.row + delta[0], col: current.col + delta[1] };
       if (next.row < 0 || next.row >= level.grid.length || next.col < 0 || next.col >= level.grid[0].length || level.grid[next.row][next.col] === 1) return current;
+      playSfx('step');
       setMoves((count) => count + 1);
       setVisited((cells) => new Set(cells).add(`${next.row}-${next.col}`));
       if (next.row === level.goal.row && next.col === level.goal.col) {
         setWon(true);
+        playSfx('win');
         setHighestUnlocked((current) => Math.max(current, Math.min(LEVELS.length - 1, levelIndex + 1)));
       }
       return next;
     });
-  }, [level, levelIndex, walking, won]);
+  }, [level, levelIndex, playSfx, walking, won]);
 
   const walkStraight = useCallback((targetRow: number, targetCol: number) => {
     if (won || walking || (targetRow !== position.row && targetCol !== position.col)) return;
@@ -126,10 +131,12 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
     setWalking(true);
     walkTimers.current = path.map((next, index) => window.setTimeout(() => {
       setPosition(next);
+      playSfx('step');
       setMoves((count) => count + 1);
       setVisited((cells) => new Set(cells).add(`${next.row}-${next.col}`));
       if (next.row === level.goal.row && next.col === level.goal.col) {
         setWon(true);
+        playSfx('win');
         setHighestUnlocked((current) => Math.max(current, Math.min(LEVELS.length - 1, levelIndex + 1)));
       }
       if (index === path.length - 1) {
@@ -137,7 +144,7 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
         setWalking(false);
       }
     }, (index + 1) * 115));
-  }, [level, levelIndex, position, walking, won]);
+  }, [level, levelIndex, playSfx, position, walking, won]);
 
   const onBoardPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     if (event.pointerType === 'mouse') return;
@@ -155,21 +162,22 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
       const direction = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right' }[event.key] as Direction | undefined;
       if (!direction) return;
       event.preventDefault();
+      startAudio();
       move(direction);
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [move]);
+  }, [move, startAudio]);
 
   const reset = () => loadLevel(levelIndex);
   const isFinalLevel = levelIndex === LEVELS.length - 1;
 
   return (
-    <main className="maze-page">
+    <main className="maze-page" onPointerDownCapture={startAudio}>
       <header className="maze-header">
         <button className="back-button forest-back" onClick={onBack}><ChevronLeft /><span>Les jeux</span></button>
         <div className="maze-title"><p>AVENTURE ENCHANTÉE</p><h1>La princesse perdue</h1></div>
-        <div className="move-count"><Footprints /><span><strong>{moves}</strong> pas</span></div>
+        <div className="maze-header-actions"><div className="move-count"><Footprints /><span><strong>{moves}</strong> pas</span></div><button className="game-sound-toggle" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique et les bruitages' : 'Activer la musique et les bruitages'}>{soundOn ? <Volume2 /> : <VolumeX />}</button></div>
       </header>
 
       <nav className="level-trail" aria-label="Les 10 niveaux du labyrinthe">

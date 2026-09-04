@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Bone, ChevronLeft, Footprints, Heart, Lightbulb, RotateCcw, Sparkles } from 'lucide-react';
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Bone, ChevronLeft, Footprints, Heart, Lightbulb, RotateCcw, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '../components/ui/button';
+import { useGameAudio } from './useGameAudio';
 
 type Direction = 'up' | 'down' | 'left' | 'right';
 type Position = { row: number; col: number };
@@ -94,6 +95,7 @@ function findPath(maze: number[][], from: Position, to: Position) {
 }
 
 export function EclairMazeGame({ onBack }: { onBack: () => void }) {
+  const { soundOn, startAudio, playSfx, toggleSound } = useGameAudio('dog');
   const [level, setLevel] = useState(0);
   const [position, setPosition] = useState(START);
   const [moves, setMoves] = useState(0);
@@ -101,10 +103,12 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   const [bones, setBones] = useState(() => new Set<string>());
   const [hintsUsed, setHintsUsed] = useState(0);
   const [boneFound, setBoneFound] = useState('');
+  const [showBoneCelebration, setShowBoneCelebration] = useState(false);
   const [won, setWon] = useState(false);
   const [showWinCard, setShowWinCard] = useState(false);
   const [walking, setWalking] = useState(false);
   const walkTimers = useRef<number[]>([]);
+  const boneCelebrationTimer = useRef<number | null>(null);
   const maze = useMemo(() => createHardMaze(LEVELS[level].seed), [level]);
 
   const fullPathLength = useMemo(() => findPath(maze, START, GOAL).length, [maze]);
@@ -116,12 +120,25 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
     return () => window.clearTimeout(timer);
   }, [won]);
 
+  const celebrateBone = useCallback((key: string) => {
+    setBoneFound(key);
+    setShowBoneCelebration(true);
+    playSfx('bone');
+    if (boneCelebrationTimer.current !== null) window.clearTimeout(boneCelebrationTimer.current);
+    boneCelebrationTimer.current = window.setTimeout(() => {
+      setBoneFound('');
+      setShowBoneCelebration(false);
+      boneCelebrationTimer.current = null;
+    }, 1250);
+  }, [playSfx]);
+
   const move = useCallback((direction: Direction) => {
     if (won || walking) return;
     const delta = { up: [-1, 0], down: [1, 0], left: [0, -1], right: [0, 1] }[direction];
     setPosition((current) => {
       const next = { row: current.row + delta[0], col: current.col + delta[1] };
       if (maze[next.row]?.[next.col] !== 0) return current;
+      playSfx('sniff');
       const key = cellKey(next);
       setMoves((count) => count + 1);
       setVisited((cells) => new Set(cells).add(key));
@@ -129,14 +146,18 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
         if (!currentBones.has(key)) return currentBones;
         const remaining = new Set(currentBones);
         remaining.delete(key);
-        setBoneFound(key);
-        window.setTimeout(() => setBoneFound(''), 650);
+        celebrateBone(key);
         return remaining;
       });
-      if (next.row === GOAL.row && next.col === GOAL.col) setWon(true);
+      if (next.row === GOAL.row && next.col === GOAL.col) {
+        setShowBoneCelebration(false);
+        playSfx('bark');
+        playSfx('win');
+        setWon(true);
+      }
       return next;
     });
-  }, [maze, walking, won]);
+  }, [celebrateBone, maze, playSfx, walking, won]);
 
   const walkStraight = useCallback((targetRow: number, targetCol: number) => {
     if (won || walking || (targetRow !== position.row && targetCol !== position.col)) return;
@@ -153,27 +174,33 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
     }
     if (!path.length) return;
 
+    playSfx('sniff');
     setWalking(true);
     walkTimers.current = path.map((next, index) => window.setTimeout(() => {
       const key = cellKey(next);
       setPosition(next);
+      playSfx('step');
       setMoves((count) => count + 1);
       setVisited((cells) => new Set(cells).add(key));
       setBones((currentBones) => {
         if (!currentBones.has(key)) return currentBones;
         const remaining = new Set(currentBones);
         remaining.delete(key);
-        setBoneFound(key);
-        window.setTimeout(() => setBoneFound(''), 650);
+        celebrateBone(key);
         return remaining;
       });
-      if (next.row === GOAL.row && next.col === GOAL.col) setWon(true);
+      if (next.row === GOAL.row && next.col === GOAL.col) {
+        setShowBoneCelebration(false);
+        playSfx('bark');
+        playSfx('win');
+        setWon(true);
+      }
       if (index === path.length - 1) {
         walkTimers.current = [];
         setWalking(false);
       }
     }, (index + 1) * 95));
-  }, [maze, position, walking, won]);
+  }, [celebrateBone, maze, playSfx, position, walking, won]);
 
   const onBoardPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     if (event.pointerType === 'mouse') return;
@@ -192,16 +219,21 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
 
   useEffect(() => stopWalking, [stopWalking]);
 
+  useEffect(() => () => {
+    if (boneCelebrationTimer.current !== null) window.clearTimeout(boneCelebrationTimer.current);
+  }, []);
+
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       const direction = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right' }[event.key] as Direction | undefined;
       if (!direction) return;
       event.preventDefault();
+      startAudio();
       move(direction);
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [move]);
+  }, [move, startAudio]);
 
   const addHint = () => {
     const path = findPath(maze, position, GOAL);
@@ -212,6 +244,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
     const target = candidates[Math.min(5 + hintsUsed * 3, candidates.length - 1)];
     setBones((items) => new Set(items).add(cellKey(target)));
     setHintsUsed((count) => count + 1);
+    playSfx('sniff');
   };
 
   const resetLevel = () => {
@@ -223,6 +256,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
     setHintsUsed(0);
     setWon(false);
     setShowWinCard(false);
+    setShowBoneCelebration(false);
   };
 
   const advanceLevel = () => {
@@ -232,17 +266,17 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   };
 
   return (
-    <main className="eclair-page">
+    <main className="eclair-page" onPointerDownCapture={startAudio}>
       <header className="eclair-header">
         <button className="back-button" onClick={onBack}><ChevronLeft /><span>Les jeux</span></button>
         <div className="eclair-title"><p>NIVEAU {level + 1} SUR {LEVELS.length}</p><h1>Éclair cherche Lola</h1></div>
-        <div className="eclair-steps"><Footprints /><strong>{moves}</strong><span>pas</span></div>
+        <div className="eclair-header-actions"><div className="eclair-steps"><Footprints /><strong>{moves}</strong><span>pas</span></div><button className="game-sound-toggle" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique et les bruitages' : 'Activer la musique et les bruitages'}>{soundOn ? <Volume2 /> : <VolumeX />}</button></div>
       </header>
 
       <section className="eclair-layout">
         <aside className="eclair-story">
           <span className="expert-mark">Niveau {level + 1} · {LEVELS[level].name}</span>
-          <h2>Retrouve<br />ta maîtresse</h2>
+          <h2>Aide Éclair à<br />retrouver Lola !</h2>
           <p>Éclair a flairé la trace de Lola dans la forêt. Guide ce petit chihuahua chocolat jusqu’à elle.</p>
           <div className="eclair-level-track" aria-label={`Progression : niveau ${level + 1} sur ${LEVELS.length}`}>
             {LEVELS.map((item, index) => <span key={item.seed} className={index < level ? 'complete' : index === level ? 'current' : ''}>{index + 1}</span>)}
@@ -274,7 +308,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
             </div>
             <div className="eclair-player" style={{ '--row': position.row, '--col': position.col } as React.CSSProperties}>
               {/* oxlint-disable-next-line next/no-img-element -- Project-local generated Chihuahua artwork. */}
-              <img src="/assets/eclair-chihuahua.webp" alt="Éclair, le petit chihuahua chocolat" />
+              <img src="/assets/eclair-chihuahua-cutout.webp" alt="Éclair, le petit chihuahua chocolat" />
             </div>
           </div>
 
@@ -287,6 +321,12 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
           </div>
         </div>
       </section>
+
+      {showBoneCelebration && !won && <div className="lick-screen bone-celebration" aria-label="Éclair est heureux d’avoir trouvé un os">
+        {/* oxlint-disable-next-line next/no-img-element -- Project-local generated celebration artwork. */}
+        <img src="/assets/eclair-lick.webp" alt="Éclair fête son os" />
+        <div><Bone /> MIAM ! ÉCLAIR A TROUVÉ UN OS ! <Bone /></div>
+      </div>}
 
       {won && !showWinCard && <div className="lick-screen" aria-label="Éclair est très heureux de retrouver Lola">
         {/* oxlint-disable-next-line next/no-img-element -- Project-local generated victory artwork. */}

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ChevronLeft, Eraser, Palette, RotateCcw, Sparkles, Undo2 } from 'lucide-react';
+import { ChevronLeft, Eraser, Palette, RotateCcw, Sparkles, Undo2, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '../components/ui/button';
+import { useGameAudio } from './useGameAudio';
 
 type Drawing = {
   id: string;
@@ -130,6 +131,7 @@ function floodFill(imageData: ImageData, startX: number, startY: number, paint: 
 }
 
 export function ColoringGame({ onBack }: { onBack: () => void }) {
+  const { soundOn, startAudio, playSfx, toggleSound } = useGameAudio('coloring');
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const savedDrawings = useRef<Record<string, ImageData>>({});
   const histories = useRef<Record<string, ImageData[]>>({});
@@ -181,6 +183,7 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
     setSelectedPaint(paintId);
     setEraserMode(false);
     setSparkle((value) => value + 1);
+    playSfx('select');
   };
 
   const paintAt = (event: React.PointerEvent<HTMLCanvasElement>) => {
@@ -204,6 +207,7 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
     setCanUndo(true);
     setPaintActions((items) => ({ ...items, [drawing.id]: Math.max(0, (items[drawing.id] ?? 0) + (eraserMode ? -1 : 1)) }));
     setSparkle((value) => value + 1);
+    playSfx(eraserMode ? 'erase' : paint.effect === 'solid' ? 'paint' : 'sparkle');
   };
 
   const undo = () => {
@@ -218,6 +222,7 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
     histories.current[drawing.id] = history.slice(0, -1);
     setCanUndo(history.length > 1);
     setPaintActions((items) => ({ ...items, [drawing.id]: Math.max(0, (items[drawing.id] ?? 0) - 1) }));
+    playSfx('erase');
   };
 
   const resetDrawing = () => {
@@ -226,20 +231,22 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
     setPaintActions((items) => ({ ...items, [drawing.id]: 0 }));
     setCanUndo(false);
     setReloadKey((value) => value + 1);
+    playSfx('erase');
   };
 
   const chooseDrawing = (index: number) => {
     setDrawingIndex(index);
     setEraserMode(false);
     setCanUndo(Boolean(histories.current[DRAWINGS[index].id]?.length));
+    playSfx('select');
   };
 
   return (
-    <main className="coloring-page">
+    <main className="coloring-page" onPointerDownCapture={startAudio}>
       <header className="coloring-header">
         <button className="back-button coloring-back" onClick={onBack}><ChevronLeft /><span>Les jeux</span></button>
         <div><p>L’ATELIER ENCHANTÉ</p><h1>Les coloriages de Lola</h1></div>
-        <span className="coloring-progress"><Sparkles /><strong>{paintActions[drawing.id] ?? 0}</strong></span>
+        <div className="coloring-header-actions"><span className="coloring-progress"><Sparkles /><strong>{paintActions[drawing.id] ?? 0}</strong></span><button className="game-sound-toggle light" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique et les bruitages' : 'Activer la musique et les bruitages'}>{soundOn ? <Volume2 /> : <VolumeX />}</button></div>
       </header>
 
       <section className="coloring-workshop">

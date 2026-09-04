@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronLeft, Pause, Play, RotateCcw, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '../components/ui/button';
+import { useGameAudio } from './useGameAudio';
 
 const PHASES = [
   { name: 'Rouge', instruction: 'ARRÊT', color: '#ff453a', className: 'red' },
@@ -11,70 +12,43 @@ const PHASES = [
 const PHASE_DURATION = 15;
 
 export function TrafficLightGame({ onBack }: { onBack: () => void }) {
+  const { soundOn, startAudio, playSfx, toggleSound } = useGameAudio('traffic');
   const [started, setStarted] = useState(false);
   const [running, setRunning] = useState(true);
-  const [soundOn, setSoundOn] = useState(true);
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [remaining, setRemaining] = useState(PHASE_DURATION);
-  const audioContextRef = useRef<AudioContext | null>(null);
-
-  const playChangeSound = useCallback(() => {
-    if (!soundOn) return;
-    const AudioContextClass = window.AudioContext ??
-      (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-    if (!AudioContextClass) return;
-    const context = audioContextRef.current ?? new AudioContextClass();
-    audioContextRef.current = context;
-    const now = context.currentTime;
-    [660, 880].forEach((frequency, index) => {
-      const oscillator = context.createOscillator();
-      const gain = context.createGain();
-      oscillator.type = 'sine';
-      oscillator.frequency.value = frequency;
-      gain.gain.setValueAtTime(0.0001, now + index * 0.13);
-      gain.gain.exponentialRampToValueAtTime(0.2, now + index * 0.13 + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + index * 0.13 + 0.11);
-      oscillator.connect(gain).connect(context.destination);
-      oscillator.start(now + index * 0.13);
-      oscillator.stop(now + index * 0.13 + 0.12);
-    });
-  }, [soundOn]);
-
   useEffect(() => {
     if (!started || !running) return;
     const timer = window.setInterval(() => {
       setRemaining((current) => {
         if (current > 1) return current - 1;
         setPhaseIndex((phase) => (phase + 1) % PHASES.length);
-        playChangeSound();
+        playSfx('traffic');
         return PHASE_DURATION;
       });
     }, 1000);
     return () => window.clearInterval(timer);
-  }, [playChangeSound, running, started]);
+  }, [playSfx, running, started]);
 
   const startSimulation = () => {
     setStarted(true);
     setRunning(true);
-    const AudioContextClass = window.AudioContext ??
-      (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-    if (AudioContextClass) {
-      audioContextRef.current ??= new AudioContextClass();
-      void audioContextRef.current.resume();
-    }
+    startAudio();
+    playSfx('select');
   };
 
   const resetSimulation = () => {
     setPhaseIndex(0);
     setRemaining(PHASE_DURATION);
     setRunning(true);
+    playSfx('select');
   };
 
   const phase = PHASES[phaseIndex];
   const progress = ((PHASE_DURATION - remaining) / PHASE_DURATION) * 360;
 
   return (
-    <main className={`app-shell phase-${phase.className}`}>
+    <main className={`app-shell phase-${phase.className}`} onPointerDownCapture={startAudio}>
       <div className="ambient ambient-one" aria-hidden="true" />
       <div className="ambient ambient-two" aria-hidden="true" />
       <header className="topbar">
@@ -100,8 +74,8 @@ export function TrafficLightGame({ onBack }: { onBack: () => void }) {
             {PHASES.map((item, index) => <div className={index === phaseIndex ? 'current' : ''} key={item.name}><span style={{ backgroundColor: item.color }} /><p>{item.name}</p><small>15 s</small></div>)}
           </div>
           <div className="controls">
-            <Button size="lg" className="primary-control" onClick={() => setRunning((value) => !value)} disabled={!started}>{running ? <Pause /> : <Play />}{running ? 'Mettre en pause' : 'Reprendre'}</Button>
-            <Button size="icon-lg" variant="outline" className="icon-control" onClick={() => setSoundOn((value) => !value)} aria-label={soundOn ? 'Couper le son' : 'Activer le son'}>{soundOn ? <Volume2 /> : <VolumeX />}</Button>
+            <Button size="lg" className="primary-control" onClick={() => { setRunning((value) => !value); playSfx('select'); }} disabled={!started}>{running ? <Pause /> : <Play />}{running ? 'Mettre en pause' : 'Reprendre'}</Button>
+            <Button size="icon-lg" variant="outline" className="icon-control" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique et les bruitages' : 'Activer la musique et les bruitages'}>{soundOn ? <Volume2 /> : <VolumeX />}</Button>
             <Button size="icon-lg" variant="outline" className="icon-control" onClick={resetSimulation} aria-label="Recommencer la simulation"><RotateCcw /></Button>
           </div>
         </div>
