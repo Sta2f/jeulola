@@ -5,7 +5,7 @@ import { MazeGame } from './MazeGame';
 import { ColoringGame } from './ColoringGame';
 import { EclairMazeGame } from './EclairMazeGame';
 import { BettyHideAndSeek } from './BettyHideAndSeek';
-import { useGameAudio } from './useGameAudio';
+import { preloadFileMusic, startFileMusic, useGameAudio } from './useGameAudio';
 
 type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'eclair-maze' | 'betty-hide';
 
@@ -17,8 +17,10 @@ export default function Home() {
     if (screen !== 'home') stopAudio();
   }, [screen, stopAudio]);
 
+  useEffect(() => preloadFileMusic(), []);
+
   if (screen === 'traffic') return <TrafficLightGame onBack={() => setScreen('home')} />;
-  if (screen === 'maze-menu') return <MazeMenu onBack={() => setScreen('home')} onPrincess={() => setScreen('maze')} onEclair={() => setScreen('eclair-maze')} />;
+  if (screen === 'maze-menu') return <MazeMenu onBack={() => setScreen('home')} onPrincess={() => { startFileMusic('forest'); setScreen('maze'); }} onEclair={() => { startFileMusic('dog'); setScreen('eclair-maze'); }} />;
   if (screen === 'maze') return <MazeGame onBack={() => setScreen('maze-menu')} />;
   if (screen === 'coloring') return <ColoringGame onBack={() => setScreen('home')} />;
   if (screen === 'eclair-maze') return <EclairMazeGame onBack={() => setScreen('maze-menu')} />;
@@ -57,7 +59,7 @@ export default function Home() {
             <span className="sign-icon"><Map /></span>
             <span><strong>Les labyrinthes</strong><small>Choisis ton aventure</small></span>
           </button>
-          <button className="wood-sign sign-turquoise" onClick={() => setScreen('coloring')}>
+          <button className="wood-sign sign-turquoise" onClick={() => { startFileMusic('coloring'); setScreen('coloring'); }}>
             <span className="sign-icon"><Palette /></span>
             <span><strong>Les coloriages</strong><small>Crée avec les couleurs</small></span>
           </button>

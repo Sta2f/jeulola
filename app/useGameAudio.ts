@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 export type SoundEffect = 'step' | 'sniff' | 'bark' | 'bone' | 'sparkle' | 'paint' | 'erase' | 'select' | 'traffic' | 'win' | 'wrong' | 'hint';
 type MusicTheme = 'forest' | 'dog' | 'coloring' | 'traffic' | 'hide' | 'home';
+export type FileMusicTheme = 'forest' | 'dog' | 'coloring' | 'home';
 
 const MUSIC_NOTES: Record<MusicTheme, number[]> = {
   forest: [261.63, 329.63, 392, 523.25, 392, 329.63],
@@ -14,9 +15,39 @@ const MUSIC_NOTES: Record<MusicTheme, number[]> = {
 const FILE_MUSIC: Partial<Record<MusicTheme, { src: string; volume: number }>> = {
   forest: { src: '/assets/audio/glowing-maze-path.mp3', volume: .34 },
   dog: { src: '/assets/audio/the-lost-path-found.mp3', volume: .32 },
+  coloring: { src: '/assets/audio/colorful-quiet-time.mp3', volume: .3 },
   home: { src: '/assets/audio/miniature-wonderland.mp3', volume: .3 },
 };
+const fileMusicCache = new Map<FileMusicTheme, HTMLAudioElement>();
 const noiseBuffers = new WeakMap<AudioContext, AudioBuffer>();
+
+function getFileMusic(theme: FileMusicTheme) {
+  let audio = fileMusicCache.get(theme);
+  if (audio) return audio;
+  const settings = FILE_MUSIC[theme]!;
+  audio = new Audio(settings.src);
+  audio.loop = true;
+  audio.volume = settings.volume;
+  audio.preload = 'auto';
+  fileMusicCache.set(theme, audio);
+  return audio;
+}
+
+export function preloadFileMusic() {
+  getFileMusic('home').load();
+  window.setTimeout(() => {
+    (['forest', 'dog', 'coloring'] as FileMusicTheme[]).forEach((theme) => getFileMusic(theme).load());
+  }, 300);
+}
+
+export function startFileMusic(theme: FileMusicTheme) {
+  const audio = getFileMusic(theme);
+  fileMusicCache.forEach((otherAudio, otherTheme) => {
+    if (otherTheme !== theme) otherAudio.pause();
+  });
+  if (audio.paused) void audio.play().catch(() => undefined);
+  return audio;
+}
 
 function audioContextClass() {
   return window.AudioContext ?? (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
@@ -80,8 +111,7 @@ export function useGameAudio(theme: MusicTheme) {
   const beginMusic = useCallback(() => {
     const fileMusic = FILE_MUSIC[theme];
     if (fileMusic) {
-      fileMusicRef.current ??= Object.assign(new Audio(fileMusic.src), { loop: true, volume: fileMusic.volume, preload: 'auto' });
-      if (fileMusicRef.current.paused) void fileMusicRef.current.play().catch(() => undefined);
+      fileMusicRef.current = startFileMusic(theme as FileMusicTheme);
       return;
     }
     if (musicTimer.current !== null) return;
@@ -164,6 +194,13 @@ export function useGameAudio(theme: MusicTheme) {
     if (fileMusicRef.current) fileMusicRef.current.currentTime = 0;
     if (contextRef.current) void contextRef.current.close();
   }, [stopMusic]);
+
+  useEffect(() => {
+    if (!FILE_MUSIC[theme]) return;
+    const audio = getFileMusic(theme as FileMusicTheme);
+    fileMusicRef.current = audio;
+    if (soundOn && audio.paused) void audio.play().catch(() => undefined);
+  }, [soundOn, theme]);
 
   return { soundOn, startAudio: startMusic, stopAudio: stopMusic, playSfx, toggleSound };
 }
