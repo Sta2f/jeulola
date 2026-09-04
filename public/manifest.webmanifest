@@ -1,0 +1,19 @@
+{
+  "name": "Les aventures de Lola",
+  "short_name": "Jeux de Lola",
+  "description": "Les jeux féeriques de Lola",
+  "start_url": "/",
+  "scope": "/",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#d8f4ff",
+  "theme_color": "#0d1916",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

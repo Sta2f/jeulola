@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ChevronLeft, Crown, Dog, Gamepad2, Map, Palette, Rabbit, Sparkles, TrafficCone, Volume2, VolumeX } from 'lucide-react';
+import { ChevronLeft, Crown, Dog, Gamepad2, Map, Maximize2, Minimize2, Palette, Rabbit, Sparkles, TrafficCone, Volume2, VolumeX } from 'lucide-react';
 import { TrafficLightGame } from './TrafficLightGame';
 import { MazeGame } from './MazeGame';
 import { ColoringGame } from './ColoringGame';
@@ -11,6 +11,8 @@ type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'ecla
 
 export default function Home() {
   const [screen, setScreen] = useState<GameScreen>('home');
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [fullscreenTip, setFullscreenTip] = useState(false);
   const { soundOn, startAudio, stopAudio, toggleSound } = useGameAudio('home');
 
   useEffect(() => {
@@ -18,6 +20,40 @@ export default function Home() {
   }, [screen, stopAudio]);
 
   useEffect(() => preloadFileMusic(), []);
+
+  useEffect(() => {
+    const updateFullscreen = () => {
+      const webkitDocument = document as Document & { webkitFullscreenElement?: Element | null };
+      setIsFullscreen(Boolean(document.fullscreenElement ?? webkitDocument.webkitFullscreenElement));
+    };
+    document.addEventListener('fullscreenchange', updateFullscreen);
+    document.addEventListener('webkitfullscreenchange', updateFullscreen);
+    return () => {
+      document.removeEventListener('fullscreenchange', updateFullscreen);
+      document.removeEventListener('webkitfullscreenchange', updateFullscreen);
+    };
+  }, []);
+
+  const toggleFullscreen = async () => {
+    const webkitDocument = document as Document & { webkitFullscreenElement?: Element | null; webkitExitFullscreen?: () => Promise<void> | void };
+    const root = document.documentElement as HTMLElement & { webkitRequestFullscreen?: () => Promise<void> | void };
+    try {
+      if (document.fullscreenElement ?? webkitDocument.webkitFullscreenElement) {
+        if (document.exitFullscreen) await document.exitFullscreen();
+        else await webkitDocument.webkitExitFullscreen?.();
+      } else if (root.requestFullscreen) {
+        await root.requestFullscreen();
+      } else if (root.webkitRequestFullscreen) {
+        await root.webkitRequestFullscreen();
+      } else {
+        setFullscreenTip(true);
+        window.setTimeout(() => setFullscreenTip(false), 6500);
+      }
+    } catch {
+      setFullscreenTip(true);
+      window.setTimeout(() => setFullscreenTip(false), 6500);
+    }
+  };
 
   if (screen === 'traffic') return <TrafficLightGame onBack={() => setScreen('home')} />;
   if (screen === 'maze-menu') return <MazeMenu onBack={() => setScreen('home')} onPrincess={() => { startFileMusic('forest'); setScreen('maze'); }} onEclair={() => { startFileMusic('dog'); setScreen('eclair-maze'); }} />;
@@ -30,8 +66,10 @@ export default function Home() {
     <main className="games-home" onPointerDownCapture={startAudio}>
       <nav className="home-nav" aria-label="Navigation principale">
         <a className="home-brand" href="#games" aria-label="Le monde de Lola — accueil"><Crown /><span>Le monde de Lola</span></a>
-        <div className="home-nav-actions"><span className="game-count"><Gamepad2 /> 5 jeux</span><button className="game-sound-toggle light home-sound-toggle" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique d’accueil' : 'Activer la musique d’accueil'}>{soundOn ? <Volume2 /> : <VolumeX />}</button></div>
+        <div className="home-nav-actions"><span className="game-count"><Gamepad2 /> 5 jeux</span><button className="game-sound-toggle light home-fullscreen-toggle" onClick={toggleFullscreen} aria-label={isFullscreen ? 'Quitter le plein écran' : 'Passer en plein écran'}>{isFullscreen ? <Minimize2 /> : <Maximize2 />}</button><button className="game-sound-toggle light home-sound-toggle" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique d’accueil' : 'Activer la musique d’accueil'}>{soundOn ? <Volume2 /> : <VolumeX />}</button></div>
       </nav>
+
+      {fullscreenTip && <output className="fullscreen-tip">Sur iPad : touche Partager, puis « Sur l’écran d’accueil » pour jouer comme dans une app.</output>}
 
       <section className="park-hero" id="games" aria-label="Choisir un jeu">
         {/* oxlint-disable-next-line next/no-img-element -- Vite app with a project-local generated banner. */}

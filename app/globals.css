@@ -50,7 +50,8 @@ button { font: inherit; }
 .game-count { display: flex; align-items: center; gap: 7px; padding: 8px 12px; border-radius: 10px; color: #63345f; background: #ffe1ee; font-size: .8rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .game-count svg { width: 17px; }
 .home-nav-actions { display: flex; align-items: center; gap: 9px; }
-.home-sound-toggle { width: 38px; height: 38px; border-radius: 10px; }
+.home-sound-toggle,.home-fullscreen-toggle { width: 38px; height: 38px; border-radius: 10px; }
+.fullscreen-tip { position: fixed; z-index: 60; right: max(16px,env(safe-area-inset-right)); bottom: max(16px,env(safe-area-inset-bottom)); width: min(390px,calc(100% - 32px)); padding: 13px 16px; border: 2px solid rgba(255,255,255,.9); border-radius: 15px; color: #63365f; background: rgba(255,240,249,.97); box-shadow: 0 15px 40px rgba(76,42,74,.24); font-size: .82rem; font-weight: 800; line-height: 1.4; }
 .park-hero { position: relative; width: min(1480px,100%); min-height: min(770px,calc(100svh - 135px)); margin: 0 auto; overflow: hidden; border: 4px solid #fffaf0; border-radius: 34px; box-shadow: 0 28px 70px rgba(74,82,115,.25),inset 0 0 0 2px rgba(89,55,100,.08); isolation: isolate; }
 .park-hero > img { position: absolute; inset: 0; z-index: -3; width: 100%; height: 100%; object-fit: cover; object-position: center; animation: banner-arrive 1.2s cubic-bezier(.2,.8,.2,1) both; }
 .park-vignette { position: absolute; inset: 0; z-index: -2; background: linear-gradient(90deg,rgba(61,33,61,.2),transparent 34%,transparent 60%,rgba(65,33,63,.13)),linear-gradient(0deg,rgba(45,28,50,.18),transparent 32%); pointer-events: none; }
@@ -421,7 +422,7 @@ button { font: inherit; }
 @keyframes complete-arrive { from { opacity: 0; transform: translate(-50%,-50%) scale(.7) rotate(-3deg); } }
 @keyframes magic-paint-flow { 0%,100% { background-position: 0 50%; } 50% { background-position: 100% 50%; } }
 
-@media (max-width: 1180px) {
+@media (max-width: 1400px), (hover: none) and (pointer: coarse) and (min-width: 701px) {
   .coloring-page { padding-bottom: 190px; }
   .coloring-workshop { grid-template-columns: minmax(0,1fr); }
   .drawing-picker { min-width: 0; overflow: hidden; }
@@ -534,7 +535,7 @@ button { font: inherit; }
 @keyframes betty-peek { 50% { transform: translateY(-9px) rotate(2deg); } }
 @keyframes betty-confetti-fall { to { transform: translateY(900px) rotate(var(--spin)); } }
 
-@media (max-width: 1180px) {
+@media (max-width: 1400px), (hover: none) and (pointer: coarse) and (min-width: 701px) {
   .betty-header { grid-template-columns: auto 1fr auto; min-height: 68px; padding: 8px 12px; }.betty-header p { display: none; }.betty-header h1 { font-size: 1.15rem; }
   .betty-intro { grid-template-columns: minmax(250px,.8fr) 1.2fr; min-height: calc(100svh - 68px); gap: 25px; padding: 24px 0 32px; }.betty-intro-art { min-height: 450px; }.betty-intro-copy h2 { font-size: clamp(2.4rem,6vw,4rem); }
   .betty-game { grid-template-columns: minmax(190px,270px) minmax(300px,480px); min-height: calc(100svh - 68px); gap: 25px; padding: 18px 0 28px; }.betty-panel h2 { font-size: 2.5rem; }.betty-panel > p { font-size: .88rem; }.betty-hearts { grid-template-columns: repeat(5,27px); margin: 15px 0; }.betty-hearts svg { width: 23px; }.betty-scene { border-width: 4px; border-radius: 24px; }
@@ -622,7 +623,7 @@ button { font: inherit; }
 @keyframes bone-celebration-zoom { 0% { opacity: 0; transform: scale(.18) rotate(-7deg); } 35% { opacity: 1; transform: scale(.72) rotate(3deg); } 75% { transform: scale(.92) rotate(-2deg); } 100% { opacity: 0; transform: scale(1.08) translateY(5%); } }
 @keyframes bone-celebration-copy { 0%,18% { opacity: 0; transform: translateY(15px) scale(.8); } 35%,78% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-10px); } }
 
-@media (max-width: 1050px) and (orientation: portrait) {
+@media (max-width: 1400px) and (orientation: portrait), (hover: none) and (pointer: coarse) and (min-width: 701px) and (orientation: portrait) {
   .eclair-layout { grid-template-columns: 1fr; width: min(920px,calc(100% - 28px)); }
   .eclair-story { display: grid; grid-template-columns: 1fr minmax(220px,300px); gap: 8px 24px; align-items: end; }
   .expert-mark,.eclair-story h2,.eclair-story > p:first-of-type { grid-column: 1; }
@@ -675,10 +676,10 @@ button { font: inherit; }
 }
 
 /* Tablet tuning: keep the games large enough to play without clipping the controls. */
-@media (min-width: 701px) and (max-width: 1180px) {
+@media (min-width: 701px) and (max-width: 1400px), (hover: none) and (pointer: coarse) and (min-width: 701px) {
   .games-home { overflow-x: hidden; overflow-y: auto; padding: 10px 12px 18px; }
   .home-nav { min-height: 54px; margin-bottom: 10px; }
-  .park-hero { min-height: max(620px,calc(100dvh - 112px)); border-radius: 26px; }
+  .park-hero { min-height: max(660px,calc(100dvh - 112px)); border-radius: 26px; }
   .welcome-board { top: 8px; right: 14px; width: min(350px,38vw); }
   .signpost { top: auto; right: 26px; bottom: 22px; width: min(350px,38vw); gap: 7px; transform: none; }
   .signpost-top { min-height: 45px; margin-bottom: 1px; padding: 8px 18px; }
@@ -732,10 +733,11 @@ button { font: inherit; }
   .betty-panel > p { margin: 8px 0; }
 }
 
-@media (min-width: 701px) and (max-width: 1180px) and (orientation: landscape) {
+@media (min-width: 701px) and (max-width: 1400px) and (orientation: landscape), (hover: none) and (pointer: coarse) and (min-width: 701px) and (orientation: landscape) {
   .simulation { grid-template-columns: minmax(230px,.75fr) minmax(350px,1.25fr); }
   .maze-layout { grid-template-columns: minmax(205px,.4fr) minmax(0,1.6fr); align-items: center; }
   .maze-stage { min-width: 0; }
+  .maze-board { width: min(100%,calc(122dvh - 195px)); margin-inline: auto; }
   .eclair-header { min-height: 70px; padding: 9px 16px; }
   .eclair-layout { grid-template-columns: minmax(220px,.42fr) minmax(0,1.58fr); gap: 22px; width: min(1100px,calc(100% - 24px)); min-height: calc(100dvh - 70px); padding: 15px 0 22px; }
   .eclair-story h2 { font-size: clamp(2rem,4.2vw,3.2rem); }
@@ -748,7 +750,7 @@ button { font: inherit; }
   .eclair-board { border-radius: 18px; }
 }
 
-@media (min-width: 701px) and (max-width: 900px) and (orientation: portrait) {
+@media (min-width: 701px) and (max-width: 1400px) and (orientation: portrait), (hover: none) and (pointer: coarse) and (min-width: 701px) and (orientation: portrait) {
   .welcome-board { width: min(360px,50vw); }
   .signpost { width: min(350px,47vw); }
   .maze-page { overflow-y: auto; }
@@ -756,6 +758,9 @@ button { font: inherit; }
   .maze-story { display: grid; grid-template-columns: 1fr auto; }
   .maze-board { width: min(100%,690px); margin-inline: auto; }
   .betty-game { grid-template-columns: minmax(190px,255px) minmax(300px,430px); }
+  .simulation { grid-template-columns: 1fr; gap: 24px; }
+  .maze-menu-content { grid-template-columns: 1fr; min-height: auto; padding: 15px 0 25px; }
+  .maze-adventure { height: 350px; min-height: 350px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

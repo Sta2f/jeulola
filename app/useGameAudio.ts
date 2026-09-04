@@ -13,19 +13,22 @@ const MUSIC_NOTES: Record<MusicTheme, number[]> = {
   home: [261.63, 329.63, 392, 523.25],
 };
 const FILE_MUSIC: Partial<Record<MusicTheme, { src: string; volume: number }>> = {
-  forest: { src: '/assets/audio/glowing-maze-path.mp3', volume: .34 },
-  dog: { src: '/assets/audio/the-lost-path-found.mp3', volume: .32 },
-  coloring: { src: '/assets/audio/colorful-quiet-time.mp3', volume: .3 },
-  hide: { src: '/assets/audio/tiptoe-through-the-corners.mp3', volume: .31 },
-  home: { src: '/assets/audio/miniature-wonderland.mp3', volume: .3 },
+  forest: { src: '/assets/audio/glowing-maze-path.mp3', volume: .1 },
+  dog: { src: '/assets/audio/the-lost-path-found.mp3', volume: .1 },
+  coloring: { src: '/assets/audio/colorful-quiet-time.mp3', volume: .09 },
+  hide: { src: '/assets/audio/tiptoe-through-the-corners.mp3', volume: .1 },
+  home: { src: '/assets/audio/miniature-wonderland.mp3', volume: .09 },
 };
 const fileMusicCache = new Map<FileMusicTheme, HTMLAudioElement>();
 const noiseBuffers = new WeakMap<AudioContext, AudioBuffer>();
 
 function getFileMusic(theme: FileMusicTheme) {
   let audio = fileMusicCache.get(theme);
-  if (audio) return audio;
   const settings = FILE_MUSIC[theme]!;
+  if (audio) {
+    audio.volume = settings.volume;
+    return audio;
+  }
   audio = new Audio(settings.src);
   audio.loop = true;
   audio.volume = settings.volume;
