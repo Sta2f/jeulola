@@ -1,6 +1,6 @@
-# Le feu de Lola
+# Les aventures de Lola
 
-Simulation interactive de feu tricolore. Chaque couleur reste active pendant 15 secondes et un signal sonore annonce le changement.
+Un petit portail de jeux pour Lola, avec un feu tricolore interactif et un labyrinthe animé dans une forêt enchantée.
 
 ## Développement
 
