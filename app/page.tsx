@@ -13,13 +13,15 @@ type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'ecla
 
 export default function Home() {
   const [screen, setScreen] = useState<GameScreen>('home');
+  const [entered, setEntered] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [fullscreenTip, setFullscreenTip] = useState(false);
   const { soundOn, startAudio, stopAudio, toggleSound } = useGameAudio('home');
 
   useEffect(() => {
     if (screen !== 'home') stopAudio();
-  }, [screen, stopAudio]);
+    else if (entered) startAudio();
+  }, [entered, screen, startAudio, stopAudio]);
 
   useEffect(() => preloadFileMusic(), []);
 
@@ -97,6 +99,17 @@ export default function Home() {
 
   return (
     <main className="games-home" onPointerDownCapture={startAudio}>
+      {!entered && <section className="home-entry" aria-labelledby="home-entry-title">
+        <div className="home-entry-card">
+          <span className="home-entry-sparkles" aria-hidden="true">✦　✧　✦</span>
+          <p><Sparkles /> Une aventure féerique</p>
+          <h2 id="home-entry-title">Bienvenue dans<br />le monde de Lola</h2>
+          <span>Des jeux, des couleurs et de la musique t’attendent.</span>
+          <button onClick={() => { startAudio(); setEntered(true); }}><Gamepad2 /> Entrer dans le monde de Lola</button>
+          <small>La musique commencera dès ton entrée.</small>
+        </div>
+      </section>}
+
       <nav className="home-nav" aria-label="Navigation principale">
         <a className="home-brand" href="#games" aria-label="Le monde de Lola — accueil"><Crown /><span>Le monde de Lola</span></a>
         <div className="home-nav-actions"><span className="game-count"><Gamepad2 /> 5 jeux</span><button className="game-sound-toggle light home-fullscreen-toggle" onClick={toggleFullscreen} aria-label={isFullscreen ? 'Quitter le plein écran' : 'Passer en plein écran'}>{isFullscreen ? <Minimize2 /> : <Maximize2 />}</button><button className="game-sound-toggle light home-sound-toggle" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique d’accueil' : 'Activer la musique d’accueil'}>{soundOn ? <Volume2 /> : <VolumeX />}</button></div>
