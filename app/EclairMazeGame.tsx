@@ -9,6 +9,18 @@ const ROWS = 19;
 const COLS = 27;
 const START = { row: ROWS - 2, col: 1 };
 const GOAL = { row: 1, col: COLS - 2 };
+const LEVELS = [
+  { seed: 1126, name: 'La clairière' },
+  { seed: 1254, name: 'Les fougères' },
+  { seed: 1290, name: 'Le bois secret' },
+  { seed: 1241, name: 'Les vieux chênes' },
+  { seed: 1237, name: 'Le sentier brumeux' },
+  { seed: 1013, name: 'La forêt profonde' },
+  { seed: 1007, name: 'Les ronces magiques' },
+  { seed: 1218, name: 'Le vallon sauvage' },
+  { seed: 1244, name: 'La piste oubliée' },
+  { seed: 1055, name: 'Le cœur de la forêt' },
+] as const;
 
 function cellKey(position: Position) {
   return `${position.row}-${position.col}`;
@@ -22,8 +34,8 @@ function makeRandom(seed: number) {
   };
 }
 
-function createHardMaze() {
-  const random = makeRandom(424242);
+function createHardMaze(seed: number) {
+  const random = makeRandom(seed);
   const grid = Array.from({ length: ROWS }, () => Array(COLS).fill(1));
   const stack = [START];
   grid[START.row][START.col] = 0;
@@ -53,10 +65,9 @@ function createHardMaze() {
   return grid;
 }
 
-const HARD_MAZE = createHardMaze();
 const STEPS = [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
-function findPath(from: Position, to: Position) {
+function findPath(maze: number[][], from: Position, to: Position) {
   const queue = [from];
   const parents = new Map<string, string | null>([[cellKey(from), null]]);
   while (queue.length) {
@@ -65,7 +76,7 @@ function findPath(from: Position, to: Position) {
     for (const [rowDelta, colDelta] of STEPS) {
       const next = { row: current.row + rowDelta, col: current.col + colDelta };
       const key = cellKey(next);
-      if (HARD_MAZE[next.row]?.[next.col] === 0 && !parents.has(key)) {
+      if (maze[next.row]?.[next.col] === 0 && !parents.has(key)) {
         parents.set(key, cellKey(current));
         queue.push(next);
       }
@@ -83,6 +94,7 @@ function findPath(from: Position, to: Position) {
 }
 
 export function EclairMazeGame({ onBack }: { onBack: () => void }) {
+  const [level, setLevel] = useState(0);
   const [position, setPosition] = useState(START);
   const [moves, setMoves] = useState(0);
   const [visited, setVisited] = useState(() => new Set([cellKey(START)]));
@@ -93,8 +105,9 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   const [showWinCard, setShowWinCard] = useState(false);
   const [walking, setWalking] = useState(false);
   const walkTimers = useRef<number[]>([]);
+  const maze = useMemo(() => createHardMaze(LEVELS[level].seed), [level]);
 
-  const fullPathLength = useMemo(() => findPath(START, GOAL).length, []);
+  const fullPathLength = useMemo(() => findPath(maze, START, GOAL).length, [maze]);
   const progress = Math.min(100, Math.round((visited.size / fullPathLength) * 100));
 
   useEffect(() => {
@@ -108,7 +121,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
     const delta = { up: [-1, 0], down: [1, 0], left: [0, -1], right: [0, 1] }[direction];
     setPosition((current) => {
       const next = { row: current.row + delta[0], col: current.col + delta[1] };
-      if (HARD_MAZE[next.row]?.[next.col] !== 0) return current;
+      if (maze[next.row]?.[next.col] !== 0) return current;
       const key = cellKey(next);
       setMoves((count) => count + 1);
       setVisited((cells) => new Set(cells).add(key));
@@ -123,7 +136,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
       if (next.row === GOAL.row && next.col === GOAL.col) setWon(true);
       return next;
     });
-  }, [walking, won]);
+  }, [maze, walking, won]);
 
   const walkStraight = useCallback((targetRow: number, targetCol: number) => {
     if (won || walking || (targetRow !== position.row && targetCol !== position.col)) return;
@@ -133,7 +146,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
     let cursor = position;
     while (cursor.row !== targetRow || cursor.col !== targetCol) {
       const next = { row: cursor.row + rowStep, col: cursor.col + colStep };
-      if (HARD_MAZE[next.row]?.[next.col] !== 0) break;
+      if (maze[next.row]?.[next.col] !== 0) break;
       path.push(next);
       cursor = next;
       if (next.row === GOAL.row && next.col === GOAL.col) break;
@@ -160,7 +173,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
         setWalking(false);
       }
     }, (index + 1) * 95));
-  }, [position, walking, won]);
+  }, [maze, position, walking, won]);
 
   const onBoardPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     if (event.pointerType === 'mouse') return;
@@ -191,7 +204,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   }, [move]);
 
   const addHint = () => {
-    const path = findPath(position, GOAL);
+    const path = findPath(maze, position, GOAL);
     if (path.length < 2) return;
     const existing = new Set(bones);
     const candidates = path.slice(1).filter((step) => !existing.has(cellKey(step)));
@@ -201,7 +214,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
     setHintsUsed((count) => count + 1);
   };
 
-  const reset = () => {
+  const resetLevel = () => {
     stopWalking();
     setPosition(START);
     setMoves(0);
@@ -212,23 +225,32 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
     setShowWinCard(false);
   };
 
+  const advanceLevel = () => {
+    if (level === LEVELS.length - 1) setLevel(0);
+    else setLevel((current) => current + 1);
+    resetLevel();
+  };
+
   return (
     <main className="eclair-page">
       <header className="eclair-header">
         <button className="back-button" onClick={onBack}><ChevronLeft /><span>Les jeux</span></button>
-        <div className="eclair-title"><p>LA GRANDE PISTE</p><h1>Éclair cherche Lola</h1></div>
+        <div className="eclair-title"><p>NIVEAU {level + 1} SUR {LEVELS.length}</p><h1>Éclair cherche Lola</h1></div>
         <div className="eclair-steps"><Footprints /><strong>{moves}</strong><span>pas</span></div>
       </header>
 
       <section className="eclair-layout">
         <aside className="eclair-story">
-          <span className="expert-mark">Niveau expert</span>
+          <span className="expert-mark">Niveau {level + 1} · {LEVELS[level].name}</span>
           <h2>Retrouve<br />ta maîtresse</h2>
           <p>Éclair a flairé la trace de Lola dans la forêt. Guide ce petit chihuahua chocolat jusqu’à elle.</p>
+          <div className="eclair-level-track" aria-label={`Progression : niveau ${level + 1} sur ${LEVELS.length}`}>
+            {LEVELS.map((item, index) => <span key={item.seed} className={index < level ? 'complete' : index === level ? 'current' : ''}>{index + 1}</span>)}
+          </div>
           <div className="eclair-meter"><span style={{ width: `${progress}%` }} /><div><small>Exploration</small><strong>{progress}%</strong></div></div>
           <Button className="hint-button" onClick={addHint}><Lightbulb /> Indice : pose un os</Button>
           <p className="hint-copy"><Bone /> Chaque os apparaît sur le bon chemin.</p>
-          <Button variant="outline" className="eclair-reset" onClick={reset}><RotateCcw /> Recommencer</Button>
+          <Button variant="outline" className="eclair-reset" onClick={resetLevel}><RotateCcw /> Recommencer</Button>
         </aside>
 
         <div className="eclair-stage">
@@ -236,7 +258,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
             {/* oxlint-disable-next-line next/no-img-element -- Project-local generated game artwork. */}
             <img className="eclair-backdrop" src="/assets/eclair-forest.webp" alt="" aria-hidden="true" />
             <div className="eclair-grid">
-              {HARD_MAZE.flatMap((row, rowIndex) => row.map((cell, colIndex) => {
+              {maze.flatMap((row, rowIndex) => row.map((cell, colIndex) => {
                 const key = `${rowIndex}-${colIndex}`;
                 return <span key={key} className={`eclair-cell ${cell ? 'hedge' : 'trail'} ${visited.has(key) ? 'sniffed' : ''}`} />;
               }))}
@@ -275,10 +297,10 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
 
       {showWinCard && <dialog open className="eclair-win" aria-labelledby="eclair-win-title"><div>
         <span className="victory-paws">🐾 🐾 🐾</span>
-        <p><Sparkles /> Retrouvailles réussies</p>
-        <h2 id="eclair-win-title">Éclair est fou de joie !</h2>
+        <p><Sparkles /> {level === LEVELS.length - 1 ? 'Aventure terminée' : `Niveau ${level + 1} réussi`}</p>
+        <h2 id="eclair-win-title">{level === LEVELS.length - 1 ? 'Éclair a traversé les 10 forêts !' : 'Éclair est fou de joie !'}</h2>
         <p>Il a retrouvé Lola après <strong>{moves} pas</strong> et {hintsUsed} indice{hintsUsed > 1 ? 's' : ''}.</p>
-        <section><Button size="lg" onClick={reset}><RotateCcw /> Rejouer</Button><Button size="lg" variant="outline" onClick={onBack}>Choisir un autre jeu</Button></section>
+        <section><Button size="lg" onClick={advanceLevel}>{level === LEVELS.length - 1 ? <><RotateCcw /> Rejouer l’aventure</> : <>Niveau {level + 2} <ArrowRight /></>}</Button><Button size="lg" variant="outline" onClick={onBack}>Choisir un autre jeu</Button></section>
       </div></dialog>}
     </main>
   );
