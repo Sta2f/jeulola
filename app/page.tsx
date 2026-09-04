@@ -28,9 +28,13 @@ export default function Home() {
         <div className="park-vignette" aria-hidden="true" />
 
         <header className="welcome-board">
-          <p><Sparkles /> Bienvenue dans</p>
-          <h1>Le monde<br />de Lola</h1>
-          <span>Joue · Explore · Découvre</span>
+          {/* oxlint-disable-next-line next/no-img-element -- Project-local generated fairy cloud. */}
+          <img src="/assets/lola-cloud-title.webp" alt="" aria-hidden="true" />
+          <div className="welcome-cloud-copy">
+            <p><Sparkles /> Bienvenue dans</p>
+            <h1>Le monde<br />de Lola</h1>
+            <span>Joue · Explore · Découvre</span>
+          </div>
         </header>
 
         <div className="signpost" aria-label="Les jeux de Lola">
