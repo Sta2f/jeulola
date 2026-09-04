@@ -597,7 +597,7 @@ button { font: inherit; }
 .eclair-controls button:active { transform: translateY(2px) scale(.96); background: rgba(213,156,70,.2); }
 .eclair-controls svg { width: 21px; }
 .lick-screen { position: fixed; z-index: 50; inset: 0; display: grid; overflow: hidden; place-items: center; background: radial-gradient(circle,#59351d 0,#150c07 68%); animation: lick-screen-in 300ms ease both; }
-.lick-screen img { width: min(940px,118vw); height: min(940px,118vw); object-fit: contain; mix-blend-mode: screen; filter: drop-shadow(0 0 45px rgba(250,173,80,.38)); animation: happy-zoom 2.4s cubic-bezier(.13,.8,.18,1) both; }
+.lick-screen img { width: min(940px,118vw); height: min(940px,118vw); object-fit: contain; filter: drop-shadow(0 0 45px rgba(250,173,80,.38)); animation: happy-zoom 2.4s cubic-bezier(.13,.8,.18,1) both; }
 .bone-celebration { background: radial-gradient(circle,#7b5424 0,#1a0f08 70%); animation-duration: 180ms; }
 .bone-celebration img { animation: bone-celebration-zoom 1.25s cubic-bezier(.16,.86,.2,1) both; }
 .bone-celebration > div { bottom: 9vh; animation: bone-celebration-copy 1.25s ease both; }

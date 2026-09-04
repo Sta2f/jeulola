@@ -335,13 +335,13 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
 
       {showBoneCelebration && !won && <div className="lick-screen bone-celebration" aria-label="Éclair est heureux d’avoir trouvé un os">
         {/* oxlint-disable-next-line next/no-img-element -- Project-local generated celebration artwork. */}
-        <img src="/assets/eclair-lick.webp" alt="Éclair fête son os" />
+        <img src="/assets/eclair-lick-transparent.png" alt="Éclair fête son os" />
         <div><Bone /> MIAM ! ÉCLAIR A TROUVÉ UN OS ! <Bone /></div>
       </div>}
 
       {won && !showWinCard && <div className="lick-screen" aria-label="Éclair est très heureux de retrouver Lola">
         {/* oxlint-disable-next-line next/no-img-element -- Project-local generated victory artwork. */}
-        <img src="/assets/eclair-lick.webp" alt="Éclair lèche joyeusement l’écran" />
+        <img src="/assets/eclair-lick-transparent.png" alt="Éclair lèche joyeusement l’écran" />
         <span className="lick-smear" aria-hidden="true" />
         <div><Heart /> ÉCLAIR A RETROUVÉ LOLA ! <Heart /></div>
       </div>}
