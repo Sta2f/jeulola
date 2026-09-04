@@ -155,6 +155,7 @@ const DRAWINGS: Drawing[] = [
 export function ColoringGame({ onBack }: { onBack: () => void }) {
   const [drawingIndex, setDrawingIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState<string>(COLORS[0].value);
+  const [eraserMode, setEraserMode] = useState(false);
   const [paint, setPaint] = useState<Record<string, Record<string, string>>>({});
   const [history, setHistory] = useState<Array<{ drawingId: string; zoneId: string; previous?: string }>>([]);
   const [sparkle, setSparkle] = useState(0);
@@ -171,20 +172,8 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
 
   const selectColor = (color: string) => {
     setSelectedColor(color);
+    setEraserMode(false);
     setSparkle((value) => value + 1);
-  };
-
-  const colorZone = (zoneId: string) => {
-    const previous = currentPaint[zoneId];
-    if (previous === selectedColor) return;
-    setHistory((items) => [...items, { drawingId: drawing.id, zoneId, previous }]);
-    setPaint((drawings) => ({
-      ...drawings,
-      [drawing.id]: { ...drawings[drawing.id], [zoneId]: selectedColor },
-    }));
-    setPaintedZone(zoneId);
-    setSparkle((value) => value + 1);
-    window.setTimeout(() => setPaintedZone(''), 420);
   };
 
   const eraseZone = (zoneId: string) => {
@@ -196,6 +185,25 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
       delete nextDrawing[zoneId];
       return { ...drawings, [drawing.id]: nextDrawing };
     });
+    setPaintedZone(zoneId);
+    window.setTimeout(() => setPaintedZone(''), 300);
+  };
+
+  const colorZone = (zoneId: string) => {
+    if (eraserMode) {
+      eraseZone(zoneId);
+      return;
+    }
+    const previous = currentPaint[zoneId];
+    if (previous === selectedColor) return;
+    setHistory((items) => [...items, { drawingId: drawing.id, zoneId, previous }]);
+    setPaint((drawings) => ({
+      ...drawings,
+      [drawing.id]: { ...drawings[drawing.id], [zoneId]: selectedColor },
+    }));
+    setPaintedZone(zoneId);
+    setSparkle((value) => value + 1);
+    window.setTimeout(() => setPaintedZone(''), 420);
   };
 
   const undo = () => {
@@ -297,12 +305,9 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
                 </button>
               ))}
             </div>
-            <button className="eraser-hint" onClick={() => {
-              const lastZone = [...drawing.zones].reverse().find((zone) => currentPaint[zone.id]);
-              if (lastZone) eraseZone(lastZone.id);
-            }}><Eraser /> Gomme</button>
+            <button className={`eraser-hint ${eraserMode ? 'selected' : ''}`} onClick={() => setEraserMode((active) => !active)} aria-pressed={eraserMode}><Eraser /> Gomme</button>
           </div>
-          <p className="coloring-help">Choisis une couleur puis touche une zone. Double-clique une zone pour l’effacer.</p>
+          <p className="coloring-help">{eraserMode ? 'Gomme activée : touche une zone pour retirer sa couleur.' : 'Choisis une couleur puis touche une zone. La couleur ne dépasse jamais.'}</p>
         </section>
       </section>
     </main>
