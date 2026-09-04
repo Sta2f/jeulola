@@ -107,10 +107,14 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   const [won, setWon] = useState(false);
   const [showWinCard, setShowWinCard] = useState(false);
   const [walking, setWalking] = useState(false);
-  const walkTimers = useRef<number[]>([]);
+  const [walkDuration, setWalkDuration] = useState(170);
+  const walkTimer = useRef<number | null>(null);
   const boneCelebrationTimer = useRef<number | null>(null);
   const dogStepCounter = useRef(0);
   const maze = useMemo(() => createHardMaze(LEVELS[level].seed), [level]);
+  const gridCells = useMemo(() => maze.flatMap((row, rowIndex) => row.map((cell, colIndex) => (
+    <span key={`${rowIndex}-${colIndex}`} className={`eclair-cell ${cell ? 'hedge' : 'trail'}`} />
+  ))), [maze]);
 
   const fullPathLength = useMemo(() => findPath(maze, START, GOAL).length, [maze]);
   const progress = Math.min(100, Math.round((visited.size / fullPathLength) * 100));
@@ -139,6 +143,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
     setPosition((current) => {
       const next = { row: current.row + delta[0], col: current.col + delta[1] };
       if (maze[next.row]?.[next.col] !== 0) return current;
+      setWalkDuration(170);
       dogStepCounter.current += 1;
       playSfx('step');
       if (dogStepCounter.current % 5 === 0) playSfx('sniff');
@@ -177,34 +182,41 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
     }
     if (!path.length) return;
 
-    playSfx('sniff');
+    const destination = path[path.length - 1];
+    const duration = Math.min(760, Math.max(180, path.length * 58));
+    const reachesGoal = destination.row === GOAL.row && destination.col === GOAL.col;
+    const crossedBone = path.map(cellKey).find((key) => bones.has(key));
+    setWalkDuration(duration);
     setWalking(true);
-    walkTimers.current = path.map((next, index) => window.setTimeout(() => {
-      const key = cellKey(next);
-      setPosition(next);
-      if (index % 3 === 0) playSfx('step');
-      if (index > 0 && index % 8 === 0) playSfx('sniff');
-      setMoves((count) => count + 1);
-      setVisited((cells) => new Set(cells).add(key));
-      setBones((currentBones) => {
-        if (!currentBones.has(key)) return currentBones;
-        const remaining = new Set(currentBones);
-        remaining.delete(key);
-        celebrateBone(key);
-        return remaining;
-      });
-      if (next.row === GOAL.row && next.col === GOAL.col) {
+    setPosition(destination);
+    setMoves((count) => count + path.length);
+    setVisited((cells) => {
+      const nextCells = new Set(cells);
+      path.forEach((step) => nextCells.add(cellKey(step)));
+      return nextCells;
+    });
+    if (crossedBone) setBones((currentBones) => {
+      const remaining = new Set(currentBones);
+      path.forEach((step) => remaining.delete(cellKey(step)));
+      return remaining;
+    });
+    playSfx('sniff');
+    playSfx('step');
+    walkTimer.current = window.setTimeout(() => {
+      if (reachesGoal) {
         setShowBoneCelebration(false);
         playSfx('bark');
         playSfx('win');
         setWon(true);
+      } else if (crossedBone) {
+        celebrateBone(crossedBone);
+      } else {
+        playSfx('step');
       }
-      if (index === path.length - 1) {
-        walkTimers.current = [];
-        setWalking(false);
-      }
-    }, (index + 1) * 95));
-  }, [celebrateBone, maze, playSfx, position, walking, won]);
+      walkTimer.current = null;
+      setWalking(false);
+    }, duration);
+  }, [bones, celebrateBone, maze, playSfx, position, walking, won]);
 
   const onBoardPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     if (event.pointerType === 'mouse') return;
@@ -216,8 +228,8 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   };
 
   const stopWalking = useCallback(() => {
-    walkTimers.current.forEach((timer) => window.clearTimeout(timer));
-    walkTimers.current = [];
+    if (walkTimer.current !== null) window.clearTimeout(walkTimer.current);
+    walkTimer.current = null;
     setWalking(false);
   }, []);
 
@@ -254,6 +266,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   const resetLevel = () => {
     stopWalking();
     setPosition(START);
+    setWalkDuration(170);
     setMoves(0);
     setVisited(new Set([cellKey(START)]));
     setBones(new Set());
@@ -292,15 +305,10 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
         </aside>
 
         <div className="eclair-stage">
-          <div className={`eclair-board ${walking ? 'is-walking' : ''}`} onPointerDown={onBoardPointerDown} style={{ '--cols': COLS, '--rows': ROWS } as React.CSSProperties} aria-label="Labyrinthe expert d’Éclair">
+          <div className={`eclair-board ${walking ? 'is-walking' : ''}`} onPointerDown={onBoardPointerDown} style={{ '--cols': COLS, '--rows': ROWS, '--move-duration': `${walkDuration}ms` } as React.CSSProperties} aria-label="Labyrinthe expert d’Éclair">
             {/* oxlint-disable-next-line next/no-img-element -- Project-local generated game artwork. */}
             <img className="eclair-backdrop" src="/assets/eclair-forest.webp" alt="" aria-hidden="true" />
-            <div className="eclair-grid">
-              {maze.flatMap((row, rowIndex) => row.map((cell, colIndex) => {
-                const key = `${rowIndex}-${colIndex}`;
-                return <span key={key} className={`eclair-cell ${cell ? 'hedge' : 'trail'} ${visited.has(key) ? 'sniffed' : ''}`} />;
-              }))}
-            </div>
+            <div className="eclair-grid">{gridCells}</div>
             {[...bones].map((key) => {
               const [row, col] = key.split('-').map(Number);
               return <span key={key} className="hint-bone" style={{ '--row': row, '--col': col } as React.CSSProperties} aria-label="Os indice"><Bone /></span>;

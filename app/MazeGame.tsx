@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronLeft, Crown, Footprints, LockKeyhole, RotateCcw, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useGameAudio } from './useGameAudio';
@@ -75,12 +75,15 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
   const [moves, setMoves] = useState(0);
   const [won, setWon] = useState(false);
   const [walking, setWalking] = useState(false);
-  const [visited, setVisited] = useState(() => new Set([`${level.start.row}-${level.start.col}`]));
-  const walkTimers = useRef<number[]>([]);
+  const [walkDuration, setWalkDuration] = useState(170);
+  const walkTimer = useRef<number | null>(null);
+  const gridCells = useMemo(() => level.grid.flatMap((row, rowIndex) => row.map((cell, colIndex) => (
+    <span key={`${rowIndex}-${colIndex}`} className={`maze-cell ${cell ? 'wall' : 'path'}`} />
+  ))), [level]);
 
   const stopWalking = useCallback(() => {
-    walkTimers.current.forEach((timer) => window.clearTimeout(timer));
-    walkTimers.current = [];
+    if (walkTimer.current !== null) window.clearTimeout(walkTimer.current);
+    walkTimer.current = null;
     setWalking(false);
   }, []);
 
@@ -91,7 +94,7 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
     setPosition(nextLevel.start);
     setMoves(0);
     setWon(false);
-    setVisited(new Set([`${nextLevel.start.row}-${nextLevel.start.col}`]));
+    setWalkDuration(170);
     playSfx('select');
   }, [playSfx, stopWalking]);
 
@@ -101,9 +104,9 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
     setPosition((current) => {
       const next = { row: current.row + delta[0], col: current.col + delta[1] };
       if (next.row < 0 || next.row >= level.grid.length || next.col < 0 || next.col >= level.grid[0].length || level.grid[next.row][next.col] === 1) return current;
+      setWalkDuration(170);
       playSfx('step');
       setMoves((count) => count + 1);
-      setVisited((cells) => new Set(cells).add(`${next.row}-${next.col}`));
       if (next.row === level.goal.row && next.col === level.goal.col) {
         setWon(true);
         playSfx('win');
@@ -128,22 +131,24 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
     }
     if (!path.length) return;
 
+    const destination = path[path.length - 1];
+    const duration = Math.min(720, Math.max(190, path.length * 72));
+    const reachesGoal = destination.row === level.goal.row && destination.col === level.goal.col;
+    setWalkDuration(duration);
     setWalking(true);
-    walkTimers.current = path.map((next, index) => window.setTimeout(() => {
-      setPosition(next);
-      if (index % 2 === 0) playSfx('step');
-      setMoves((count) => count + 1);
-      setVisited((cells) => new Set(cells).add(`${next.row}-${next.col}`));
-      if (next.row === level.goal.row && next.col === level.goal.col) {
+    setPosition(destination);
+    setMoves((count) => count + path.length);
+    playSfx('step');
+    walkTimer.current = window.setTimeout(() => {
+      playSfx('step');
+      if (reachesGoal) {
         setWon(true);
         playSfx('win');
         setHighestUnlocked((current) => Math.max(current, Math.min(LEVELS.length - 1, levelIndex + 1)));
       }
-      if (index === path.length - 1) {
-        walkTimers.current = [];
-        setWalking(false);
-      }
-    }, (index + 1) * 115));
+      walkTimer.current = null;
+      setWalking(false);
+    }, duration);
   }, [level, levelIndex, playSfx, position, walking, won]);
 
   const onBoardPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
@@ -203,16 +208,11 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
         </aside>
 
         <div className="maze-stage">
-          <div className={`maze-board ${walking ? 'is-walking' : ''}`} onPointerDown={onBoardPointerDown} aria-label={`Labyrinthe de la forêt enchantée, niveau ${levelIndex + 1}`} style={{ '--cols': level.grid[0].length, '--rows': level.grid.length, aspectRatio: `${level.grid[0].length} / ${level.grid.length}` } as React.CSSProperties}>
+          <div className={`maze-board ${walking ? 'is-walking' : ''}`} onPointerDown={onBoardPointerDown} aria-label={`Labyrinthe de la forêt enchantée, niveau ${levelIndex + 1}`} style={{ '--cols': level.grid[0].length, '--rows': level.grid.length, '--move-duration': `${walkDuration}ms`, aspectRatio: `${level.grid[0].length} / ${level.grid.length}` } as React.CSSProperties}>
             {/* oxlint-disable-next-line next/no-img-element -- Vite app with a project-local generated game asset. */}
             <img className="maze-backdrop" src="/assets/enchanted-forest.webp" alt="" aria-hidden="true" />
             <div className="maze-shade" aria-hidden="true" />
-            <div className="maze-grid">
-              {level.grid.flatMap((row, rowIndex) => row.map((cell, colIndex) => {
-                const key = `${rowIndex}-${colIndex}`;
-                return <span key={key} className={`maze-cell ${cell ? 'wall' : 'path'} ${visited.has(key) ? 'visited' : ''}`} />;
-              }))}
-            </div>
+            <div className="maze-grid">{gridCells}</div>
             <div className="castle-goal" style={{ '--row': level.goal.row, '--col': level.goal.col } as React.CSSProperties} aria-label="Arrivée au château"><Crown /><span>CHÂTEAU</span></div>
             <div className="princess-player" style={{ '--row': position.row, '--col': position.col } as React.CSSProperties} aria-label={`Lola, ligne ${position.row + 1}, colonne ${position.col + 1}`}>
               {/* oxlint-disable-next-line next/no-img-element -- Vite app with a project-local generated game sprite. */}
