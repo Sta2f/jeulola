@@ -152,7 +152,6 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
   }, [level, levelIndex, playSfx, position, walking, won]);
 
   const onBoardPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (event.pointerType === 'mouse') return;
     event.preventDefault();
     const bounds = event.currentTarget.getBoundingClientRect();
     const targetCol = Math.min(level.grid[0].length - 1, Math.max(0, Math.floor((event.clientX - bounds.left) / bounds.width * level.grid[0].length)));

@@ -219,7 +219,6 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   }, [bones, celebrateBone, maze, playSfx, position, walking, won]);
 
   const onBoardPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (event.pointerType === 'mouse') return;
     event.preventDefault();
     const bounds = event.currentTarget.getBoundingClientRect();
     const targetCol = Math.min(COLS - 1, Math.max(0, Math.floor((event.clientX - bounds.left) / bounds.width * COLS)));
