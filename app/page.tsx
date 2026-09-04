@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ChevronLeft, Crown, Dog, Gamepad2, Map, Maximize2, Minimize2, Palette, Rabbit, Sparkles, TrafficCone, Volume2, VolumeX } from 'lucide-react';
 import { TrafficLightGame } from './TrafficLightGame';
 import { MazeGame } from './MazeGame';
 import { ColoringGame } from './ColoringGame';
 import { EclairMazeGame } from './EclairMazeGame';
 import { BettyHideAndSeek } from './BettyHideAndSeek';
-import { preloadFileMusic, startFileMusic, useGameAudio } from './useGameAudio';
+import { type FileMusicTheme, preloadFileMusic, startFileMusic, stopAllFileMusic, useGameAudio } from './useGameAudio';
 
 declare const __BUILD_ID__: string;
 
@@ -17,6 +17,13 @@ export default function Home() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [fullscreenTip, setFullscreenTip] = useState(false);
   const { soundOn, startAudio, stopAudio, toggleSound } = useGameAudio('home');
+
+  const goTo = useCallback((nextScreen: GameScreen, music?: FileMusicTheme) => {
+    stopAudio();
+    stopAllFileMusic();
+    if (music) startFileMusic(music);
+    setScreen(nextScreen);
+  }, [stopAudio]);
 
   useEffect(() => {
     if (screen !== 'home') stopAudio();
@@ -46,11 +53,15 @@ export default function Home() {
       if (document.visibilityState === 'visible') void checkForUpdate();
     };
     void checkForUpdate();
+    const updateTimer = window.setInterval(checkForUpdate, 12000);
     window.addEventListener('focus', checkForUpdate);
+    window.addEventListener('online', checkForUpdate);
     window.addEventListener('pageshow', checkForUpdate);
     document.addEventListener('visibilitychange', onVisibilityChange);
     return () => {
+      window.clearInterval(updateTimer);
       window.removeEventListener('focus', checkForUpdate);
+      window.removeEventListener('online', checkForUpdate);
       window.removeEventListener('pageshow', checkForUpdate);
       document.removeEventListener('visibilitychange', onVisibilityChange);
     };
@@ -90,12 +101,12 @@ export default function Home() {
     }
   };
 
-  if (screen === 'traffic') return <TrafficLightGame onBack={() => setScreen('home')} />;
-  if (screen === 'maze-menu') return <MazeMenu onBack={() => setScreen('home')} onPrincess={() => { startFileMusic('forest'); setScreen('maze'); }} onEclair={() => { startFileMusic('dog'); setScreen('eclair-maze'); }} />;
-  if (screen === 'maze') return <MazeGame onBack={() => setScreen('maze-menu')} />;
-  if (screen === 'coloring') return <ColoringGame onBack={() => setScreen('home')} />;
-  if (screen === 'eclair-maze') return <EclairMazeGame onBack={() => setScreen('maze-menu')} />;
-  if (screen === 'betty-hide') return <BettyHideAndSeek onBack={() => setScreen('home')} />;
+  if (screen === 'traffic') return <TrafficLightGame onBack={() => goTo('home')} />;
+  if (screen === 'maze-menu') return <MazeMenu onBack={() => goTo('home')} onPrincess={() => goTo('maze', 'forest')} onEclair={() => goTo('eclair-maze', 'dog')} />;
+  if (screen === 'maze') return <MazeGame onBack={() => goTo('maze-menu')} />;
+  if (screen === 'coloring') return <ColoringGame onBack={() => goTo('home')} />;
+  if (screen === 'eclair-maze') return <EclairMazeGame onBack={() => goTo('maze-menu')} />;
+  if (screen === 'betty-hide') return <BettyHideAndSeek onBack={() => goTo('home')} />;
 
   return (
     <main className="games-home" onPointerDownCapture={startAudio}>
@@ -135,19 +146,19 @@ export default function Home() {
         <div className="signpost" aria-label="Les jeux de Lola">
           <div className="signpost-top"><Gamepad2 /><span>Choisis ton jeu</span></div>
           <div className="signpost-pole" aria-hidden="true" />
-          <button className="wood-sign sign-pink" onClick={() => setScreen('traffic')}>
+          <button className="wood-sign sign-pink" onClick={() => goTo('traffic')}>
             <span className="sign-icon"><TrafficCone /></span>
             <span><strong>Le feu rouge</strong><small>Observe et réagis</small></span>
           </button>
-          <button className="wood-sign sign-yellow" onClick={() => setScreen('maze-menu')}>
+          <button className="wood-sign sign-yellow" onClick={() => goTo('maze-menu')}>
             <span className="sign-icon"><Map /></span>
             <span><strong>Les labyrinthes</strong><small>Choisis ton aventure</small></span>
           </button>
-          <button className="wood-sign sign-turquoise" onClick={() => { startFileMusic('coloring'); setScreen('coloring'); }}>
+          <button className="wood-sign sign-turquoise" onClick={() => goTo('coloring', 'coloring')}>
             <span className="sign-icon"><Palette /></span>
             <span><strong>Les coloriages</strong><small>Crée avec les couleurs</small></span>
           </button>
-          <button className="wood-sign sign-green" onClick={() => { startFileMusic('hide'); setScreen('betty-hide'); }}>
+          <button className="wood-sign sign-green" onClick={() => goTo('betty-hide', 'hide')}>
             <span className="sign-icon"><Rabbit /></span>
             <span><strong>Cache-cache avec Betty</strong><small>Retrouve la lapine touffue</small></span>
           </button>

@@ -47,10 +47,20 @@ export function preloadFileMusic() {
 export function startFileMusic(theme: FileMusicTheme) {
   const audio = getFileMusic(theme);
   fileMusicCache.forEach((otherAudio, otherTheme) => {
-    if (otherTheme !== theme) otherAudio.pause();
+    if (otherTheme !== theme) {
+      otherAudio.pause();
+      otherAudio.currentTime = 0;
+    }
   });
   if (audio.paused) void audio.play().catch(() => undefined);
   return audio;
+}
+
+export function stopAllFileMusic(rewind = true) {
+  fileMusicCache.forEach((audio) => {
+    audio.pause();
+    if (rewind) audio.currentTime = 0;
+  });
 }
 
 function audioContextClass() {
