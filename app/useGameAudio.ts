@@ -13,6 +13,7 @@ const MUSIC_NOTES: Record<MusicTheme, number[]> = {
 };
 const FILE_MUSIC: Partial<Record<MusicTheme, { src: string; volume: number }>> = {
   forest: { src: '/assets/audio/glowing-maze-path.mp3', volume: .34 },
+  dog: { src: '/assets/audio/the-lost-path-found.mp3', volume: .32 },
   home: { src: '/assets/audio/miniature-wonderland.mp3', volume: .3 },
 };
 const noiseBuffers = new WeakMap<AudioContext, AudioBuffer>();
