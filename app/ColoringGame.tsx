@@ -14,26 +14,32 @@ type PaintEffect = 'solid' | 'glitter' | 'rainbow' | 'watercolor';
 type Paint = { id: string; name: string; effect: PaintEffect; colors: readonly string[] };
 
 const COLORS: Paint[] = [
-  { id: 'pink', name: 'Rose bonbon', effect: 'solid', colors: ['#ff6fae'] },
-  { id: 'raspberry', name: 'Framboise', effect: 'solid', colors: ['#e83e73'] },
-  { id: 'coral', name: 'Corail', effect: 'solid', colors: ['#ff7b67'] },
-  { id: 'orange', name: 'Orange', effect: 'solid', colors: ['#ffad42'] },
-  { id: 'sun', name: 'Soleil', effect: 'solid', colors: ['#ffd84d'] },
-  { id: 'mint', name: 'Menthe', effect: 'solid', colors: ['#70db9b'] },
-  { id: 'turquoise', name: 'Turquoise', effect: 'solid', colors: ['#50d8dc'] },
-  { id: 'sky', name: 'Ciel', effect: 'solid', colors: ['#69bfff'] },
-  { id: 'lavender', name: 'Lavande', effect: 'solid', colors: ['#ad83f4'] },
-  { id: 'purple', name: 'Violet', effect: 'solid', colors: ['#7b52d8'] },
-  { id: 'chocolate', name: 'Chocolat', effect: 'solid', colors: ['#9b6246'] },
-  { id: 'pearl', name: 'Blanc nacré', effect: 'solid', colors: ['#fffaf0'] },
+  { id: 'pink', name: 'Rose dragée', effect: 'solid', colors: ['#ff8fc7'] },
+  { id: 'raspberry', name: 'Cerise brillante', effect: 'solid', colors: ['#e62f6f'] },
+  { id: 'red', name: 'Rouge coquelicot', effect: 'solid', colors: ['#f04452'] },
+  { id: 'peach', name: 'Pêche douce', effect: 'solid', colors: ['#ff9d82'] },
+  { id: 'orange', name: 'Mandarine', effect: 'solid', colors: ['#ff922f'] },
+  { id: 'gold', name: 'Or solaire', effect: 'solid', colors: ['#f5b82e'] },
+  { id: 'sun', name: 'Jaune citron', effect: 'solid', colors: ['#ffe45e'] },
+  { id: 'grass', name: 'Vert prairie', effect: 'solid', colors: ['#72c957'] },
+  { id: 'emerald', name: 'Émeraude', effect: 'solid', colors: ['#28a97d'] },
+  { id: 'turquoise', name: 'Lagon', effect: 'solid', colors: ['#34c9c6'] },
+  { id: 'sky', name: 'Bleu ciel', effect: 'solid', colors: ['#63b9f5'] },
+  { id: 'night', name: 'Bleu nuit', effect: 'solid', colors: ['#3454a5'] },
+  { id: 'lavender', name: 'Lilas', effect: 'solid', colors: ['#b68bea'] },
+  { id: 'purple', name: 'Violet royal', effect: 'solid', colors: ['#7744bd'] },
+  { id: 'chocolate', name: 'Chocolat', effect: 'solid', colors: ['#87543f'] },
+  { id: 'pearl', name: 'Crème nacrée', effect: 'solid', colors: ['#fff2d5'] },
+  { id: 'charcoal', name: 'Gris velours', effect: 'solid', colors: ['#53606d'] },
 ];
 
 const MAGIC_PAINTS: Paint[] = [
-  { id: 'rose-gold-glitter', name: 'Paillettes rose et or', effect: 'glitter', colors: ['#ff67b5', '#ffd66d', '#fff5fb'] },
-  { id: 'unicorn-glitter', name: 'Paillettes licorne', effect: 'glitter', colors: ['#8d73ff', '#ff70c7', '#75e8ff'] },
-  { id: 'magic-rainbow', name: 'Arc-en-ciel magique', effect: 'rainbow', colors: ['#ff5c8a', '#ffca4b', '#55db91', '#61bfff', '#ae76f4'] },
-  { id: 'sunset-watercolor', name: 'Aquarelle coucher de soleil', effect: 'watercolor', colors: ['#ff739d', '#ffac67', '#ffe175'] },
-  { id: 'ocean-watercolor', name: 'Aquarelle océan', effect: 'watercolor', colors: ['#55d9cf', '#58aee8', '#8c79db'] },
+  { id: 'fairy-glitter', name: 'Poussière de fée rose et or', effect: 'glitter', colors: ['#f65ca8', '#ffd85f', '#ffe8f5'] },
+  { id: 'mermaid-glitter', name: 'Écailles de sirène', effect: 'glitter', colors: ['#28c9c4', '#9d7bf4', '#d9fff8'] },
+  { id: 'magic-rainbow', name: 'Aurore arc-en-ciel', effect: 'rainbow', colors: ['#f65586', '#ffb644', '#f4e858', '#47c98a', '#4ba7ec', '#9b62df'] },
+  { id: 'berry-watercolor', name: 'Aquarelle fruits rouges', effect: 'watercolor', colors: ['#e83c75', '#ff8ea8', '#f1a1d8'] },
+  { id: 'lagoon-watercolor', name: 'Aquarelle lagon', effect: 'watercolor', colors: ['#23b6aa', '#52d8c7', '#4b90dd'] },
+  { id: 'galaxy-glitter', name: 'Nuit étoilée', effect: 'glitter', colors: ['#3d3f9d', '#d96fc7', '#7988ea'] },
 ];
 
 const PAINTS = [...COLORS, ...MAGIC_PAINTS];

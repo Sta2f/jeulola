@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-export type SoundEffect = 'step' | 'sniff' | 'bark' | 'bone' | 'sparkle' | 'paint' | 'erase' | 'select' | 'traffic' | 'win';
-type MusicTheme = 'forest' | 'dog' | 'coloring' | 'traffic';
+export type SoundEffect = 'step' | 'sniff' | 'bark' | 'bone' | 'sparkle' | 'paint' | 'erase' | 'select' | 'traffic' | 'win' | 'wrong' | 'hint';
+type MusicTheme = 'forest' | 'dog' | 'coloring' | 'traffic' | 'hide';
 
 const MUSIC_NOTES: Record<MusicTheme, number[]> = {
   forest: [261.63, 329.63, 392, 523.25, 392, 329.63],
   dog: [196, 246.94, 293.66, 369.99, 293.66, 246.94],
   coloring: [329.63, 392, 493.88, 659.25, 523.25, 392],
   traffic: [220, 277.18, 329.63, 277.18],
+  hide: [293.66, 369.99, 440, 587.33, 493.88, 369.99],
 };
 const noiseBuffers = new WeakMap<AudioContext, AudioBuffer>();
 
@@ -120,6 +121,11 @@ export function useGameAudio(theme: MusicTheme) {
       notes.forEach((frequency, index) => tone(context, frequency, now + index * .055, .16, effect === 'paint' ? .045 : .065, 'sine'));
     }
     if (effect === 'erase') noise(context, now, .18, 620, .045);
+    if (effect === 'wrong') {
+      tone(context, 240, now, .16, .055, 'triangle');
+      tone(context, 190, now + .11, .2, .045, 'triangle');
+    }
+    if (effect === 'hint') [392, 523.25, 659.25].forEach((frequency, index) => tone(context, frequency, now + index * .09, .28, .05, 'sine'));
     if (effect === 'traffic') [660, 880].forEach((frequency, index) => tone(context, frequency, now + index * .13, .12, .16));
     if (effect === 'win') [523.25, 659.25, 783.99, 1046.5].forEach((frequency, index) => tone(context, frequency, now + index * .11, .5, .075, 'triangle'));
   }, [ensureContext, soundOn]);
