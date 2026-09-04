@@ -7,6 +7,8 @@ import { EclairMazeGame } from './EclairMazeGame';
 import { BettyHideAndSeek } from './BettyHideAndSeek';
 import { preloadFileMusic, startFileMusic, useGameAudio } from './useGameAudio';
 
+declare const __BUILD_ID__: string;
+
 type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'eclair-maze' | 'betty-hide';
 
 export default function Home() {
@@ -20,6 +22,37 @@ export default function Home() {
   }, [screen, stopAudio]);
 
   useEffect(() => preloadFileMusic(), []);
+
+  useEffect(() => {
+    let checking = false;
+    const checkForUpdate = async () => {
+      if (checking) return;
+      checking = true;
+      try {
+        const response = await fetch(`/version.json?t=${Date.now()}`, { cache: 'no-store' });
+        const latest = await response.json() as { buildId?: string };
+        if (latest.buildId && latest.buildId !== __BUILD_ID__) {
+          window.location.replace(`/?update=${encodeURIComponent(latest.buildId)}`);
+        }
+      } catch {
+        // The game keeps working offline and checks again the next time Safari becomes active.
+      } finally {
+        checking = false;
+      }
+    };
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') void checkForUpdate();
+    };
+    void checkForUpdate();
+    window.addEventListener('focus', checkForUpdate);
+    window.addEventListener('pageshow', checkForUpdate);
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    return () => {
+      window.removeEventListener('focus', checkForUpdate);
+      window.removeEventListener('pageshow', checkForUpdate);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+    };
+  }, []);
 
   useEffect(() => {
     const updateFullscreen = () => {
