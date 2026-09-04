@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Check, ChevronLeft, Crown, Footprints, LockKeyhole, RotateCcw, Sparkles, Volume2, VolumeX } from 'lucide-react';
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, ChevronLeft, Crown, Footprints, RotateCcw, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useGameAudio } from './useGameAudio';
 
@@ -69,7 +69,6 @@ const LEVELS: Level[] = LEVEL_SETTINGS.map((settings) => ({
 export function MazeGame({ onBack }: { onBack: () => void }) {
   const { soundOn, startAudio, playSfx, toggleSound } = useGameAudio('forest');
   const [levelIndex, setLevelIndex] = useState(0);
-  const [highestUnlocked, setHighestUnlocked] = useState(0);
   const level = LEVELS[levelIndex];
   const [position, setPosition] = useState(level.start);
   const [moves, setMoves] = useState(0);
@@ -110,11 +109,10 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
       if (next.row === level.goal.row && next.col === level.goal.col) {
         setWon(true);
         playSfx('win');
-        setHighestUnlocked((current) => Math.max(current, Math.min(LEVELS.length - 1, levelIndex + 1)));
       }
       return next;
     });
-  }, [level, levelIndex, playSfx, walking, won]);
+  }, [level, playSfx, walking, won]);
 
   const walkStraight = useCallback((targetRow: number, targetCol: number) => {
     if (won || walking || (targetRow !== position.row && targetCol !== position.col)) return;
@@ -144,12 +142,11 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
       if (reachesGoal) {
         setWon(true);
         playSfx('win');
-        setHighestUnlocked((current) => Math.max(current, Math.min(LEVELS.length - 1, levelIndex + 1)));
       }
       walkTimer.current = null;
       setWalking(false);
     }, duration);
-  }, [level, levelIndex, playSfx, position, walking, won]);
+  }, [level, playSfx, position, walking, won]);
 
   const onBoardPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -185,15 +182,11 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
       </header>
 
       <nav className="level-trail" aria-label="Les 10 niveaux du labyrinthe">
-        {LEVELS.map((item, index) => {
-          const unlocked = index <= highestUnlocked;
-          const complete = index < highestUnlocked;
-          return (
-            <button key={item.name} className={`${index === levelIndex ? 'current' : ''} ${complete ? 'complete' : ''}`} disabled={!unlocked} onClick={() => loadLevel(index)} aria-label={`Niveau ${index + 1}${unlocked ? '' : ' verrouillé'}`} aria-current={index === levelIndex ? 'step' : undefined}>
-              {complete ? <Check /> : unlocked ? index + 1 : <LockKeyhole />}
-            </button>
-          );
-        })}
+        {LEVELS.map((item, index) => (
+          <button key={item.name} className={index === levelIndex ? 'current' : ''} onClick={() => loadLevel(index)} aria-label={`Jouer directement au niveau ${index + 1}`} aria-current={index === levelIndex ? 'step' : undefined}>
+            {index + 1}
+          </button>
+        ))}
       </nav>
 
       <section className="maze-layout">

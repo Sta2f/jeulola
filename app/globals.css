@@ -577,9 +577,9 @@ button { font: inherit; }
 .expert-mark { display: inline-flex; margin-bottom: 19px; padding: 7px 11px; border: 1px solid rgba(241,174,78,.34); border-radius: 999px; color: #f0b25c; background: rgba(239,165,67,.09); font-size: .7rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
 .eclair-story > p:first-of-type { max-width: 400px; margin: 24px 0; color: #98aca5; font-size: 1rem; line-height: 1.63; }
 .eclair-level-track { display: grid; grid-template-columns: repeat(10,1fr); gap: 5px; margin: 0 0 15px; }
-.eclair-level-track span { display: grid; aspect-ratio: 1; max-width: 30px; border: 1px solid rgba(238,190,102,.2); border-radius: 50%; place-items: center; color: #718780; background: rgba(255,255,255,.035); font-family: "Courier New",monospace; font-size: .68rem; font-weight: 900; transition: transform 240ms ease,background 240ms ease,color 240ms ease; }
-.eclair-level-track span.complete { color: #2c1c0f; background: #d9a64f; }
-.eclair-level-track span.current { border-color: #ffe39a; color: #24160b; background: #fff0b8; box-shadow: 0 0 0 4px rgba(238,184,83,.13),0 0 18px rgba(237,181,76,.3); transform: scale(1.12); }
+.eclair-level-track button { display: grid; width: 100%; aspect-ratio: 1; max-width: 30px; padding: 0; border: 1px solid rgba(238,190,102,.26); border-radius: 50%; place-items: center; color: #b4c6bf; background: rgba(255,255,255,.06); font-family: "Courier New",monospace; font-size: .68rem; font-weight: 900; cursor: pointer; touch-action: manipulation; transition: transform 160ms ease,background 160ms ease,color 160ms ease; }
+.eclair-level-track button:hover,.eclair-level-track button:focus-visible { border-color: #ffe39a; color: #fff0b8; background: rgba(217,166,79,.2); transform: translateY(-2px); outline: none; }
+.eclair-level-track button.current { border-color: #ffe39a; color: #24160b; background: #fff0b8; box-shadow: 0 0 0 4px rgba(238,184,83,.13),0 0 18px rgba(237,181,76,.3); transform: scale(1.12); }
 .eclair-meter { position: relative; height: 44px; margin-bottom: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,.1); border-radius: 12px; background: rgba(255,255,255,.04); }
 .eclair-meter > span { position: absolute; inset: 0; background: linear-gradient(90deg,rgba(191,125,50,.35),rgba(38,150,136,.42)); transform-origin: left center; transition: transform 380ms ease; }
 .eclair-meter div { position: relative; display: flex; height: 100%; align-items: center; justify-content: space-between; padding: 0 13px; }

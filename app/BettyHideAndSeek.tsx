@@ -20,16 +20,16 @@ type Scene = {
 };
 
 const SCENES: Scene[] = [
-  { name: 'Le jardin géant', clue: 'Regarde près du petit tunnel, sous les fleurs.', x: 19, y: 72, crop: 'inset(0 0 46% 0)', atlasX: 0, atlasY: 0 },
+  { name: 'Le jardin géant', clue: 'Une petite oreille dépasse près d’un passage fleuri.', x: 19, y: 72, crop: 'inset(0 0 58% 12%)', atlasX: 0, atlasY: 0, difficulty: 'Maligne', hitRadius: 7.8, rabbitSize: 15, hintSize: 24, hintDuration: 2700, hotDistance: 17, warmDistance: 28 },
   { name: 'La chambre cabane', clue: 'Betty s’est rapprochée d’un autre animal… observe les petits détails.', x: 84, y: 67, crop: 'inset(0 58% 72% 0)', atlasX: 1, atlasY: 0, difficulty: 'Difficile', hitRadius: 6.2, rabbitSize: 13, hintSize: 18, hintDuration: 2100, hotDistance: 13, warmDistance: 23 },
-  { name: 'Le village bonbon', clue: 'Cherche du côté des tonneaux remplis de gourmandises.', x: 82, y: 72, crop: 'inset(0 42% 0 0)', atlasX: 2, atlasY: 0 },
-  { name: 'La forêt des lucioles', clue: 'Betty adore les champignons qui brillent.', x: 27, y: 69, crop: 'inset(0 0 50% 0)', atlasX: 3, atlasY: 0 },
-  { name: 'La ferme ensoleillée', clue: 'Il y a quelque chose de touffu près des bottes de foin.', x: 62, y: 47, crop: 'inset(0 0 48% 0)', atlasX: 4, atlasY: 0 },
-  { name: 'Le palais sous-marin', clue: 'Une lapine se cache près du grand coquillage.', x: 72, y: 80, crop: 'inset(0 48% 0 0)', atlasX: 0, atlasY: 1 },
-  { name: 'Le village enneigé', clue: 'Regarde entre les cadeaux et le sapin.', x: 72, y: 76, crop: 'inset(0 0 47% 0)', atlasX: 1, atlasY: 1 },
-  { name: 'La bibliothèque du château', clue: 'Betty a choisi un fauteuil bien confortable.', x: 70, y: 65, crop: 'inset(0 0 45% 0)', atlasX: 2, atlasY: 1 },
-  { name: 'La fête foraine', clue: 'Cherche près du banc, sous les ballons.', x: 18, y: 78, crop: 'inset(0 0 49% 0)', atlasX: 3, atlasY: 1 },
-  { name: 'Le royaume des nuages', clue: 'Une petite tête apparaît près du pavillon fleuri.', x: 76, y: 74, crop: 'inset(0 45% 0 0)', atlasX: 4, atlasY: 1 },
+  { name: 'Le village bonbon', clue: 'Une touffe grise se confond avec les gourmandises.', x: 82, y: 72, crop: 'inset(18% 50% 18% 0)', atlasX: 2, atlasY: 0, difficulty: 'Difficile', hitRadius: 7.1, rabbitSize: 14, hintSize: 21, hintDuration: 2400, hotDistance: 15, warmDistance: 25 },
+  { name: 'La forêt des lucioles', clue: 'Les lumières révèlent parfois le bout d’une oreille.', x: 27, y: 69, crop: 'inset(0 8% 64% 20%)', atlasX: 3, atlasY: 0, difficulty: 'Corsée', hitRadius: 6.8, rabbitSize: 13.5, hintSize: 20, hintDuration: 2250, hotDistance: 14, warmDistance: 24 },
+  { name: 'La ferme ensoleillée', clue: 'Observe les formes touffues autour de la paille.', x: 62, y: 47, crop: 'inset(10% 0 52% 36%)', atlasX: 4, atlasY: 0, difficulty: 'Corsée', hitRadius: 6.5, rabbitSize: 13, hintSize: 19, hintDuration: 2150, hotDistance: 13.5, warmDistance: 23 },
+  { name: 'Le palais sous-marin', clue: 'Une silhouette argentée se fond dans les coraux.', x: 72, y: 80, crop: 'inset(24% 55% 8% 0)', atlasX: 0, atlasY: 1, difficulty: 'Experte', hitRadius: 6.1, rabbitSize: 12.5, hintSize: 18, hintDuration: 2000, hotDistance: 12.5, warmDistance: 22 },
+  { name: 'Le village enneigé', clue: 'Cherche deux petites pointes dans le décor blanc.', x: 72, y: 76, crop: 'inset(0 20% 68% 20%)', atlasX: 1, atlasY: 1, difficulty: 'Experte', hitRadius: 5.9, rabbitSize: 12, hintSize: 17, hintDuration: 1850, hotDistance: 12, warmDistance: 21 },
+  { name: 'La bibliothèque du château', clue: 'Un regard discret se cache parmi les objets anciens.', x: 70, y: 65, crop: 'inset(24% 12% 34% 48%)', atlasX: 2, atlasY: 1, difficulty: 'Experte', hitRadius: 5.7, rabbitSize: 11.8, hintSize: 16, hintDuration: 1750, hotDistance: 11.5, warmDistance: 20 },
+  { name: 'La fête foraine', clue: 'Une minuscule oreille dépasse près d’un endroit où l’on se repose.', x: 18, y: 78, crop: 'inset(0 28% 72% 15%)', atlasX: 3, atlasY: 1, difficulty: 'Championne', hitRadius: 5.4, rabbitSize: 11.5, hintSize: 15, hintDuration: 1600, hotDistance: 10.5, warmDistance: 19 },
+  { name: 'Le royaume des nuages', clue: 'Betty ressemble presque à un petit nuage gris.', x: 76, y: 74, crop: 'inset(22% 58% 26% 0)', atlasX: 4, atlasY: 1, difficulty: 'Championne', hitRadius: 5.1, rabbitSize: 11, hintSize: 14, hintDuration: 1500, hotDistance: 10, warmDistance: 18 },
 ];
 
 type Marker = { x: number; y: number; warmth: 'cold' | 'warm' | 'hot'; id: number };

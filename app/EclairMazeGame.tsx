@@ -275,10 +275,14 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
     setShowBoneCelebration(false);
   };
 
-  const advanceLevel = () => {
-    if (level === LEVELS.length - 1) setLevel(0);
-    else setLevel((current) => current + 1);
+  const loadLevel = (nextLevel: number) => {
+    setLevel(nextLevel);
     resetLevel();
+    playSfx('select');
+  };
+
+  const advanceLevel = () => {
+    loadLevel(level === LEVELS.length - 1 ? 0 : level + 1);
   };
 
   return (
@@ -294,8 +298,8 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
           <span className="expert-mark">Niveau {level + 1} · {LEVELS[level].name}</span>
           <h2>Aide Éclair à<br />retrouver Lola !</h2>
           <p>Éclair a flairé la trace de Lola dans la forêt. Guide ce petit chihuahua chocolat jusqu’à elle.</p>
-          <div className="eclair-level-track" aria-label={`Progression : niveau ${level + 1} sur ${LEVELS.length}`}>
-            {LEVELS.map((item, index) => <span key={item.seed} className={index < level ? 'complete' : index === level ? 'current' : ''}>{index + 1}</span>)}
+          <div className="eclair-level-track" aria-label="Choisir directement un des 10 niveaux">
+            {LEVELS.map((item, index) => <button type="button" key={item.seed} className={index === level ? 'current' : ''} onClick={() => loadLevel(index)} aria-label={`Jouer directement au niveau ${index + 1}`} aria-current={index === level ? 'step' : undefined}>{index + 1}</button>)}
           </div>
           <div className="eclair-meter"><span style={{ transform: `scaleX(${progress / 100})` }} /><div><small>Exploration</small><strong>{progress}%</strong></div></div>
           <Button className="hint-button" onClick={addHint}><Lightbulb /> Indice : pose un os</Button>
