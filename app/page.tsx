@@ -143,12 +143,12 @@ function MazeMenu({ onBack, onPrincess, onEclair }: { onBack: () => void; onPrin
       <button className="maze-adventure princess-adventure" onClick={onPrincess}>
         {/* oxlint-disable-next-line next/no-img-element -- Project-local game character. */}
         <img src="/assets/princess-lantern.webp" alt="Lola avec sa lanterne" />
-        <span><small>10 niveaux enchantés</small><strong>La princesse perdue</strong><em>Guide Lola jusqu’au château</em></span>
+        <span><small>20 niveaux enchantés</small><strong>La princesse perdue</strong><em>Guide Lola jusqu’au château</em></span>
       </button>
       <button className="maze-adventure eclair-adventure" onClick={onEclair}>
         {/* oxlint-disable-next-line next/no-img-element -- Project-local game character. */}
         <img src="/assets/eclair-chihuahua-cutout.webp" alt="Éclair, le chihuahua chocolat" />
-        <span><small>10 niveaux experts</small><strong>Aide Éclair à retrouver Lola !</strong><em>Suis sa piste dans la forêt</em></span>
+        <span><small>20 niveaux experts</small><strong>Aide Éclair à retrouver Lola !</strong><em>Suis sa piste dans la forêt</em></span>
         <Dog aria-hidden="true" />
       </button>
     </section>

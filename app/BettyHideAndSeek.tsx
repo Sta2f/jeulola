@@ -7,30 +7,52 @@ type Scene = {
   clue: string;
   x: number;
   y: number;
-  crop: string;
+  atlas: string;
   atlasX: number;
   atlasY: number;
-  difficulty?: string;
-  hitRadius?: number;
-  rabbitSize?: number;
-  hintSize?: number;
-  hintDuration?: number;
-  hotDistance?: number;
-  warmDistance?: number;
+  difficulty: string;
+  hitRadius: number;
+  rabbitSize: number;
+  hintSize: number;
+  hintDuration: number;
+  hotDistance: number;
+  warmDistance: number;
 };
 
-const SCENES: Scene[] = [
-  { name: 'Le jardin géant', clue: 'Une petite oreille dépasse près d’un passage fleuri.', x: 19, y: 72, crop: 'inset(0 0 58% 12%)', atlasX: 0, atlasY: 0, difficulty: 'Maligne', hitRadius: 7.8, rabbitSize: 15, hintSize: 24, hintDuration: 2700, hotDistance: 17, warmDistance: 28 },
-  { name: 'La chambre cabane', clue: 'Betty s’est rapprochée d’un autre animal… observe les petits détails.', x: 84, y: 67, crop: 'inset(0 58% 72% 0)', atlasX: 1, atlasY: 0, difficulty: 'Difficile', hitRadius: 6.2, rabbitSize: 13, hintSize: 18, hintDuration: 2100, hotDistance: 13, warmDistance: 23 },
-  { name: 'Le village bonbon', clue: 'Une touffe grise se confond avec les gourmandises.', x: 82, y: 72, crop: 'inset(18% 50% 18% 0)', atlasX: 2, atlasY: 0, difficulty: 'Difficile', hitRadius: 7.1, rabbitSize: 14, hintSize: 21, hintDuration: 2400, hotDistance: 15, warmDistance: 25 },
-  { name: 'La forêt des lucioles', clue: 'Les lumières révèlent parfois le bout d’une oreille.', x: 27, y: 69, crop: 'inset(0 8% 64% 20%)', atlasX: 3, atlasY: 0, difficulty: 'Corsée', hitRadius: 6.8, rabbitSize: 13.5, hintSize: 20, hintDuration: 2250, hotDistance: 14, warmDistance: 24 },
-  { name: 'La ferme ensoleillée', clue: 'Observe les formes touffues autour de la paille.', x: 62, y: 47, crop: 'inset(10% 0 52% 36%)', atlasX: 4, atlasY: 0, difficulty: 'Corsée', hitRadius: 6.5, rabbitSize: 13, hintSize: 19, hintDuration: 2150, hotDistance: 13.5, warmDistance: 23 },
-  { name: 'Le palais sous-marin', clue: 'Une silhouette argentée se fond dans les coraux.', x: 72, y: 80, crop: 'inset(24% 55% 8% 0)', atlasX: 0, atlasY: 1, difficulty: 'Experte', hitRadius: 6.1, rabbitSize: 12.5, hintSize: 18, hintDuration: 2000, hotDistance: 12.5, warmDistance: 22 },
-  { name: 'Le village enneigé', clue: 'Cherche deux petites pointes dans le décor blanc.', x: 72, y: 76, crop: 'inset(0 20% 68% 20%)', atlasX: 1, atlasY: 1, difficulty: 'Experte', hitRadius: 5.9, rabbitSize: 12, hintSize: 17, hintDuration: 1850, hotDistance: 12, warmDistance: 21 },
-  { name: 'La bibliothèque du château', clue: 'Un regard discret se cache parmi les objets anciens.', x: 70, y: 65, crop: 'inset(24% 12% 34% 48%)', atlasX: 2, atlasY: 1, difficulty: 'Experte', hitRadius: 5.7, rabbitSize: 11.8, hintSize: 16, hintDuration: 1750, hotDistance: 11.5, warmDistance: 20 },
-  { name: 'La fête foraine', clue: 'Une minuscule oreille dépasse près d’un endroit où l’on se repose.', x: 18, y: 78, crop: 'inset(0 28% 72% 15%)', atlasX: 3, atlasY: 1, difficulty: 'Championne', hitRadius: 5.4, rabbitSize: 11.5, hintSize: 15, hintDuration: 1600, hotDistance: 10.5, warmDistance: 19 },
-  { name: 'Le royaume des nuages', clue: 'Betty ressemble presque à un petit nuage gris.', x: 76, y: 74, crop: 'inset(22% 58% 26% 0)', atlasX: 4, atlasY: 1, difficulty: 'Championne', hitRadius: 5.1, rabbitSize: 11, hintSize: 14, hintDuration: 1500, hotDistance: 10, warmDistance: 18 },
+type SceneSeed = readonly [name: string, clue: string, x: number, y: number];
+
+const SCENE_GROUPS: { atlas: string; scenes: SceneSeed[] }[] = [
+  { atlas: '/assets/betty-scenes.webp', scenes: [
+    ['Le jardin géant', 'Regarde près du petit tunnel fleuri.', 19, 72], ['La chambre cabane', 'Observe les petits détails près des meubles.', 84, 67], ['Le village bonbon', 'Cherche près des gourmandises colorées.', 82, 72], ['La forêt des lucioles', 'Une silhouette se fond près des champignons.', 27, 69], ['La ferme ensoleillée', 'Regarde autour de la paille et des paniers.', 62, 47],
+    ['Le palais sous-marin', 'Cherche près du grand coquillage.', 72, 80], ['Le village enneigé', 'Observe entre les cadeaux et le sapin.', 72, 76], ['La bibliothèque du château', 'Regarde près des fauteuils et des livres.', 70, 65], ['La fête foraine', 'Cherche près du banc sous les ballons.', 18, 78], ['Le royaume des nuages', 'Un petit nuage gris semble bouger.', 76, 74],
+  ] },
+  { atlas: '/assets/betty-scenes-2.webp', scenes: [
+    ['La serre aux roses', 'Betty adore se glisser entre les pots fleuris.', 18, 77], ['La boulangerie des fées', 'Regarde près des paniers et des tabourets.', 78, 75], ['La grotte de cristal', 'Une petite forme grise se cache près des pierres bleues.', 26, 73], ['La gare miniature', 'Cherche près des valises et du banc.', 76, 76], ['La chambre aux jouets', 'Observe les cubes et les petits trains.', 82, 70],
+    ['Le village des citrouilles', 'Betty s’est faufilée près d’une maison ronde.', 76, 77], ['Le jardin des cascades', 'Regarde près du pont et des fleurs tropicales.', 22, 72], ['L’atelier des horloges', 'Cherche parmi les rouages et les caisses.', 78, 78], ['Le moulin des lavandes', 'Une touffe grise se confond avec les paniers.', 22, 82], ['L’étang des lucioles', 'Observe le petit pont et les roseaux.', 77, 70],
+  ] },
+  { atlas: '/assets/betty-scenes-3.webp', scenes: [
+    ['La cour du château bonbon', 'Cherche près des fleurs et de la fontaine.', 20, 76], ['La bibliothèque des bois', 'Betty s’est approchée des piles de livres.', 78, 76], ['La crique du phare', 'Regarde près du coffre et des coquillages.', 21, 78], ['La cuisine champignon', 'Observe les petits sièges rouges.', 78, 78], ['Le village dans la boule à neige', 'Cherche près des cadeaux au pied de la boule.', 80, 78],
+    ['Le jardin arc-en-ciel', 'Une petite forme se cache près du banc fleuri.', 78, 78], ['La nurserie du dragon', 'Regarde près des cristaux et des coffres.', 22, 77], ['Le jardin de perles', 'Cherche près du grand coquillage lumineux.', 23, 76], ['Le pavillon des cerisiers', 'Observe près des coussins et de la table.', 80, 76], ['Le camp de la jungle', 'Betty se cache près de la tente et des sacs.', 74, 78],
+  ] },
+  { atlas: '/assets/betty-scenes-4.webp', scenes: [
+    ['Le port des montgolfières', 'Cherche parmi les paniers et les cordages.', 20, 76], ['L’atelier des robes de fée', 'Regarde près des tissus et des paniers.', 80, 76], ['Le dédale des tournesols', 'Observe le petit chariot fleuri.', 22, 78], ['L’observatoire de minuit', 'Betty s’est glissée près des livres d’étoiles.', 79, 77], ['La chambre dans l’arbre', 'Cherche près des sacs et des lanternes.', 78, 77],
+    ['Le jardin du palais de glace', 'Une silhouette grise se fond dans la neige.', 22, 78], ['La plage au trésor', 'Regarde près du coffre et des tonneaux.', 78, 76], ['La salle de musique magique', 'Cherche entre les instruments et les coussins.', 78, 77], ['Le marché de la rivière', 'Observe les paniers de fruits près du quai.', 77, 77], ['La serre du soleil couchant', 'Betty se repose près du fauteuil fleuri.', 78, 76],
+  ] },
+  { atlas: '/assets/betty-scenes-5.webp', scenes: [
+    ['L’atelier de Noël', 'Cherche près des paquets et du petit traîneau.', 78, 78], ['La serre aux papillons', 'Une petite forme se cache près du fauteuil.', 20, 77], ['La mine aux pierres magiques', 'Observe près du wagon et des cristaux.', 78, 77], ['La fête des douceurs', 'Cherche près des pots colorés et des fleurs.', 79, 77], ['Le grenier secret du château', 'Regarde près des coffres et des livres.', 78, 76],
+    ['Le verger enchanté', 'Betty s’est approchée des paniers de pommes.', 21, 78], ['Le jardin de la lune', 'Cherche près du banc et des fleurs bleues.', 78, 77], ['L’atelier des couleurs', 'Observe les pinceaux et les petites tables.', 21, 78], ['Le village des fleurs', 'Une lapine minuscule se fond près des maisonnettes.', 78, 77], ['Le balcon du palais des fées', 'Regarde près du fauteuil et des coussins.', 22, 77],
+  ] },
 ];
+
+const SCENES: Scene[] = SCENE_GROUPS.flatMap((group, groupIndex) => group.scenes.map(([name, clue, x, y], sceneIndex) => {
+  const index = groupIndex * 10 + sceneIndex;
+  return {
+    name, clue, x, y, atlas: group.atlas, atlasX: sceneIndex % 5, atlasY: Math.floor(sceneIndex / 5),
+    difficulty: index < 10 ? 'Maligne' : index < 20 ? 'Difficile' : index < 30 ? 'Corsée' : index < 40 ? 'Experte' : 'Championne',
+    hitRadius: Math.max(5.3, 8 - index * .055), rabbitSize: Math.max(8.6, 13 - index * .09), hintSize: Math.max(14, 23 - index * .17),
+    hintDuration: Math.max(1450, 2700 - index * 25), hotDistance: Math.max(11, 17 - index * .11), warmDistance: Math.max(19, 28 - index * .17),
+  };
+}));
 
 type Marker = { x: number; y: number; warmth: 'cold' | 'warm' | 'hot'; id: number };
 
@@ -106,6 +128,12 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
     resetRound();
   };
 
+  const loadScene = (nextLevel: number) => {
+    setLevel(nextLevel);
+    resetRound();
+    playSfx('select');
+  };
+
   return <main className="betty-page" onPointerDownCapture={startAudio}>
     <header className="betty-header">
       <button className="back-button betty-back" onClick={onBack}><ChevronLeft /><span>Les jeux</span></button>
@@ -120,9 +148,9 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
         <img src="/assets/betty-rabbit.webp" alt="Betty, une lapine gris et blanc très touffue" />
       </div>
       <div className="betty-intro-copy">
-        <span className="betty-kicker"><Rabbit /> 10 cachettes féeriques</span>
+        <span className="betty-kicker"><Rabbit /> 50 cachettes féeriques</span>
         <h2>Aide Lola à retrouver Betty !</h2>
-        <p>Betty la petite lapine touffue s’est cachée dans dix mondes merveilleux. Observe bien chaque détail.</p>
+        <p>Betty la petite lapine touffue s’est cachée dans cinquante mondes merveilleux. Elle reste entière, mais se fond dans chaque décor.</p>
         <div className="betty-rules">
           <div><Heart /><span><strong>10 chances</strong><small>Chaque mauvais endroit retire un cœur.</small></span></div>
           <div><Eye /><span><strong>Chaud ou froid</strong><small>La marque change de couleur selon la distance.</small></span></div>
@@ -132,25 +160,25 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
       </div>
     </section> : <section className="betty-game">
       <aside className="betty-panel">
-        <span className="betty-level">Décor {level + 1} sur 10{scene.difficulty ? ` · ${scene.difficulty}` : ''}</span>
+        <span className="betty-level">Décor {level + 1} sur {SCENES.length} · {scene.difficulty}</span>
         <h2>{scene.name}</h2>
         <p>Regarde partout, puis touche l’endroit où Betty pourrait être cachée.</p>
         <div className="betty-hearts" aria-label={`${chances} chances restantes`}>
           {Array.from({ length: 10 }, (_, index) => <Heart key={index} className={index < chances ? 'alive' : 'gone'} />)}
         </div>
         <button className="betty-hint" onClick={showHint} disabled={hintUsed || found || lost}><Lightbulb /> {hintUsed ? scene.clue : 'Voir un indice'}</button>
-        <div className="betty-dots" aria-label={`Niveau ${level + 1} sur 10`}>{SCENES.map((_, index) => <i key={index} className={index < level ? 'done' : index === level ? 'current' : ''} />)}</div>
+        <div className="betty-dots" aria-label={`Choisir directement un des ${SCENES.length} décors`}>{SCENES.map((item, index) => <button type="button" key={item.name} className={index < level ? 'done' : index === level ? 'current' : ''} onClick={() => loadScene(index)} aria-label={`Ouvrir le décor ${index + 1} : ${item.name}`} aria-current={index === level ? 'step' : undefined} />)}</div>
       </aside>
 
       <div className="betty-stage-wrap">
         <button
           className={`betty-scene ${marker ? 'made-mistake' : ''}`}
-          style={{ '--atlas-x': scene.atlasX, '--atlas-y': scene.atlasY } as React.CSSProperties}
+          style={{ '--atlas-x': scene.atlasX, '--atlas-y': scene.atlasY, '--scene-atlas': `url("${scene.atlas}")` } as React.CSSProperties}
           onPointerDown={chooseSpot}
           aria-label={`Chercher Betty dans ${scene.name}`}
         >
           {/* oxlint-disable-next-line next/no-img-element -- Optimized project-local generated character in a Vite app. */}
-          <img className={`hidden-betty ${found ? 'is-found' : ''}`} style={{ left: `${scene.x}%`, top: `${scene.y}%`, width: found ? '18%' : `${scene.rabbitSize ?? 18}%`, clipPath: found ? 'none' : scene.crop }} src="/assets/betty-rabbit.webp" alt="" />
+          <img className={`hidden-betty ${found ? 'is-found' : ''}`} style={{ left: `${scene.x}%`, top: `${scene.y}%`, width: found ? '18%' : `${scene.rabbitSize}%` }} src="/assets/betty-rabbit.webp" alt="" />
           {hintActive && <span className="betty-hint-ring" style={{ left: `${scene.x}%`, top: `${scene.y}%`, width: `${scene.hintSize ?? 32}%` }}><Lightbulb /></span>}
           {marker && <span key={marker.id} className={`betty-marker ${marker.warmth}`} style={{ left: `${marker.x}%`, top: `${marker.y}%` }}><span>{marker.warmth === 'hot' ? 'Très chaud !' : marker.warmth === 'warm' ? 'Tu chauffes…' : 'C’est froid !'}</span></span>}
         </button>
@@ -159,7 +187,7 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
           <div className="betty-confetti" aria-hidden="true">{confetti.map((piece, index) => <i key={index} style={{ '--x': piece.x, '--delay': piece.delay, '--spin': piece.spin, '--color': piece.color } as React.CSSProperties} />)}</div>
           {/* oxlint-disable-next-line next/no-img-element -- Optimized project-local generated character in a Vite app. */}
           <img src="/assets/betty-rabbit.webp" alt="Betty saute de joie" />
-          <div><small>BRAVO LOLA !</small><strong>Tu as trouvé Betty !</strong><p>Elle remue ses oreilles de bonheur.</p><button onClick={nextScene}>{level === 9 ? 'Rejouer les 10 décors' : 'Décor suivant'} <Sparkles /></button></div>
+          <div><small>BRAVO LOLA !</small><strong>Tu as trouvé Betty !</strong><p>Elle remue ses oreilles de bonheur.</p><button onClick={nextScene}>{level === SCENES.length - 1 ? 'Rejouer les 50 décors' : 'Décor suivant'} <Sparkles /></button></div>
         </output>}
         {lost && <output className="betty-result lost">
           {/* oxlint-disable-next-line next/no-img-element -- Optimized project-local generated character in a Vite app. */}

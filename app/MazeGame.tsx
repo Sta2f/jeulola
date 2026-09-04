@@ -18,6 +18,16 @@ const LEVEL_SETTINGS = [
   { rows: 13, cols: 15, seed: 188, name: 'La brume enchantée', difficulty: 'Courageuse' },
   { rows: 13, cols: 15, seed: 233, name: 'Le dédale royal', difficulty: 'Experte' },
   { rows: 13, cols: 17, seed: 301, name: 'La porte du château', difficulty: 'Royale' },
+  { rows: 15, cols: 19, seed: 701, name: 'Le jardin des fausses pistes', difficulty: 'Maître', branching: true },
+  { rows: 15, cols: 19, seed: 827, name: 'La forêt aux vingt détours', difficulty: 'Maître', branching: true },
+  { rows: 15, cols: 21, seed: 919, name: 'Le bois des chemins trompeurs', difficulty: 'Maître', branching: true },
+  { rows: 17, cols: 21, seed: 1033, name: 'Le royaume des impasses', difficulty: 'Prodige', branching: true },
+  { rows: 17, cols: 23, seed: 1171, name: 'Les ronces du vieux palais', difficulty: 'Prodige', branching: true },
+  { rows: 19, cols: 23, seed: 1307, name: 'La vallée aux mille branches', difficulty: 'Prodige', branching: true },
+  { rows: 19, cols: 25, seed: 1459, name: 'Le labyrinthe des étoiles', difficulty: 'Légendaire', branching: true },
+  { rows: 21, cols: 25, seed: 1601, name: 'La forêt sans fin', difficulty: 'Légendaire', branching: true },
+  { rows: 21, cols: 27, seed: 1777, name: 'Le grand dédale enchanté', difficulty: 'Légendaire', branching: true },
+  { rows: 23, cols: 29, seed: 1951, name: 'La couronne des chemins perdus', difficulty: 'Ultime', branching: true },
 ] as const;
 
 function seededRandom(seed: number) {
@@ -28,13 +38,41 @@ function seededRandom(seed: number) {
   };
 }
 
-function generateMaze(rows: number, cols: number, seed: number) {
+function generateMaze(rows: number, cols: number, seed: number, branching = false) {
   const random = seededRandom(seed);
   const grid = Array.from({ length: rows }, () => Array(cols).fill(1));
   const start = { row: rows - 2, col: 1 };
   const goal = { row: 1, col: cols - 2 };
   const stack = [start];
   grid[start.row][start.col] = 0;
+
+  if (branching) {
+    const active = [start];
+    while (active.length) {
+      const activeIndex = random() < .52 ? active.length - 1 : Math.floor(random() * active.length);
+      const current = active[activeIndex];
+      const directions = [[-2, 0], [2, 0], [0, -2], [0, 2]];
+      for (let index = directions.length - 1; index > 0; index -= 1) {
+        const swapIndex = Math.floor(random() * (index + 1));
+        [directions[index], directions[swapIndex]] = [directions[swapIndex], directions[index]];
+      }
+      const nextDirection = directions.find(([rowDelta, colDelta]) => {
+        const nextRow = current.row + rowDelta;
+        const nextCol = current.col + colDelta;
+        return nextRow > 0 && nextRow < rows - 1 && nextCol > 0 && nextCol < cols - 1 && grid[nextRow][nextCol] === 1;
+      });
+      if (!nextDirection) {
+        active.splice(activeIndex, 1);
+        continue;
+      }
+      const [rowDelta, colDelta] = nextDirection;
+      const next = { row: current.row + rowDelta, col: current.col + colDelta };
+      grid[current.row + rowDelta / 2][current.col + colDelta / 2] = 0;
+      grid[next.row][next.col] = 0;
+      active.push(next);
+    }
+    return { grid, start, goal };
+  }
 
   while (stack.length) {
     const current = stack[stack.length - 1];
@@ -63,7 +101,7 @@ function generateMaze(rows: number, cols: number, seed: number) {
 
 const LEVELS: Level[] = LEVEL_SETTINGS.map((settings) => ({
   ...settings,
-  ...generateMaze(settings.rows, settings.cols, settings.seed),
+  ...generateMaze(settings.rows, settings.cols, settings.seed, 'branching' in settings && settings.branching),
 }));
 
 export function MazeGame({ onBack }: { onBack: () => void }) {
@@ -181,7 +219,7 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
         <div className="maze-header-actions"><div className="move-count"><Footprints /><span><strong>{moves}</strong> pas</span></div><button className="game-sound-toggle" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique et les bruitages' : 'Activer la musique et les bruitages'}>{soundOn ? <Volume2 /> : <VolumeX />}</button></div>
       </header>
 
-      <nav className="level-trail" aria-label="Les 10 niveaux du labyrinthe">
+      <nav className="level-trail" aria-label="Les 20 niveaux du labyrinthe">
         {LEVELS.map((item, index) => (
           <button key={item.name} className={index === levelIndex ? 'current' : ''} onClick={() => loadLevel(index)} aria-label={`Jouer directement au niveau ${index + 1}`} aria-current={index === levelIndex ? 'step' : undefined}>
             {index + 1}
@@ -191,7 +229,7 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
 
       <section className="maze-layout">
         <aside className="maze-story">
-          <span className="chapter-mark">Niveau {levelIndex + 1} sur 10</span>
+          <span className="chapter-mark">Niveau {levelIndex + 1} sur {LEVELS.length}</span>
           <h2>{level.name}</h2>
           <p>Guide Lola entre les vieux arbres jusqu’à la couronne dorée. Chaque forêt devient un peu plus mystérieuse.</p>
           <span className="difficulty-badge">Difficulté · {level.difficulty}</span>
@@ -223,7 +261,7 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
 
       {won && <dialog open className="win-screen" aria-labelledby="win-title"><div className="win-card">
         <div className="win-crown"><Crown /></div><p><Sparkles /> {isFinalLevel ? 'Aventure terminée' : 'Niveau réussi'}</p>
-        <h2 id="win-title">{isFinalLevel ? 'Lola a traversé les 10 forêts !' : `Le niveau ${levelIndex + 1} est terminé`}</h2>
+        <h2 id="win-title">{isFinalLevel ? 'Lola a traversé les 20 forêts !' : `Le niveau ${levelIndex + 1} est terminé`}</h2>
         <p>Tu as trouvé la sortie en <strong>{moves} pas</strong>.</p>
         <div>
           <Button size="lg" onClick={() => loadLevel(isFinalLevel ? 0 : levelIndex + 1)}>{isFinalLevel ? <RotateCcw /> : <Sparkles />} {isFinalLevel ? 'Recommencer l’aventure' : 'Niveau suivant'}</Button>
