@@ -1,21 +1,23 @@
 import { useState } from 'react';
-import { Crown, Gamepad2, Map, Sparkles, TrafficCone } from 'lucide-react';
+import { Crown, Gamepad2, Map, Palette, Sparkles, TrafficCone } from 'lucide-react';
 import { TrafficLightGame } from './TrafficLightGame';
 import { MazeGame } from './MazeGame';
+import { ColoringGame } from './ColoringGame';
 
-type GameScreen = 'home' | 'traffic' | 'maze';
+type GameScreen = 'home' | 'traffic' | 'maze' | 'coloring';
 
 export default function Home() {
   const [screen, setScreen] = useState<GameScreen>('home');
 
   if (screen === 'traffic') return <TrafficLightGame onBack={() => setScreen('home')} />;
   if (screen === 'maze') return <MazeGame onBack={() => setScreen('home')} />;
+  if (screen === 'coloring') return <ColoringGame onBack={() => setScreen('home')} />;
 
   return (
     <main className="games-home">
       <nav className="home-nav" aria-label="Navigation principale">
         <a className="home-brand" href="#games" aria-label="Le monde de Lola — accueil"><Crown /><span>Le monde de Lola</span></a>
-        <span className="game-count"><Gamepad2 /> 2 jeux</span>
+        <span className="game-count"><Gamepad2 /> 3 jeux</span>
       </nav>
 
       <section className="park-hero" id="games" aria-label="Choisir un jeu">
@@ -40,14 +42,14 @@ export default function Home() {
             <span className="sign-icon"><Map /></span>
             <span><strong>Le labyrinthe</strong><small>Retrouve le château</small></span>
           </button>
-          <div className="wood-sign sign-turquoise is-coming" aria-label="De nouveaux jeux arrivent bientôt">
-            <span className="sign-icon"><Sparkles /></span>
-            <span><strong>Bientôt…</strong><small>Une nouvelle surprise</small></span>
-          </div>
+          <button className="wood-sign sign-turquoise" onClick={() => setScreen('coloring')}>
+            <span className="sign-icon"><Palette /></span>
+            <span><strong>Les coloriages</strong><small>Crée avec les couleurs</small></span>
+          </button>
         </div>
       </section>
 
-      <footer className="home-footer"><span>Deux aventures sont déjà ouvertes</span><span>D’autres jeux arrivent bientôt</span></footer>
+      <footer className="home-footer"><span>Trois aventures sont déjà ouvertes</span><span>D’autres jeux arrivent bientôt</span></footer>
     </main>
   );
 }
