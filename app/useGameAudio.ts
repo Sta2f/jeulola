@@ -54,6 +54,7 @@ function noise(context: AudioContext, start: number, duration: number, frequency
 export function useGameAudio(theme: MusicTheme) {
   const [soundOn, setSoundOn] = useState(true);
   const contextRef = useRef<AudioContext | null>(null);
+  const forestMusicRef = useRef<HTMLAudioElement | null>(null);
   const musicTimer = useRef<number | null>(null);
   const noteIndex = useRef(0);
 
@@ -67,9 +68,15 @@ export function useGameAudio(theme: MusicTheme) {
   const stopMusic = useCallback(() => {
     if (musicTimer.current !== null) window.clearInterval(musicTimer.current);
     musicTimer.current = null;
+    forestMusicRef.current?.pause();
   }, []);
 
   const beginMusic = useCallback(() => {
+    if (theme === 'forest') {
+      forestMusicRef.current ??= Object.assign(new Audio('/assets/audio/glowing-maze-path.mp3'), { loop: true, volume: .34, preload: 'auto' });
+      if (forestMusicRef.current.paused) void forestMusicRef.current.play().catch(() => undefined);
+      return;
+    }
     if (musicTimer.current !== null) return;
     const context = ensureContext();
     if (!context) return;
@@ -132,19 +139,22 @@ export function useGameAudio(theme: MusicTheme) {
 
   const toggleSound = useCallback(() => {
     setSoundOn((current) => {
-      const context = ensureContext();
+      const context = theme === 'forest' ? null : ensureContext();
       if (current) {
         stopMusic();
         if (context) void context.suspend();
       } else if (context) {
         void context.resume().then(beginMusic);
+      } else {
+        beginMusic();
       }
       return !current;
     });
-  }, [beginMusic, ensureContext, stopMusic]);
+  }, [beginMusic, ensureContext, stopMusic, theme]);
 
   useEffect(() => () => {
     stopMusic();
+    if (forestMusicRef.current) forestMusicRef.current.currentTime = 0;
     if (contextRef.current) void contextRef.current.close();
   }, [stopMusic]);
 
