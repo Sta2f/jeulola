@@ -2,8 +2,6 @@
 button, a, summary { -webkit-tap-highlight-color: transparent; }
 button:focus-visible, a:focus-visible, summary:focus-visible, input:focus-visible { outline: 3px solid #e9ac43; outline-offset: 4px; }
 button { touch-action: manipulation; }
-.sign-bike { background-color: #f6b3a1; color: #723a43; border-color: #ce7d7d; }
-.sign-bike::after { border-left-color: #f6b3a1; }
 .game-sound-toggle { width: 44px !important; height: 44px !important; min-width: 44px; padding: 0 !important; border-radius: 12px !important; opacity: 1 !important; }
 .achievement-count { color: #edd399; font-size: .75rem; white-space: nowrap; align-self: center; }
 .eclair-level-track .achievement-count { flex-basis: 100%; }

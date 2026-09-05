@@ -4,7 +4,6 @@ import Home from './page';
 import { FullscreenControl } from './FullscreenControl';
 import './globals.css';
 import './polish.css';
-import './red-bike.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

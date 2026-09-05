@@ -1,6 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
-import { Bike } from 'lucide-react';
-const RedBikeGame = lazy(() => import('./RedBikeGame'));
+import { useCallback, useEffect, useState } from 'react';
 import { ChevronLeft, Crown, Dog, Gamepad2, Map, Palette, Rabbit, Sparkles, TrafficCone, Volume2, VolumeX } from 'lucide-react';
 import { TrafficLightGame } from './TrafficLightGame';
 import { MazeGame } from './MazeGame';
@@ -11,7 +9,7 @@ import { type FileMusicTheme, preloadFileMusic, startFileMusic, stopAllFileMusic
 
 declare const __BUILD_ID__: string;
 
-type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'eclair-maze' | 'betty-hide' | 'bike';
+type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'eclair-maze' | 'betty-hide';
 
 export default function Home() {
   const [screen, setScreen] = useState<GameScreen>('home');
@@ -31,7 +29,7 @@ export default function Home() {
     window.history.replaceState({ lolaScreen: 'home' }, '', '#home');
     const back = (event: PopStateEvent) => {
       const next = event.state?.lolaScreen as GameScreen;
-      const valid: GameScreen[] = ['home', 'traffic', 'maze-menu', 'maze', 'coloring', 'eclair-maze', 'betty-hide', 'bike'];
+      const valid: GameScreen[] = ['home', 'traffic', 'maze-menu', 'maze', 'coloring', 'eclair-maze', 'betty-hide'];
       stopAudio();
       stopAllFileMusic();
       setScreen(valid.includes(next) ? next : 'home');
@@ -84,7 +82,6 @@ export default function Home() {
   }, []);
 
   if (screen === 'traffic') return <TrafficLightGame onBack={() => goTo('home')} />;
-  if (screen === 'bike') return <Suspense fallback={<main className="home-entry"><div className="home-entry-card"><h2>Le vélo de Lola arrive…</h2></div></main>}><RedBikeGame onBack={() => goTo('home')} /></Suspense>;
   if (screen === 'maze-menu') return <MazeMenu onBack={() => goTo('home')} onPrincess={() => goTo('maze', 'forest')} onEclair={() => goTo('eclair-maze', 'dog')} />;
   if (screen === 'maze') return <MazeGame onBack={() => goTo('maze-menu')} />;
   if (screen === 'coloring') return <ColoringGame onBack={() => goTo('home')} />;
@@ -106,7 +103,7 @@ export default function Home() {
 
       <nav className="home-nav" aria-label="Navigation principale">
         <a className="home-brand" href="#games" aria-label="Le monde de Lola — accueil"><Crown /><span>Le monde de Lola</span></a>
-        <div className="home-nav-actions"><span className="game-count"><Gamepad2 /> 6 jeux</span><button className="game-sound-toggle light home-sound-toggle" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique d’accueil' : 'Activer la musique d’accueil'}>{soundOn ? <Volume2 /> : <VolumeX />}</button></div>
+        <div className="home-nav-actions"><span className="game-count"><Gamepad2 /> 5 jeux</span><button className="game-sound-toggle light home-sound-toggle" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique d’accueil' : 'Activer la musique d’accueil'}>{soundOn ? <Volume2 /> : <VolumeX />}</button></div>
       </nav>
 
       <section className="park-hero" id="games" aria-label="Choisir un jeu">
@@ -127,7 +124,6 @@ export default function Home() {
         <div className="signpost" aria-label="Les jeux de Lola">
           <div className="signpost-top"><Gamepad2 /><span>Choisis ton jeu</span></div>
           <div className="signpost-pole" aria-hidden="true" />
-          <button className="wood-sign sign-bike" onClick={() => goTo('bike')}><span className="sign-icon"><Bike /></span><span><strong>Le vélo rouge de Lola</strong><small>Nouveau · Une aventure en 3D</small></span></button>
           <button className="wood-sign sign-pink" onClick={() => goTo('traffic')}>
             <span className="sign-icon"><TrafficCone /></span>
             <span><strong>Le feu rouge</strong><small>Observe et réagis</small></span>
@@ -147,7 +143,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="home-footer"><span>40 labyrinthes · 50 cachettes · 10 coloriages · 10 balades à vélo</span><span>Un petit monde, de grandes aventures</span></footer>
+      <footer className="home-footer"><span>40 labyrinthes · 50 cachettes · 10 coloriages</span><span>Un petit monde, de grandes aventures</span></footer>
     </main>
   );
 }
