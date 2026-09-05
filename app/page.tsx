@@ -21,6 +21,22 @@ export default function Home() {
     stopAllFileMusic();
     if (music) startFileMusic(music);
     setScreen(nextScreen);
+    window.history.pushState({ lolaScreen: nextScreen }, '', `#${nextScreen}`);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [stopAudio]);
+
+  useEffect(() => {
+    window.history.replaceState({ lolaScreen: 'home' }, '', '#home');
+    const back = (event: PopStateEvent) => {
+      const next = event.state?.lolaScreen as GameScreen;
+      const valid: GameScreen[] = ['home', 'traffic', 'maze-menu', 'maze', 'coloring', 'eclair-maze', 'betty-hide'];
+      stopAudio();
+      stopAllFileMusic();
+      setScreen(valid.includes(next) ? next : 'home');
+      window.scrollTo(0, 0);
+    };
+    window.addEventListener('popstate', back);
+    return () => window.removeEventListener('popstate', back);
   }, [stopAudio]);
 
   useEffect(() => {
@@ -127,7 +143,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="home-footer"><span>Cinq aventures sont déjà ouvertes</span><span>D’autres jeux arrivent bientôt</span></footer>
+      <footer className="home-footer"><span>40 labyrinthes · 50 cachettes · 10 coloriages</span><span>Un petit monde, de grandes aventures</span></footer>
     </main>
   );
 }

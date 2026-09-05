@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Maximize2, Minimize2 } from 'lucide-react';
+import { setAudioSettings, useAudioSettings } from './preferences';
 
 type WebkitDocument = Document & {
   webkitFullscreenElement?: Element | null;
@@ -11,6 +12,7 @@ type WebkitElement = HTMLElement & {
 };
 
 export function FullscreenControl() {
+  const audio = useAudioSettings();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showTip, setShowTip] = useState(false);
 
@@ -50,6 +52,7 @@ export function FullscreenControl() {
   };
 
   return <>
+    <details className="sound-settings"><summary aria-label="Régler le volume">♪ <span>Volume</span></summary><label>Musique douce <output>{Math.round(audio.volume * 100)} %</output><input aria-label="Volume de la musique" type="range" min="0" max="100" value={Math.round(audio.volume * 100)} onChange={(event) => setAudioSettings({ volume: Number(event.target.value) / 100 })} /></label></details>
     <button className="app-fullscreen-button" type="button" onClick={toggleFullscreen} aria-label={isFullscreen ? 'Quitter le plein écran' : 'Passer en plein écran'}>
       {isFullscreen ? <Minimize2 /> : <Maximize2 />}
       <span>{isFullscreen ? 'Quitter' : 'Plein écran'}</span>

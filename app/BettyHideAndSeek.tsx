@@ -136,7 +136,7 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
 
   return <main className="betty-page" onPointerDownCapture={startAudio}>
     <header className="betty-header">
-      <button className="back-button betty-back" onClick={onBack}><ChevronLeft /><span>Les jeux</span></button>
+      <button className="back-button betty-back" aria-label="Les jeux" onClick={onBack}><ChevronLeft /><span>Les jeux</span></button>
       <div><p>LE GRAND CACHE-CACHE</p><h1>Où est Betty ?</h1></div>
       <button className="game-sound-toggle light" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique et les bruitages' : 'Activer la musique et les bruitages'}>{soundOn ? <Volume2 /> : <VolumeX />}</button>
     </header>

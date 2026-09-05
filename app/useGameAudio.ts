@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+import { getAudioSettings, setAudioSettings, useAudioSettings } from './preferences';
 
 export type SoundEffect = 'step' | 'sniff' | 'bark' | 'bone' | 'sparkle' | 'paint' | 'erase' | 'select' | 'traffic' | 'win' | 'wrong' | 'hint';
 type MusicTheme = 'forest' | 'dog' | 'coloring' | 'traffic' | 'hide' | 'home';
@@ -46,6 +47,8 @@ export function preloadFileMusic() {
 
 export function startFileMusic(theme: FileMusicTheme) {
   const audio = getFileMusic(theme);
+  if (!getAudioSettings().enabled) return audio;
+  audio.volume = FILE_MUSIC[theme]!.volume * getAudioSettings().volume;
   fileMusicCache.forEach((otherAudio, otherTheme) => {
     if (otherTheme !== theme) {
       otherAudio.pause();
@@ -103,7 +106,8 @@ function noise(context: AudioContext, start: number, duration: number, frequency
 }
 
 export function useGameAudio(theme: MusicTheme) {
-  const [soundOn, setSoundOn] = useState(true);
+  const { enabled: soundOn, volume } = useAudioSettings();
+  const activeRef = useRef(false);
   const contextRef = useRef<AudioContext | null>(null);
   const fileMusicRef = useRef<HTMLAudioElement | null>(null);
   const musicTimer = useRef<number | null>(null);
@@ -117,12 +121,14 @@ export function useGameAudio(theme: MusicTheme) {
   }, []);
 
   const stopMusic = useCallback(() => {
+    activeRef.current = false;
     if (musicTimer.current !== null) window.clearInterval(musicTimer.current);
     musicTimer.current = null;
     fileMusicRef.current?.pause();
   }, []);
 
   const beginMusic = useCallback(() => {
+    activeRef.current = true;
     const fileMusic = FILE_MUSIC[theme];
     if (fileMusic) {
       fileMusicRef.current = startFileMusic(theme as FileMusicTheme);
@@ -189,32 +195,40 @@ export function useGameAudio(theme: MusicTheme) {
   }, [ensureContext, soundOn]);
 
   const toggleSound = useCallback(() => {
-    setSoundOn((current) => {
-      const context = FILE_MUSIC[theme] ? null : ensureContext();
-      if (current) {
-        stopMusic();
-        if (context) void context.suspend();
-      } else if (context) {
-        void context.resume().then(beginMusic);
-      } else {
-        beginMusic();
-      }
-      return !current;
-    });
-  }, [beginMusic, ensureContext, stopMusic, theme]);
+    const enabled = !getAudioSettings().enabled;
+    setAudioSettings({ enabled });
+    if (enabled) beginMusic();
+    else { stopAllFileMusic(false); stopMusic(); }
+  }, [beginMusic, stopMusic]);
 
   useEffect(() => () => {
     stopMusic();
     if (fileMusicRef.current) fileMusicRef.current.currentTime = 0;
-    if (contextRef.current) void contextRef.current.close();
+    const context = contextRef.current;
+    contextRef.current = null;
+    if (context && context.state !== 'closed') void context.close().catch(() => undefined);
   }, [stopMusic]);
 
   useEffect(() => {
     if (!FILE_MUSIC[theme]) return;
     const audio = getFileMusic(theme as FileMusicTheme);
     fileMusicRef.current = audio;
-    if (soundOn && audio.paused) void audio.play().catch(() => undefined);
-  }, [soundOn, theme]);
+    audio.volume = FILE_MUSIC[theme]!.volume * volume;
+    if (!soundOn) audio.pause();
+  }, [soundOn, theme, volume]);
+
+  useEffect(() => {
+    let resume = false;
+    const visibility = () => {
+      if (document.hidden) {
+        resume = activeRef.current;
+        stopMusic();
+        if (contextRef.current?.state === 'running') void contextRef.current.suspend();
+      } else if (resume && getAudioSettings().enabled) beginMusic();
+    };
+    document.addEventListener('visibilitychange', visibility);
+    return () => document.removeEventListener('visibilitychange', visibility);
+  }, [beginMusic, stopMusic]);
 
   return { soundOn, startAudio: startMusic, stopAudio: stopMusic, playSfx, toggleSound };
 }

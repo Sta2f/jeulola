@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ChevronLeft, Eraser, Palette, RotateCcw, Sparkles, Undo2, Volume2, VolumeX } from 'lucide-react';
+import { ChevronLeft, Download, Eraser, Palette, RotateCcw, Sparkles, Undo2, Volume2, VolumeX } from 'lucide-react';
+import { readSaved, saveValue } from './preferences';
 import { Button } from '../components/ui/button';
 import { useGameAudio } from './useGameAudio';
 
@@ -148,6 +149,8 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
   const [paintActions, setPaintActions] = useState<Record<string, number>>({});
   const [canUndo, setCanUndo] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
+  const [ready, setReady] = useState(false);
+  const [confirmClear, setConfirmClear] = useState(false);
   const drawing = DRAWINGS[drawingIndex];
   const paint = PAINTS.find((item) => item.id === selectedPaint) ?? COLORS[0];
 
@@ -165,6 +168,7 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
     if (saved) {
       context.putImageData(saved, 0, 0);
       setCanUndo(Boolean(histories.current[drawing.id]?.length));
+      setReady(true);
       return;
     }
 
@@ -178,8 +182,10 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
       savedDrawings.current[drawing.id] = context.getImageData(0, 0, canvas.width, canvas.height);
       histories.current[drawing.id] = [];
       setCanUndo(false);
+      setReady(true);
     };
-    image.src = drawing.image;
+    image.onerror = () => { if (!cancelled && image.src !== new URL(drawing.image, location.href).href) image.src = drawing.image; };
+    image.src = readSaved<string>(`drawing:${drawing.id}`, '') || drawing.image;
     return () => {
       cancelled = true;
     };
@@ -194,7 +200,7 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
 
   const paintAt = (event: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || !ready) return;
     event.preventDefault();
     const context = canvas.getContext('2d', { willReadFrequently: true });
     if (!context) return;
@@ -210,6 +216,7 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
     histories.current[drawing.id] = [...history.slice(-19), before];
     context.putImageData(after, 0, 0);
     savedDrawings.current[drawing.id] = after;
+    saveValue(`drawing:${drawing.id}`, canvas.toDataURL('image/png'));
     setCanUndo(true);
     setPaintActions((items) => ({ ...items, [drawing.id]: Math.max(0, (items[drawing.id] ?? 0) + (eraserMode ? -1 : 1)) }));
     setSparkle((value) => value + 1);
@@ -225,6 +232,7 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
     if (!context) return;
     context.putImageData(previous, 0, 0);
     savedDrawings.current[drawing.id] = previous;
+    saveValue(`drawing:${drawing.id}`, canvas.toDataURL('image/png'));
     histories.current[drawing.id] = history.slice(0, -1);
     setCanUndo(history.length > 1);
     setPaintActions((items) => ({ ...items, [drawing.id]: Math.max(0, (items[drawing.id] ?? 0) - 1) }));
@@ -232,6 +240,10 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
   };
 
   const resetDrawing = () => {
+    if (!confirmClear) { setConfirmClear(true); return; }
+    setConfirmClear(false);
+    setReady(false);
+    saveValue(`drawing:${drawing.id}`, '');
     delete savedDrawings.current[drawing.id];
     histories.current[drawing.id] = [];
     setPaintActions((items) => ({ ...items, [drawing.id]: 0 }));
@@ -241,6 +253,9 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
   };
 
   const chooseDrawing = (index: number) => {
+    if (index === drawingIndex) return;
+    setReady(false);
+    setConfirmClear(false);
     setDrawingIndex(index);
     setEraserMode(false);
     setCanUndo(Boolean(histories.current[DRAWINGS[index].id]?.length));
@@ -250,7 +265,7 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
   return (
     <main className="coloring-page" onPointerDownCapture={startAudio}>
       <header className="coloring-header">
-        <button className="back-button coloring-back" onClick={onBack}><ChevronLeft /><span>Les jeux</span></button>
+        <button className="back-button coloring-back" aria-label="Les jeux" onClick={onBack}><ChevronLeft /><span>Les jeux</span></button>
         <div><p>L’ATELIER ENCHANTÉ</p><h1>Les coloriages de Lola</h1></div>
         <div className="coloring-header-actions"><span className="coloring-progress"><Sparkles /><strong>{paintActions[drawing.id] ?? 0}</strong></span><button className="game-sound-toggle light" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique et les bruitages' : 'Activer la musique et les bruitages'}>{soundOn ? <Volume2 /> : <VolumeX />}</button></div>
       </header>
@@ -273,12 +288,15 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
           <div className="canvas-heading">
             <div><span>Dessin {drawingIndex + 1} sur 10</span><h2>{drawing.title}</h2></div>
             <div className="canvas-actions">
+              <Button variant="outline" disabled={!ready} onClick={() => { const link = document.createElement('a'); link.download = `Lola-${drawing.id}.png`; link.href = canvasRef.current!.toDataURL('image/png'); link.click(); playSfx('sparkle'); }}><Download /> Garder</Button>
               <Button variant="outline" onClick={undo} disabled={!canUndo}><Undo2 /> Annuler</Button>
-              <Button variant="outline" onClick={resetDrawing}><RotateCcw /> Effacer</Button>
+              <Button variant="outline" onClick={resetDrawing}><RotateCcw /> {confirmClear ? 'Tout effacer ?' : 'Effacer'}</Button>
+              {confirmClear && <Button variant="outline" onClick={() => setConfirmClear(false)}>Non</Button>}
             </div>
           </div>
 
           <div className="magic-canvas">
+            {!ready && <output className="drawing-loading">Ton dessin arrive…</output>}
             <canvas ref={canvasRef} width="800" height="576" onPointerDown={paintAt} aria-label={`Coloriage interactif : ${drawing.title}`} />
             <div className="sparkle-burst" key={sparkle} aria-hidden="true">
               {sparkleDots.map((dot, index) => <i key={index} style={{ '--x': `${Math.cos(dot.angle) * dot.distance}px`, '--y': `${Math.sin(dot.angle) * dot.distance}px`, '--delay': `${index * 12}ms` } as React.CSSProperties}>✦</i>)}

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useAchievements } from './useAchievements';
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Bone, ChevronLeft, Footprints, Heart, Lightbulb, RotateCcw, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useGameAudio } from './useGameAudio';
@@ -153,6 +154,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   const [boneFound, setBoneFound] = useState('');
   const [showBoneCelebration, setShowBoneCelebration] = useState(false);
   const [won, setWon] = useState(false);
+  const completed = useAchievements('eclair', level, won);
   const [showWinCard, setShowWinCard] = useState(false);
   const [walking, setWalking] = useState(false);
   const [walkDuration, setWalkDuration] = useState(170);
@@ -354,7 +356,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   return (
     <main className="eclair-page" onPointerDownCapture={startAudio}>
       <header className="eclair-header">
-        <button className="back-button" onClick={onBack}><ChevronLeft /><span>Les jeux</span></button>
+        <button className="back-button" aria-label="Les jeux" onClick={onBack}><ChevronLeft /><span>Les jeux</span></button>
         <div className="eclair-title"><p>NIVEAU {level + 1} SUR {LEVELS.length}</p><h1>Éclair cherche Lola</h1></div>
         <div className="eclair-header-actions"><div className="eclair-steps"><Footprints /><strong>{moves}</strong><span>pas</span></div><button className="game-sound-toggle" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique et les bruitages' : 'Activer la musique et les bruitages'}>{soundOn ? <Volume2 /> : <VolumeX />}</button></div>
       </header>
@@ -365,6 +367,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
           <h2>Aide Éclair à<br />retrouver Lola !</h2>
           <p>Éclair a flairé la trace de Lola dans la forêt. Guide ce petit chihuahua chocolat jusqu’à elle.</p>
           <div className="eclair-level-track" aria-label="Choisir directement un des 20 niveaux">
+            <span className="achievement-count">✦ {completed.length}/20 réussis</span>
             {LEVELS.map((item, index) => <button type="button" key={item.seed} className={index === level ? 'current' : ''} onClick={() => loadLevel(index)} aria-label={`Jouer directement au niveau ${index + 1}`} aria-current={index === level ? 'step' : undefined}>{index + 1}</button>)}
           </div>
           <div className="eclair-meter"><span style={{ transform: `scaleX(${progress / 100})` }} /><div><small>Exploration</small><strong>{progress}%</strong></div></div>

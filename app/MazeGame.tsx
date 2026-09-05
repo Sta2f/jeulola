@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useAchievements } from './useAchievements';
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, ChevronLeft, Crown, Footprints, RotateCcw, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useGameAudio } from './useGameAudio';
@@ -111,6 +112,7 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
   const [position, setPosition] = useState(level.start);
   const [moves, setMoves] = useState(0);
   const [won, setWon] = useState(false);
+  const completed = useAchievements('princess', levelIndex, won);
   const [walking, setWalking] = useState(false);
   const [walkDuration, setWalkDuration] = useState(170);
   const walkTimer = useRef<number | null>(null);
@@ -220,6 +222,7 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
       </header>
 
       <nav className="level-trail" aria-label="Les 20 niveaux du labyrinthe">
+        <span className="achievement-count">✦ {completed.length}/20 réussis</span>
         {LEVELS.map((item, index) => (
           <button key={item.name} className={index === levelIndex ? 'current' : ''} onClick={() => loadLevel(index)} aria-label={`Jouer directement au niveau ${index + 1}`} aria-current={index === levelIndex ? 'step' : undefined}>
             {index + 1}
