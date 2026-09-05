@@ -22,17 +22,59 @@ const FILE_MUSIC: Partial<Record<MusicTheme, { src: string; volume: number }>> =
 };
 const fileMusicCache = new Map<FileMusicTheme, HTMLAudioElement>();
 const noiseBuffers = new WeakMap<AudioContext, AudioBuffer>();
+// iOS ignores HTMLMediaElement.volume. Route music through Web Audio instead.
+let musicContext: AudioContext | null = null;
+const musicGains = new Map<FileMusicTheme, GainNode>();
+const effectGains = new Map<AudioContext, GainNode>();
+
+function level() { const settings = getAudioSettings(); return settings.enabled ? settings.volume : 0; }
+
+function updateVolumes() {
+  musicGains.forEach((gain, theme) => {
+    gain.gain.cancelScheduledValues(gain.context.currentTime);
+    gain.gain.setTargetAtTime(FILE_MUSIC[theme]!.volume * level(), gain.context.currentTime, .015);
+  });
+  effectGains.forEach((gain, context) => {
+    gain.gain.cancelScheduledValues(context.currentTime);
+    gain.gain.setTargetAtTime(level(), context.currentTime, .015);
+  });
+}
+
+function effectsOutput(context: AudioContext) {
+  let gain = effectGains.get(context);
+  if (!gain) {
+    gain = context.createGain();
+    gain.gain.value = level();
+    gain.connect(context.destination);
+    effectGains.set(context, gain);
+  }
+  return gain;
+}
+
+function connectMusic(theme: FileMusicTheme, audio: HTMLAudioElement) {
+  const Context = audioContextClass();
+  if (!Context) { audio.volume = FILE_MUSIC[theme]!.volume * level(); return; }
+  musicContext ??= new Context();
+  if (!musicGains.has(theme)) {
+    const gain = musicContext.createGain();
+    gain.gain.value = FILE_MUSIC[theme]!.volume * level();
+    musicContext.createMediaElementSource(audio).connect(gain).connect(musicContext.destination);
+    musicGains.set(theme, gain);
+  }
+  audio.volume = 1;
+  updateVolumes();
+  void musicContext.resume().catch(() => undefined);
+}
 
 function getFileMusic(theme: FileMusicTheme) {
   let audio = fileMusicCache.get(theme);
   const settings = FILE_MUSIC[theme]!;
   if (audio) {
-    audio.volume = settings.volume;
     return audio;
   }
   audio = new Audio(settings.src);
   audio.loop = true;
-  audio.volume = settings.volume;
+  audio.volume = settings.volume * level();
   audio.preload = 'auto';
   fileMusicCache.set(theme, audio);
   return audio;
@@ -48,7 +90,7 @@ export function preloadFileMusic() {
 export function startFileMusic(theme: FileMusicTheme) {
   const audio = getFileMusic(theme);
   if (!getAudioSettings().enabled) return audio;
-  audio.volume = FILE_MUSIC[theme]!.volume * getAudioSettings().volume;
+  connectMusic(theme, audio);
   fileMusicCache.forEach((otherAudio, otherTheme) => {
     if (otherTheme !== theme) {
       otherAudio.pause();
@@ -78,7 +120,7 @@ function tone(context: AudioContext, frequency: number, start: number, duration:
   gain.gain.setValueAtTime(.0001, start);
   gain.gain.exponentialRampToValueAtTime(volume, start + .018);
   gain.gain.exponentialRampToValueAtTime(.0001, start + duration);
-  oscillator.connect(gain).connect(context.destination);
+  oscillator.connect(gain).connect(effectsOutput(context));
   oscillator.start(start);
   oscillator.stop(start + duration + .02);
 }
@@ -101,7 +143,7 @@ function noise(context: AudioContext, start: number, duration: number, frequency
   gain.gain.setValueAtTime(.0001, start);
   gain.gain.exponentialRampToValueAtTime(volume, start + .012);
   gain.gain.exponentialRampToValueAtTime(.0001, start + duration);
-  source.connect(filter).connect(gain).connect(context.destination);
+  source.connect(filter).connect(gain).connect(effectsOutput(context));
   source.start(start, 0, duration);
 }
 
@@ -175,7 +217,7 @@ export function useGameAudio(theme: MusicTheme) {
         gain.gain.setValueAtTime(.0001, now + delay);
         gain.gain.exponentialRampToValueAtTime(.11, now + delay + .018);
         gain.gain.exponentialRampToValueAtTime(.0001, now + delay + .16);
-        oscillator.connect(gain).connect(context.destination);
+        oscillator.connect(gain).connect(effectsOutput(context));
         oscillator.start(now + delay);
         oscillator.stop(now + delay + .18);
       });
@@ -197,6 +239,7 @@ export function useGameAudio(theme: MusicTheme) {
   const toggleSound = useCallback(() => {
     const enabled = !getAudioSettings().enabled;
     setAudioSettings({ enabled });
+    updateVolumes();
     if (enabled) beginMusic();
     else { stopAllFileMusic(false); stopMusic(); }
   }, [beginMusic, stopMusic]);
@@ -206,14 +249,16 @@ export function useGameAudio(theme: MusicTheme) {
     if (fileMusicRef.current) fileMusicRef.current.currentTime = 0;
     const context = contextRef.current;
     contextRef.current = null;
+    if (context) { effectGains.get(context)?.disconnect(); effectGains.delete(context); }
     if (context && context.state !== 'closed') void context.close().catch(() => undefined);
   }, [stopMusic]);
 
   useEffect(() => {
+    updateVolumes();
     if (!FILE_MUSIC[theme]) return;
     const audio = getFileMusic(theme as FileMusicTheme);
     fileMusicRef.current = audio;
-    audio.volume = FILE_MUSIC[theme]!.volume * volume;
+    if (!musicGains.has(theme as FileMusicTheme)) audio.volume = FILE_MUSIC[theme]!.volume * level();
     if (!soundOn) audio.pause();
   }, [soundOn, theme, volume]);
 
