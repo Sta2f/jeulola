@@ -3,6 +3,7 @@ import { ChevronLeft, Download, Eraser, Palette, RotateCcw, Sparkles, Undo2, Vol
 import { readSaved, saveValue } from './preferences';
 import { Button } from '../components/ui/button';
 import { useGameAudio } from './useGameAudio';
+import { buildRegions } from './coloringRegions';
 
 type Drawing = {
   id: string;
@@ -46,7 +47,7 @@ const MAGIC_PAINTS: Paint[] = [
 const PAINTS = [...COLORS, ...MAGIC_PAINTS];
 
 const DRAWINGS: Drawing[] = [
-  { id: 'winged-bunny', title: 'Le lapin ailé', subtitle: 'Une aventure dans la jungle', image: '/assets/coloring/01-lapin-aile.webp' },
+  { id: 'winged-bunny', title: 'L’oiseau de la jungle', subtitle: 'Une aventure dans la jungle', image: '/assets/coloring/01-lapin-aile.webp' },
   { id: 'puppy', title: 'Le petit chiot', subtitle: 'Son goûter plein de cœurs', image: '/assets/coloring/02-chiot.webp' },
   { id: 'turtle', title: 'La tortue rigolote', subtitle: 'Deux amis au jardin', image: '/assets/coloring/03-tortue.webp' },
   { id: 'frog', title: 'La grenouille', subtitle: 'Sous les champignons', image: '/assets/coloring/04-grenouille.webp' },
@@ -92,35 +93,14 @@ function paintColor(effect: PaintEffect, colors: readonly (readonly number[])[],
   return mixColors(colors[index], colors[index + 1], position - index).map((channel, channelIndex) => channelIndex === 3 ? 255 : Math.round(channel * .88 + 255 * .12));
 }
 
-function floodFill(imageData: ImageData, startX: number, startY: number, paint: Paint) {
+function floodFill(imageData: ImageData, startX: number, startY: number, paint: Paint, regions: Uint32Array) {
   const { data, width, height } = imageData;
-  const startPixel = startY * width + startX;
-  const startIndex = startPixel * 4;
-  const target = [data[startIndex], data[startIndex + 1], data[startIndex + 2], data[startIndex + 3]];
-  const brightness = (target[0] + target[1] + target[2]) / 3;
-  if (brightness < 90) return false;
-
-  const tolerance = 22;
-  const seen = new Uint8Array(width * height);
-  const stack: number[] = [];
+  const target = regions[startY * width + startX];
+  if (!target) return false;
   const colors = paint.colors.map(hexToRgb);
-  const matchesTarget = (pixel: number) => {
-    const index = pixel * 4;
-    return Math.abs(data[index] - target[0]) <= tolerance
-      && Math.abs(data[index + 1] - target[1]) <= tolerance
-      && Math.abs(data[index + 2] - target[2]) <= tolerance
-      && Math.abs(data[index + 3] - target[3]) <= tolerance;
-  };
-  const addPixel = (pixel: number) => {
-    if (pixel < 0 || pixel >= width * height || seen[pixel] || !matchesTarget(pixel)) return;
-    seen[pixel] = 1;
-    stack.push(pixel);
-  };
-
-  addPixel(startPixel);
   let paintedPixels = 0;
-  while (stack.length) {
-    const pixel = stack.pop()!;
+  for (let pixel = 0; pixel < regions.length; pixel++) {
+    if (regions[pixel] !== target) continue;
     const index = pixel * 4;
     const x = pixel % width;
     const color = paintColor(paint.effect, colors, x, Math.floor(pixel / width), width, height);
@@ -129,10 +109,6 @@ function floodFill(imageData: ImageData, startX: number, startY: number, paint: 
     data[index + 2] = color[2];
     data[index + 3] = color[3];
     paintedPixels += 1;
-    if (x > 0) addPixel(pixel - 1);
-    if (x < width - 1) addPixel(pixel + 1);
-    addPixel(pixel - width);
-    addPixel(pixel + width);
   }
   return paintedPixels > 4;
 }
@@ -141,11 +117,13 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
   const { soundOn, startAudio, playSfx, toggleSound } = useGameAudio('coloring');
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const savedDrawings = useRef<Record<string, ImageData>>({});
+  const regionMaps = useRef<Record<string, Uint32Array>>({});
   const histories = useRef<Record<string, ImageData[]>>({});
   const [drawingIndex, setDrawingIndex] = useState(0);
   const [selectedPaint, setSelectedPaint] = useState(COLORS[0].id);
   const [eraserMode, setEraserMode] = useState(false);
   const [sparkle, setSparkle] = useState(0);
+  const [sparklePoint, setSparklePoint] = useState({ x: 50, y: 50 });
   const [paintActions, setPaintActions] = useState<Record<string, number>>({});
   const [canUndo, setCanUndo] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
@@ -179,13 +157,23 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
       context.fillStyle = '#ffffff';
       context.fillRect(0, 0, canvas.width, canvas.height);
       context.drawImage(image, 0, 0, canvas.width, canvas.height);
-      savedDrawings.current[drawing.id] = context.getImageData(0, 0, canvas.width, canvas.height);
-      histories.current[drawing.id] = [];
-      setCanUndo(false);
-      setReady(true);
+      const original = context.getImageData(0, 0, canvas.width, canvas.height);
+      regionMaps.current[drawing.id] = buildRegions(original.data, canvas.width, canvas.height);
+      const finish = () => {
+        if (cancelled) return;
+        savedDrawings.current[drawing.id] = context.getImageData(0, 0, canvas.width, canvas.height);
+        histories.current[drawing.id] = [];
+        setCanUndo(false); setReady(true);
+      };
+      const savedImage = readSaved<string>(`drawing:${drawing.id}`, '');
+      if (!savedImage) { finish(); return; }
+      const restoration = new Image();
+      restoration.onload = () => { if (!cancelled) { context.drawImage(restoration, 0, 0, canvas.width, canvas.height); finish(); } };
+      restoration.onerror = finish;
+      restoration.src = savedImage;
     };
     image.onerror = () => { if (!cancelled && image.src !== new URL(drawing.image, location.href).href) image.src = drawing.image; };
-    image.src = readSaved<string>(`drawing:${drawing.id}`, '') || drawing.image;
+    image.src = drawing.image;
     return () => {
       cancelled = true;
     };
@@ -205,15 +193,16 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
     const context = canvas.getContext('2d', { willReadFrequently: true });
     if (!context) return;
     const bounds = canvas.getBoundingClientRect();
+    setSparklePoint({ x: (event.clientX - bounds.left) / bounds.width * 100, y: (event.clientY - bounds.top) / bounds.height * 100 });
     const x = Math.max(0, Math.min(canvas.width - 1, Math.floor((event.clientX - bounds.left) * canvas.width / bounds.width)));
     const y = Math.max(0, Math.min(canvas.height - 1, Math.floor((event.clientY - bounds.top) * canvas.height / bounds.height)));
     const before = context.getImageData(0, 0, canvas.width, canvas.height);
     const after = new ImageData(new Uint8ClampedArray(before.data), before.width, before.height);
-    const changed = floodFill(after, x, y, eraserMode ? { id: 'eraser', name: 'Gomme', effect: 'solid', colors: ['#ffffff'] } : paint);
+    const changed = floodFill(after, x, y, eraserMode ? { id: 'eraser', name: 'Gomme', effect: 'solid', colors: ['#ffffff'] } : paint, regionMaps.current[drawing.id]);
     if (!changed) return;
 
     const history = histories.current[drawing.id] ?? [];
-    histories.current[drawing.id] = [...history.slice(-19), before];
+    histories.current[drawing.id] = [...history.slice(-5), before];
     context.putImageData(after, 0, 0);
     savedDrawings.current[drawing.id] = after;
     saveValue(`drawing:${drawing.id}`, canvas.toDataURL('image/png'));
@@ -255,6 +244,7 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
   const chooseDrawing = (index: number) => {
     if (index === drawingIndex) return;
     setReady(false);
+    histories.current = {};
     setConfirmClear(false);
     setDrawingIndex(index);
     setEraserMode(false);
@@ -298,7 +288,7 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
           <div className="magic-canvas">
             {!ready && <output className="drawing-loading">Ton dessin arrive…</output>}
             <canvas ref={canvasRef} width="800" height="576" onPointerDown={paintAt} aria-label={`Coloriage interactif : ${drawing.title}`} />
-            <div className="sparkle-burst" key={sparkle} aria-hidden="true">
+            <div className="sparkle-burst" key={sparkle} style={{ left: `${sparklePoint.x}%`, top: `${sparklePoint.y}%` }} aria-hidden="true">
               {sparkleDots.map((dot, index) => <i key={index} style={{ '--x': `${Math.cos(dot.angle) * dot.distance}px`, '--y': `${Math.sin(dot.angle) * dot.distance}px`, '--delay': `${index * 12}ms` } as React.CSSProperties}>✦</i>)}
             </div>
           </div>

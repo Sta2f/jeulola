@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, Pause, Play, RotateCcw, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useGameAudio } from './useGameAudio';
@@ -17,18 +17,32 @@ export function TrafficLightGame({ onBack }: { onBack: () => void }) {
   const [running, setRunning] = useState(true);
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [remaining, setRemaining] = useState(PHASE_DURATION);
+  const remainingRef = useRef(PHASE_DURATION);
+  const [challenge, setChallenge] = useState(false);
+  const [stars, setStars] = useState(0);
+  const [answered, setAnswered] = useState(false);
+  const [feedback, setFeedback] = useState('');
   useEffect(() => {
     if (!started || !running) return;
     const timer = window.setInterval(() => {
-      setRemaining((current) => {
-        if (current > 1) return current - 1;
+      remainingRef.current -= 1;
+      if (remainingRef.current <= 0) {
+        remainingRef.current = PHASE_DURATION;
         setPhaseIndex((phase) => (phase + 1) % PHASES.length);
+        setAnswered(false);
+        setFeedback('');
         playSfx('traffic');
-        return PHASE_DURATION;
-      });
+      }
+      setRemaining(remainingRef.current);
     }, 1000);
     return () => window.clearInterval(timer);
   }, [playSfx, running, started]);
+
+  useEffect(() => {
+    const pauseWhenHidden = () => { if (document.hidden) setRunning(false); };
+    document.addEventListener('visibilitychange', pauseWhenHidden);
+    return () => document.removeEventListener('visibilitychange', pauseWhenHidden);
+  }, []);
 
   const startSimulation = () => {
     setStarted(true);
@@ -38,6 +52,8 @@ export function TrafficLightGame({ onBack }: { onBack: () => void }) {
   };
 
   const resetSimulation = () => {
+    remainingRef.current = PHASE_DURATION;
+    setStars(0); setAnswered(false); setFeedback('');
     setPhaseIndex(0);
     setRemaining(PHASE_DURATION);
     setRunning(true);
@@ -46,6 +62,11 @@ export function TrafficLightGame({ onBack }: { onBack: () => void }) {
 
   const phase = PHASES[phaseIndex];
   const progress = ((PHASE_DURATION - remaining) / PHASE_DURATION) * 360;
+  const answer = (index: number) => {
+    if (answered || !running) return;
+    if (index === phaseIndex) { setStars(s => s + 1); setAnswered(true); setFeedback('Bravo Lola, tu as le bon réflexe !'); playSfx('sparkle'); }
+    else { setFeedback('Regarde la lumière allumée et essaie encore.'); playSfx('wrong'); }
+  };
 
   return (
     <main className={`app-shell phase-${phase.className}`} onPointerDownCapture={startAudio}>
@@ -78,6 +99,7 @@ export function TrafficLightGame({ onBack }: { onBack: () => void }) {
             <Button size="icon-lg" variant="outline" className="icon-control" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique et les bruitages' : 'Activer la musique et les bruitages'}>{soundOn ? <Volume2 /> : <VolumeX />}</Button>
             <Button size="icon-lg" variant="outline" className="icon-control" onClick={resetSimulation} aria-label="Recommencer la simulation"><RotateCcw /></Button>
           </div>
+          <section className="traffic-challenge"><label><input type="checkbox" checked={challenge} onChange={event => setChallenge(event.target.checked)} /> Le défi des bons réflexes <span>★ {stars}</span></label>{challenge && <><p>Que dois-tu faire à cette couleur ?</p><div>{['M’arrêter','Avancer','Ralentir'].map((text,index) => <button key={text} disabled={!started || !running || answered} onClick={() => answer(index)}>{text}</button>)}</div><output>{feedback || 'Choisis une réponse et gagne une étoile.'}</output></>}</section>
         </div>
       </section>
 

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAchievements } from './useAchievements';
+import { readSaved, saveValue } from './preferences';
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Bone, ChevronLeft, Footprints, Heart, Lightbulb, RotateCcw, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useGameAudio } from './useGameAudio';
@@ -142,18 +143,20 @@ function findPath(maze: number[][], from: Position, to: Position) {
 
 export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   const { soundOn, startAudio, playSfx, toggleSound } = useGameAudio('dog');
-  const [level, setLevel] = useState(0);
+  const [level, setLevel] = useState(() => Math.max(0, Math.min(19, Math.floor(Number(readSaved('eclair-level', 0)) || 0))));
+  useEffect(() => saveValue('eclair-level', level), [level]);
   const levelSettings = LEVELS[level];
   const start = useMemo(() => levelStart(levelSettings), [levelSettings]);
   const goal = useMemo(() => levelGoal(levelSettings), [levelSettings]);
-  const [position, setPosition] = useState(() => levelStart(LEVELS[0]));
+  const [position, setPosition] = useState(() => levelStart(LEVELS[level]));
   const [moves, setMoves] = useState(0);
-  const [visited, setVisited] = useState(() => new Set([cellKey(levelStart(LEVELS[0]))]));
+  const [visited, setVisited] = useState(() => new Set([cellKey(levelStart(LEVELS[level]))]));
   const [bones, setBones] = useState(() => new Set<string>());
   const [hintsUsed, setHintsUsed] = useState(0);
   const [boneFound, setBoneFound] = useState('');
   const [showBoneCelebration, setShowBoneCelebration] = useState(false);
   const [won, setWon] = useState(false);
+  const [focusBoard, setFocusBoard] = useState(false);
   const completed = useAchievements('eclair', level, won);
   const [showWinCard, setShowWinCard] = useState(false);
   const [walking, setWalking] = useState(false);
@@ -354,7 +357,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   };
 
   return (
-    <main className="eclair-page" onPointerDownCapture={startAudio}>
+    <main className={`eclair-page ${focusBoard ? 'focus-board' : ''}`} onPointerDownCapture={startAudio}>
       <header className="eclair-header">
         <button className="back-button" aria-label="Les jeux" onClick={onBack}><ChevronLeft /><span>Les jeux</span></button>
         <div className="eclair-title"><p>NIVEAU {level + 1} SUR {LEVELS.length}</p><h1>Éclair cherche Lola</h1></div>
@@ -377,6 +380,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
         </aside>
 
         <div className="eclair-stage">
+          <div className="board-focus-actions"><button className="board-focus-toggle" aria-pressed={focusBoard} onClick={() => setFocusBoard(v => !v)}>{focusBoard ? 'Afficher les niveaux' : 'Grand plateau'}</button>{focusBoard && <button className="board-focus-toggle" onClick={addHint}><Bone /> Poser un os</button>}</div>
           <div className={`eclair-board ${walking ? 'is-walking' : ''}`} onPointerDown={onBoardPointerDown} style={{ '--cols': levelSettings.cols, '--rows': levelSettings.rows, '--move-duration': `${walkDuration}ms`, aspectRatio: `${levelSettings.cols} / ${levelSettings.rows}` } as React.CSSProperties} aria-label={`Labyrinthe d’Éclair, niveau ${level + 1} sur ${LEVELS.length}`}>
             {/* oxlint-disable-next-line next/no-img-element -- Project-local generated game artwork. */}
             <img className="eclair-backdrop" src="/assets/eclair-forest.webp" alt="" aria-hidden="true" />

@@ -4,6 +4,7 @@ import Home from './page';
 import { FullscreenControl } from './FullscreenControl';
 import './globals.css';
 import './polish.css';
+import './game-comfort.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

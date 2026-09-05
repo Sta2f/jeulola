@@ -6,6 +6,7 @@ import { ColoringGame } from './ColoringGame';
 import { EclairMazeGame } from './EclairMazeGame';
 import { BettyHideAndSeek } from './BettyHideAndSeek';
 import { type FileMusicTheme, preloadFileMusic, startFileMusic, stopAllFileMusic, useGameAudio } from './useGameAudio';
+import { readSaved } from './preferences';
 
 declare const __BUILD_ID__: string;
 
@@ -14,6 +15,7 @@ type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'ecla
 export default function Home() {
   const [screen, setScreen] = useState<GameScreen>('home');
   const [entered, setEntered] = useState(false);
+  const wins = ['princess', 'eclair', 'betty'].map(game => { const value = readSaved<number[]>(`wins:${game}`, []); return Array.isArray(value) ? new Set(value).size : 0; });
   const { soundOn, startAudio, stopAudio, toggleSound } = useGameAudio('home');
 
   const goTo = useCallback((nextScreen: GameScreen, music?: FileMusicTheme) => {
@@ -143,6 +145,7 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="lola-achievements" aria-label="Le carnet d’aventures de Lola"><div><Sparkles/><span>Mon carnet d’aventures<small>Les réussites restent sur cet appareil.</small></span></div><span><strong>{wins[0]+wins[1]}</strong> / 40 labyrinthes réussis</span><span><strong>{wins[2]}</strong> / 50 cachettes trouvées</span></section>
       <footer className="home-footer"><span>40 labyrinthes · 50 cachettes · 10 coloriages</span><span>Un petit monde, de grandes aventures</span></footer>
     </main>
   );

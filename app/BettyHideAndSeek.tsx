@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronLeft, Eye, Heart, Lightbulb, Rabbit, RotateCcw, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import { useGameAudio } from './useGameAudio';
+import { useAchievements } from './useAchievements';
 
 type Scene = {
   name: string;
@@ -62,6 +63,7 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
   const [level, setLevel] = useState(0);
   const [chances, setChances] = useState(10);
   const [found, setFound] = useState(false);
+  const completed = useAchievements('betty', level, found);
   const [hintActive, setHintActive] = useState(false);
   const [hintUsed, setHintUsed] = useState(false);
   const [marker, setMarker] = useState<Marker | null>(null);
@@ -87,7 +89,9 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
     const x = ((event.clientX - rect.left) / rect.width) * 100;
     const y = ((event.clientY - rect.top) / rect.height) * 100;
     const distance = Math.hypot(x - scene.x, y - scene.y);
-    if (distance <= (scene.hitRadius ?? 10.5)) {
+    const rabbit = event.currentTarget.querySelector('.hidden-betty')!.getBoundingClientRect();
+    const padding = 4;
+    if (event.clientX >= rabbit.left - padding && event.clientX <= rabbit.right + padding && event.clientY >= rabbit.top - padding && event.clientY <= rabbit.bottom + padding) {
       setFound(true);
       setMarker(null);
       playSfx('win');
@@ -110,6 +114,8 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
   };
 
   const resetRound = () => {
+    if (hintTimer.current !== null) window.clearTimeout(hintTimer.current);
+    hintTimer.current = null;
     setChances(10);
     setFound(false);
     setLost(false);
@@ -167,7 +173,10 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
           {Array.from({ length: 10 }, (_, index) => <Heart key={index} className={index < chances ? 'alive' : 'gone'} />)}
         </div>
         <button className="betty-hint" onClick={showHint} disabled={hintUsed || found || lost}><Lightbulb /> {hintUsed ? scene.clue : 'Voir un indice'}</button>
-        <div className="betty-dots" aria-label={`Choisir directement un des ${SCENES.length} décors`}>{SCENES.map((item, index) => <button type="button" key={item.name} className={index < level ? 'done' : index === level ? 'current' : ''} onClick={() => loadScene(index)} aria-label={`Ouvrir le décor ${index + 1} : ${item.name}`} aria-current={index === level ? 'step' : undefined} />)}</div>
+        <p className="betty-completed">✦ {completed.length} cachettes trouvées sur 50</p>
+        <label className="betty-scene-label" htmlFor="betty-scene-choice">Changer de décor</label>
+        <select id="betty-scene-choice" className="betty-scene-choice" value={level} onChange={event => loadScene(Number(event.target.value))}>{SCENES.map((item,index) => <option key={item.name} value={index}>{completed.includes(index) ? '★ ' : ''}{index+1}. {item.name}</option>)}</select>
+        <details className="betty-all-scenes"><summary>Voir mes 50 cachettes</summary><div className="betty-dots" aria-label={`Choisir directement un des ${SCENES.length} décors`}>{SCENES.map((item, index) => <button type="button" key={item.name} className={`${completed.includes(index) ? 'done' : ''} ${index === level ? 'current' : ''}`} onClick={() => loadScene(index)} aria-label={`Ouvrir le décor ${index + 1} : ${item.name}`} aria-current={index === level ? 'step' : undefined}>{index+1}</button>)}</div></details>
       </aside>
 
       <div className="betty-stage-wrap">
@@ -178,7 +187,7 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
           aria-label={`Chercher Betty dans ${scene.name}`}
         >
           {/* oxlint-disable-next-line next/no-img-element -- Optimized project-local generated character in a Vite app. */}
-          <img className={`hidden-betty ${found ? 'is-found' : ''}`} style={{ left: `${scene.x}%`, top: `${scene.y}%`, width: found ? '18%' : `${scene.rabbitSize}%` }} src="/assets/betty-rabbit.webp" alt="" />
+          <img className={`hidden-betty ${found || lost ? 'is-found' : ''}`} style={{ left: `${scene.x}%`, top: `${scene.y}%`, width: found || lost ? '18%' : `${scene.rabbitSize}%` }} src="/assets/betty-rabbit.webp" alt="" />
           {hintActive && <span className="betty-hint-ring" style={{ left: `${scene.x}%`, top: `${scene.y}%`, width: `${scene.hintSize ?? 32}%` }}><Lightbulb /></span>}
           {marker && <span key={marker.id} className={`betty-marker ${marker.warmth}`} style={{ left: `${marker.x}%`, top: `${marker.y}%` }}><span>{marker.warmth === 'hot' ? 'Très chaud !' : marker.warmth === 'warm' ? 'Tu chauffes…' : 'C’est froid !'}</span></span>}
         </button>

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAchievements } from './useAchievements';
+import { readSaved, saveValue } from './preferences';
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, ChevronLeft, Crown, Footprints, RotateCcw, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useGameAudio } from './useGameAudio';
@@ -107,11 +108,13 @@ const LEVELS: Level[] = LEVEL_SETTINGS.map((settings) => ({
 
 export function MazeGame({ onBack }: { onBack: () => void }) {
   const { soundOn, startAudio, playSfx, toggleSound } = useGameAudio('forest');
-  const [levelIndex, setLevelIndex] = useState(0);
+  const [levelIndex, setLevelIndex] = useState(() => Math.max(0, Math.min(19, Math.floor(Number(readSaved('princess-level', 0)) || 0))));
+  useEffect(() => saveValue('princess-level', levelIndex), [levelIndex]);
   const level = LEVELS[levelIndex];
   const [position, setPosition] = useState(level.start);
   const [moves, setMoves] = useState(0);
   const [won, setWon] = useState(false);
+  const [focusBoard, setFocusBoard] = useState(false);
   const completed = useAchievements('princess', levelIndex, won);
   const [walking, setWalking] = useState(false);
   const [walkDuration, setWalkDuration] = useState(170);
@@ -214,9 +217,9 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
   const isFinalLevel = levelIndex === LEVELS.length - 1;
 
   return (
-    <main className="maze-page" onPointerDownCapture={startAudio}>
+    <main className={`maze-page ${focusBoard ? 'focus-board' : ''}`} onPointerDownCapture={startAudio}>
       <header className="maze-header">
-        <button className="back-button forest-back" onClick={onBack}><ChevronLeft /><span>Les jeux</span></button>
+        <button className="back-button forest-back" aria-label="Les jeux" onClick={onBack}><ChevronLeft /><span>Les jeux</span></button>
         <div className="maze-title"><p>AVENTURE ENCHANTÉE</p><h1>La princesse perdue</h1></div>
         <div className="maze-header-actions"><div className="move-count"><Footprints /><span><strong>{moves}</strong> pas</span></div><button className="game-sound-toggle" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique et les bruitages' : 'Activer la musique et les bruitages'}>{soundOn ? <Volume2 /> : <VolumeX />}</button></div>
       </header>
@@ -241,6 +244,7 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
         </aside>
 
         <div className="maze-stage">
+          <button className="board-focus-toggle" aria-pressed={focusBoard} onClick={() => setFocusBoard(v => !v)}>{focusBoard ? 'Afficher les niveaux' : 'Grand plateau'}</button>
           <div className={`maze-board ${walking ? 'is-walking' : ''}`} onPointerDown={onBoardPointerDown} aria-label={`Labyrinthe de la forêt enchantée, niveau ${levelIndex + 1}`} style={{ '--cols': level.grid[0].length, '--rows': level.grid.length, '--move-duration': `${walkDuration}ms`, aspectRatio: `${level.grid[0].length} / ${level.grid.length}` } as React.CSSProperties}>
             {/* oxlint-disable-next-line next/no-img-element -- Vite app with a project-local generated game asset. */}
             <img className="maze-backdrop" src="/assets/enchanted-forest.webp" alt="" aria-hidden="true" />

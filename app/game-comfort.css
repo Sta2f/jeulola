@@ -1,0 +1,29 @@
+/* Play areas and touch controls share consistent, readable proportions. */
+.lola-achievements{display:flex;align-items:center;gap:18px 28px;flex-wrap:wrap;width:min(1480px,100%);margin:18px auto 0;padding:16px 20px;border-radius:18px;background:#fff9f0;color:#774670;font-size:.8rem;box-shadow:0 5px 20px #7755770c;}.lola-achievements>div{display:flex;gap:12px;align-items:center;margin-right:auto;font-weight:700;}.lola-achievements svg{color:#d0a340;width:24px;}.lola-achievements small{display:block;font-weight:400;font-size:.65rem;margin-top:4px;color:#98758d;}.lola-achievements strong{font-size:1.3rem;font-variant-numeric:tabular-nums;}
+.board-focus-toggle { display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:8px 15px;margin:0 0 12px;border:1px solid #e8d19650;border-radius:12px;color:#f4deac;background:#254438;cursor:pointer;font-size:.8rem;font-weight:700; }
+.board-focus-toggle svg {width:18px;height:18px;}.board-focus-actions{display:flex;gap:10px;justify-content:center;}
+.focus-board .maze-story,.focus-board .eclair-story,.focus-board .level-trail{display:none;}
+.focus-board .maze-layout,.focus-board .eclair-layout{display:block;min-height:0;width:calc(100% - 24px);padding:12px 0 76px;}
+.focus-board .maze-stage,.focus-board .eclair-stage{text-align:center;}
+.focus-board .maze-board,.focus-board .eclair-board{width:min(100%,calc((100dvh - 235px) * var(--cols) / var(--rows)));min-width:min(100%,340px);margin:0 auto;}
+.focus-board .touch-controls,.focus-board .eclair-controls{margin-top:12px;}
+.level-trail button.current,.eclair-level-track button.current{outline:2px solid #f4da8c;outline-offset:2px;}
+.maze-cell.wall,.eclair-cell.hedge{box-shadow:none;}
+.betty-scene-choice {display:block;width:100%;min-height:44px;margin:7px 0 12px;border:1px solid #c6a3ca;border-radius:12px;padding:8px 12px;color:#693e71;background:#fff8fc;font:inherit;font-size:.85rem;color-scheme:light;}
+.betty-scene-label,.betty-completed{color:#78437c;font-size:.8rem;}.betty-all-scenes summary{cursor:pointer;font-size:.8rem;color:#78437c;padding:8px 0;}
+.betty-all-scenes .betty-dots{grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px;}
+.betty-all-scenes .betty-dots button{height:36px;min-height:36px;border-radius:9px;transform:none;color:#704573;background:#fff7fc;font-size:.78rem;font-weight:700;}
+.betty-all-scenes .betty-dots button.done{background:#d3ebd8;color:#396948;}.betty-all-scenes .betty-dots button.current{background:#da74ae;color:white;outline:2px solid #ab4482;outline-offset:1px;}
+.betty-stage-wrap{width:min(100%,calc((100dvh - 160px)*.6));max-width:540px;justify-self:center;}
+.betty-game{grid-template-columns:minmax(220px,320px) minmax(0,1fr);width:min(1080px,calc(100% - 28px));align-items:start;}
+.betty-panel{padding-top:12px;}.betty-panel h2{font-size:clamp(1.8rem,3vw,2.7rem);line-height:1.12;}
+.palette-board{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;}
+.palette-label{grid-column:1 / -1;}.color-swatches{grid-column:1 / -1;display:flex;flex-wrap:wrap;overflow:visible;gap:5px;}
+.color-swatches button{flex:0 0 38px;min-width:38px;min-height:38px;width:38px;height:38px;}
+.magic-swatches{grid-column:1;grid-row:auto;flex-wrap:wrap;overflow:visible;justify-content:flex-start;}.eraser-hint{grid-column:2;grid-row:auto;min-height:42px;}
+.traffic-challenge{margin-top:20px;padding:15px;border:1px solid #ffffff20;border-radius:16px;background:#ffffff06;max-width:480px;}
+.traffic-challenge label{display:flex;gap:8px;align-items:center;font-size:.85rem;cursor:pointer;}.traffic-challenge input{accent-color:#f2cf79;width:18px;height:18px;}.traffic-challenge label span{margin-left:auto;color:#f2cf79;white-space:nowrap;}.traffic-challenge p{font-size:.8rem;margin:14px 0 9px;color:#b8c6cc;}
+.traffic-challenge>div{display:flex;gap:6px;flex-wrap:wrap;}.traffic-challenge button{flex:1;min-height:44px;border:1px solid #ffffff30;border-radius:10px;background:#23313b;color:#fff;padding:7px 10px;cursor:pointer;}.traffic-challenge button:disabled{opacity:.5;cursor:default;}.traffic-challenge output{display:block;margin-top:10px;color:#ebd59e;font-size:.8rem;}
+.simulation{padding-bottom:85px;}.control-panel h2{font-size:clamp(3rem,6vw,5.3rem);}.traffic-light{width:clamp(140px,19vw,230px);}.traffic-scene{min-height:0;}
+@media(max-width:900px) and (orientation:portrait){.betty-game{display:flex;flex-direction:column;align-items:center;}.betty-panel{width:100%;max-width:520px;}.betty-panel>p:not(.betty-completed){display:none;}.betty-panel h2{font-size:1.8rem;}.betty-stage-wrap{width:min(100%,470px);}.betty-hearts{display:flex;margin:10px 0;}.betty-all-scenes .betty-dots{grid-template-columns:repeat(10,1fr);}.betty-all-scenes .betty-dots button{min-width:0;}}
+@media(max-width:600px){.board-focus-toggle{margin-bottom:9px;}.maze-story h2,.eclair-story h2{font-size:1.8rem;}.maze-story>p,.eclair-story>p:first-of-type{font-size:.8rem;margin:8px 0;}.level-trail button,.eclair-level-track button{min-width:34px;min-height:34px;}.betty-all-scenes .betty-dots{grid-template-columns:repeat(5,1fr);}.color-swatches{gap:4px;}.color-swatches button{flex-basis:36px;width:36px;height:36px;min-width:36px;min-height:36px;}.magic-swatches{gap:4px;}.magic-swatch{min-width:38px;}.traffic-challenge{margin-top:14px;}.simulation{padding-bottom:85px;}}
