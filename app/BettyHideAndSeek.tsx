@@ -74,6 +74,17 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
   const scene = { ...SCENES[level], ...hidingPlace };
   const peekWidth = hidingPlace.width;
   const foregroundClip = hidingPlace.clip;
+  const [loadedAtlas, setLoadedAtlas] = useState('');
+  const [loadError, setLoadError] = useState('');
+  const [loadAttempt, setLoadAttempt] = useState(0);
+  const sceneReady = loadedAtlas === scene.atlas;
+  useEffect(() => {
+    let active = true;
+    const image = new Image();
+    image.src = scene.atlas;
+    void image.decode().then(() => { if (active) setLoadedAtlas(scene.atlas); }).catch(() => { if (active) setLoadError(scene.atlas); });
+    return () => { active = false; };
+  }, [scene.atlas, loadAttempt]);
   const confetti = useMemo(() => Array.from({ length: 22 }, (_, index) => ({
     x: `${8 + (index * 41) % 86}%`, delay: `${(index % 7) * 55}ms`, spin: `${index % 2 ? 210 : -180}deg`, color: ['#ff72b6', '#ffe06c', '#76e0d5', '#a88af5'][index % 4],
   })), []);
@@ -87,7 +98,7 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
   };
 
   const chooseSpot = (event: React.PointerEvent<HTMLButtonElement>) => {
-    if (found || lost) return;
+    if (found || lost || !sceneReady) return;
     startAudio();
     const rect = event.currentTarget.getBoundingClientRect();
     const x = ((event.clientX - rect.left) / rect.width) * 100;
@@ -109,7 +120,7 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
   };
 
   const showHint = () => {
-    if (hintUsed || found || lost) return;
+    if (hintUsed || found || lost || !sceneReady) return;
     startAudio();
     setHintUsed(true);
     setHintActive(true);
@@ -184,7 +195,10 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
       </aside>
 
       <div className="betty-stage-wrap">
+        {!sceneReady && <output className="betty-loading">{loadError === scene.atlas ? <><p>Le décor n’a pas pu charger.</p><button onClick={() => { setLoadError(''); setLoadAttempt(v => v + 1); }}>Réessayer</button></> : <p>🌸 Le décor se prépare…</p>}</output>}
         <button
+          disabled={!sceneReady}
+          aria-busy={!sceneReady}
           className={`betty-scene betty-layered ${marker ? 'made-mistake' : ''} ${found || lost ? 'betty-revealed' : ''} ${hintActive ? 'betty-peek-hint' : ''}`}
           style={{ '--atlas-x': scene.atlasX, '--atlas-y': scene.atlasY, '--scene-atlas': `url("${scene.atlas}")` } as React.CSSProperties}
           onPointerDown={chooseSpot}

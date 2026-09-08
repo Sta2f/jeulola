@@ -5,6 +5,7 @@ import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, ChevronLeft, Crown, Footprin
 import { Button } from '../components/ui/button';
 import { useGameAudio } from './useGameAudio';
 import { useFittedBoard } from './useFittedBoard';
+import { MazeZoom } from './MazeZoom';
 
 type Direction = 'up' | 'down' | 'left' | 'right';
 type Position = { row: number; col: number };
@@ -248,6 +249,7 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
 
         <div className="maze-stage" ref={fittedStage}>
           <button className="board-focus-toggle" aria-pressed={focusBoard} onClick={() => setFocusBoard(v => !v)}>{focusBoard ? 'Afficher les niveaux' : 'Grand plateau'}</button>
+          <MazeZoom row={position.row} col={position.col}>
           <div className={`maze-board ${walking ? 'is-walking' : ''}`} onPointerDown={onBoardPointerDown} aria-label={`Labyrinthe de la forêt enchantée, niveau ${levelIndex + 1}`} style={{ '--cols': level.grid[0].length, '--rows': level.grid.length, '--move-duration': `${walkDuration}ms`, aspectRatio: `${level.grid[0].length} / ${level.grid.length}` } as React.CSSProperties}>
             {/* oxlint-disable-next-line next/no-img-element -- Vite app with a project-local generated game asset. */}
             <img className="maze-backdrop" src="/assets/enchanted-forest.webp" alt="" aria-hidden="true" />
@@ -259,6 +261,7 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
               <img src="/assets/princess-lantern.webp" alt="Lola, la princesse avec sa lanterne" />
             </div>
           </div>
+          </MazeZoom>
           <p className="tap-to-walk">Touche une case dans la même ligne ou colonne : Lola avancera jusqu’au mur.</p>
           <div className="touch-controls" aria-label="Commandes directionnelles">
             <button className="touch-up" onClick={() => move('up')} aria-label="Aller vers le haut"><ArrowUp /></button>

@@ -8,6 +8,7 @@ import './game-comfort.css';
 import './letters.css';
 import './math.css';
 import './responsive.css';
+import './audit-fixes.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

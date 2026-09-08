@@ -4,6 +4,7 @@ import { readSaved, saveValue } from './preferences';
 import { Button } from '../components/ui/button';
 import { useGameAudio } from './useGameAudio';
 import { buildRegions } from './coloringRegions';
+import { useFittedColoring } from './useFittedColoring';
 
 type Drawing = {
   id: string;
@@ -126,6 +127,7 @@ function floodFill(imageData: ImageData, startX: number, startY: number, paint: 
 }
 
 export function ColoringGame({ onBack }: { onBack: () => void }) {
+  const fittedPanel = useFittedColoring();
   const { soundOn, startAudio, playSfx, toggleSound } = useGameAudio('coloring');
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const savedDrawings = useRef<Record<string, ImageData>>({});
@@ -286,7 +288,7 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
           </div>
         </aside>
 
-        <section className="coloring-canvas-panel">
+        <section className="coloring-canvas-panel" ref={fittedPanel}>
           <div className="canvas-heading">
             <div><span>Dessin {drawingIndex + 1} sur 10</span><h2>{drawing.title}</h2></div>
             <div className="canvas-actions">

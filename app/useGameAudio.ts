@@ -79,16 +79,13 @@ function getFileMusic(theme: FileMusicTheme) {
   audio = new Audio(settings.src);
   audio.loop = true;
   audio.volume = settings.volume * level();
-  audio.preload = 'auto';
+  audio.preload = 'none';
   fileMusicCache.set(theme, audio);
   return audio;
 }
 
 export function preloadFileMusic() {
   getFileMusic('home').load();
-  window.setTimeout(() => {
-    (['forest', 'dog', 'coloring', 'hide', 'letters', 'math'] as FileMusicTheme[]).forEach((theme) => getFileMusic(theme).load());
-  }, 300);
 }
 
 export function startFileMusic(theme: FileMusicTheme) {

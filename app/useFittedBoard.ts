@@ -5,12 +5,13 @@ export function useFittedBoard(level: number, expanded: boolean) {
   const stageRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     const stage = stageRef.current;
-    const board = stage?.querySelector<HTMLElement>('.maze-board');
+    const board = stage?.querySelector<HTMLElement>('.maze-board,.eclair-board');
     if (!stage || !board) return;
     let frame = 0;
     let disposed = false;
     const fit = () => {
-      const otherHeight = [...stage.children].filter(el => el !== board).reduce((total, el) => {
+      if (board.closest('[data-zoom="true"]')) return;
+      const otherHeight = [...stage.children, ...stage.querySelectorAll('.maze-zoom-toggle')].filter(el => el !== board).reduce((total, el) => {
         const css = getComputedStyle(el);
         return css.display === 'none' ? total : total + el.getBoundingClientRect().height + (parseFloat(css.marginTop) || 0) + (parseFloat(css.marginBottom) || 0);
       }, 0);

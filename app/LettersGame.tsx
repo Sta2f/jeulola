@@ -37,7 +37,7 @@ export function LettersGame({ onBack }: { onBack: () => void }) {
   const [round, setRound] = useState(0);
   useEffect(() => () => { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); }, []);
   const change = (next: Mode) => { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); setMode(next); };
-  return <main className="letters-page" onPointerDownCapture={startAudio}>
+  return <main className={`letters-page letters-mode-${mode}`} onPointerDownCapture={startAudio}>
     <header className="letters-header"><button onClick={onBack}><ChevronLeft /> Les jeux</button><span>LE MONDE DE LOLA</span><span className="letters-stars">★ {wins.length} / 24</span></header>
     <div className="letters-title"><span>UN MOT APRÈS L’AUTRE</span><h1>La magie des lettres</h1><p>Écoute, joue et écris à ton rythme.</p></div>
     <nav className="letters-modes" aria-label="Choisir une activité">
@@ -45,6 +45,7 @@ export function LettersGame({ onBack }: { onBack: () => void }) {
       <button aria-pressed={mode === 'read'} onClick={() => change('read')}><BookOpen /> Je lis</button>
       <button aria-pressed={mode === 'write'} onClick={() => change('write')}><Pencil /> Je trace</button>
     </nav>
+    <label className="letters-word-select">Choisis ton mot <select value={level} onChange={event => { setLevel(Number(event.target.value)); if ('speechSynthesis' in window) window.speechSynthesis.cancel(); }}>{words.map((word,index) => <option key={word.text} value={index}>{index + 1}. {word.picture} {word.text.toLowerCase()}</option>)}</select></label>
     <LetterRound key={`${mode}-${level}-${round}`} mode={mode} level={level} onWin={() => {
       const next = [...new Set([...wins, `${mode}:${level}`])]; setWins(next); saveValue('letters:wins', next);
     }} onNext={() => { setLevel((level + 1) % words.length); setRound(round + 1); }} />
