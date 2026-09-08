@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type PointerEvent } from 'react';
 import { ArrowRight, BookOpen, ChevronLeft, Eraser, Lightbulb, Pencil, RotateCcw, Volume2 } from 'lucide-react';
 import { getAudioSettings, readSaved, saveValue } from './preferences';
+import { useGameAudio } from './useGameAudio';
 
 const words = [
   { text: 'LUNE', picture: '🌙', syllables: 'lu · ne' },
@@ -60,6 +61,9 @@ function LetterRound({ mode, level, onWin, onNext }: { mode: Mode; level: number
   const [message, setMessage] = useState('');
   const [traceLetter, setTraceLetter] = useState(0);
   const [clear, setClear] = useState(0);
+  const { playSfx } = useGameAudio('traffic', false);
+  const [errors, setErrors] = useState(0);
+  const lost = errors >= 3;
   const speechAvailable = 'speechSynthesis' in window;
   const speak = (text: string, requested = false) => {
     if (!speechAvailable) return;
@@ -73,24 +77,31 @@ function LetterRound({ mode, level, onWin, onNext }: { mode: Mode; level: number
   };
   const success = () => { setWon(true); setMessage('Bravo Lola ! Tu as trouvé le mot !'); onWin(); speak(`Bravo Lola ! ${word.text}`); };
   const pick = (id: number, letter: string) => {
-    if (won) return;
-    if (letter !== word.text[picked.length]) { setMessage('Essaie une autre lettre. Tu peux regarder le modèle !'); return; }
+    if (won || lost || picked.includes(id)) return;
+    if (letter !== word.text[picked.length]) {
+      playSfx('wrong');
+      setErrors(errors + 1);
+      setMessage(errors === 2 ? 'Trois erreurs. Regarde le modèle, puis réessaie !' : 'Essaie une autre lettre. Tu peux regarder le modèle !');
+      return;
+    }
+    playSfx(picked.length + 1 === word.text.length ? 'win' : 'sparkle');
     setPicked([...picked, id]); setMessage('Bien joué, continue !');
     if (picked.length + 1 === word.text.length) success();
   };
   return <section className={`letters-card letters-card-${mode}`} aria-label="Le jeu de lettres">
-    <div className="letters-card-top"><span>Mot {level + 1} / {words.length}</span><span>{mode === 'write' ? 'À toi de tracer' : won ? '★ Une étoile gagnée' : 'Chaque essai compte'}</span></div>
+    <div className="letters-card-top"><span>Mot {level + 1} / {words.length}</span><span aria-live="polite">{mode === 'write' ? 'À toi de tracer' : won ? '★ Une étoile gagnée' : mode === 'build' ? `${3 - errors} chances restantes · 3 erreurs maximum` : 'Chaque essai compte'}</span></div>
     <div className="letters-picture" aria-hidden="true">{word.picture}</div>
     <h2>{mode === 'build' ? 'Remets les lettres dans l’ordre' : mode === 'read' ? 'Trouve le mot de l’image' : 'Trace les lettres du mot'}</h2>
     <button className="letters-listen" onClick={() => speak(word.text, true)} disabled={!speechAvailable}><Volume2 /> Écouter le mot</button>
     {!speechAvailable && <p>La voix n’est pas disponible ici. Regarde le modèle ou lis avec un adulte.</p>}
     {mode === 'build' && <>
       <div className="letters-slots" aria-label="Le mot à composer">{word.text.split('').map((letter, index) => <span key={index} aria-label={index < picked.length ? letter : `Lettre ${index + 1} à trouver`}>{index < picked.length ? letter : <small>{index + 1}</small>}</span>)}</div>
-      <div className="letters-tiles">{tiles.map(tile => <button key={tile.id} aria-label={`Lettre ${tile.letter}`} disabled={picked.includes(tile.id) || won} onClick={() => pick(tile.id, tile.letter)}>{tile.letter}</button>)}</div>
-      <div className="letters-help"><button onClick={() => setHint(!hint)} aria-expanded={hint}><Lightbulb /> {hint ? 'Cacher' : 'Voir'} le modèle</button><button disabled={won || !picked.length} onClick={() => { setPicked(picked.slice(0, -1)); setMessage(''); }}><RotateCcw /> Revenir</button></div>
+      <div className="letters-tiles">{tiles.map(tile => <button key={tile.id} aria-label={`Lettre ${tile.letter}`} disabled={picked.includes(tile.id) || won || lost} onClick={() => pick(tile.id, tile.letter)}>{tile.letter}</button>)}</div>
+      <div className="letters-help"><button onClick={() => setHint(!hint)} aria-expanded={hint}><Lightbulb /> {hint ? 'Cacher' : 'Voir'} le modèle</button><button disabled={won || lost || !picked.length} onClick={() => { setPicked(picked.slice(0, -1)); setMessage(''); }}><RotateCcw /> Revenir</button></div>
+      {lost && <button className="letters-next" onClick={() => { setErrors(0); setPicked([]); setMessage('Nouvel essai !'); playSfx('select'); }}>Réessayer ce mot <RotateCcw /></button>}
       {hint && <p className="letters-model">{word.text} <span>{word.text.toLowerCase()}</span></p>}
     </>}
-    {mode === 'read' && <div className="letters-choices">{choices.map(choice => <button key={choice.text} disabled={won} onClick={() => choice === word ? success() : setMessage('Pas encore. Écoute le mot et essaie à nouveau.')}>{choice.text.toLowerCase()}</button>)}</div>}
+    {mode === 'read' && <div className="letters-choices">{choices.map(choice => <button key={choice.text} disabled={won} onClick={() => { playSfx(choice === word ? 'win' : 'wrong'); if (choice === word) success(); else setMessage('Pas encore. Écoute le mot et essaie à nouveau.'); }}>{choice.text.toLowerCase()}</button>)}</div>}
     {mode === 'write' && <>
       <p className="letters-model">{word.text} <span>{word.text.toLowerCase()}</span></p>
       <div className="letters-trace-picker" aria-label="Lettre à tracer">{word.text.split('').map((letter, index) => <button key={index} aria-pressed={traceLetter === index} onClick={() => setTraceLetter(index)}>{letter}</button>)}</div>

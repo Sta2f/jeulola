@@ -147,7 +147,7 @@ function noise(context: AudioContext, start: number, duration: number, frequency
   source.start(start, 0, duration);
 }
 
-export function useGameAudio(theme: MusicTheme) {
+export function useGameAudio(theme: MusicTheme, musicEnabled = true) {
   const { enabled: soundOn, volume } = useAudioSettings();
   const activeRef = useRef(false);
   const contextRef = useRef<AudioContext | null>(null);
@@ -170,6 +170,7 @@ export function useGameAudio(theme: MusicTheme) {
   }, []);
 
   const beginMusic = useCallback(() => {
+    if (!musicEnabled) return;
     activeRef.current = true;
     const fileMusic = FILE_MUSIC[theme];
     if (fileMusic) {
@@ -190,7 +191,7 @@ export function useGameAudio(theme: MusicTheme) {
     };
     playNote();
     musicTimer.current = window.setInterval(playNote, theme === 'traffic' ? 760 : 620);
-  }, [ensureContext, theme]);
+  }, [ensureContext, theme, musicEnabled]);
 
   const startMusic = useCallback(() => {
     if (soundOn) beginMusic();

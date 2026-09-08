@@ -6,12 +6,13 @@ import { ColoringGame } from './ColoringGame';
 import { EclairMazeGame } from './EclairMazeGame';
 import { BettyHideAndSeek } from './BettyHideAndSeek';
 import { LettersGame } from './LettersGame';
+import { MathGame } from './MathGame';
 import { type FileMusicTheme, preloadFileMusic, startFileMusic, stopAllFileMusic, useGameAudio } from './useGameAudio';
 import { readSaved } from './preferences';
 
 declare const __BUILD_ID__: string;
 
-type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'eclair-maze' | 'betty-hide' | 'letters';
+type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'eclair-maze' | 'betty-hide' | 'letters' | 'math';
 
 export default function Home() {
   const [screen, setScreen] = useState<GameScreen>('home');
@@ -32,7 +33,7 @@ export default function Home() {
     window.history.replaceState({ lolaScreen: 'home' }, '', '#home');
     const back = (event: PopStateEvent) => {
       const next = event.state?.lolaScreen as GameScreen;
-      const valid: GameScreen[] = ['home', 'traffic', 'maze-menu', 'maze', 'coloring', 'eclair-maze', 'betty-hide', 'letters'];
+      const valid: GameScreen[] = ['home', 'traffic', 'maze-menu', 'maze', 'coloring', 'eclair-maze', 'betty-hide', 'letters', 'math'];
       stopAudio();
       stopAllFileMusic();
       setScreen(valid.includes(next) ? next : 'home');
@@ -91,6 +92,7 @@ export default function Home() {
   if (screen === 'eclair-maze') return <EclairMazeGame onBack={() => goTo('maze-menu')} />;
   if (screen === 'betty-hide') return <BettyHideAndSeek onBack={() => goTo('home')} />;
   if (screen === 'letters') return <LettersGame onBack={() => goTo('home')} />;
+  if (screen === 'math') return <MathGame onBack={() => goTo('home')} />;
 
   return (
     <main className="games-home" onPointerDownCapture={startAudio}>
@@ -107,7 +109,7 @@ export default function Home() {
 
       <nav className="home-nav" aria-label="Navigation principale">
         <a className="home-brand" href="#games" aria-label="Le monde de Lola — accueil"><Crown /><span>Le monde de Lola</span></a>
-        <div className="home-nav-actions"><span className="game-count"><Gamepad2 /> 6 jeux</span><button className="game-sound-toggle light home-sound-toggle" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique d’accueil' : 'Activer la musique d’accueil'}>{soundOn ? <Volume2 /> : <VolumeX />}</button></div>
+        <div className="home-nav-actions"><span className="game-count"><Gamepad2 /> 7 jeux</span><button className="game-sound-toggle light home-sound-toggle" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique d’accueil' : 'Activer la musique d’accueil'}>{soundOn ? <Volume2 /> : <VolumeX />}</button></div>
       </nav>
 
       <section className="park-hero" id="games" aria-label="Choisir un jeu">
@@ -128,6 +130,10 @@ export default function Home() {
         <div className="signpost" aria-label="Les jeux de Lola">
           <div className="signpost-top"><Gamepad2 /><span>Choisis ton jeu</span></div>
           <div className="signpost-pole" aria-hidden="true" />
+          <button className="wood-sign sign-yellow" onClick={() => goTo('math')}>
+            <span className="sign-icon" aria-hidden="true">123</span>
+            <span><strong>Les calculs enchantés</strong><small>Compte les fleurs avec les fées</small></span>
+          </button>
           <button className="wood-sign sign-purple" onClick={() => goTo('letters')}>
             <span className="sign-icon" aria-hidden="true">ABC</span>
             <span><strong>La magie des lettres</strong><small>Lis, compose et trace des mots</small></span>

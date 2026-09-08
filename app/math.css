@@ -1,0 +1,40 @@
+.math-page { color: #53355f; background: radial-gradient(ellipse at 15% 30%, #ffe4ef, transparent 60%), linear-gradient(140deg,#f8f1ff,#edf9ef); padding: 14px clamp(12px,4vw,60px); }
+.math-page button { font: inherit; cursor: pointer; border: 2px solid #decde9; border-radius: 16px; background: #fff; color: #53355f; padding: 10px 16px; min-height: 44px; }
+.math-page button:focus-visible { outline: 3px solid #9639bd; outline-offset: 3px; }
+.math-page button:disabled { cursor: default; opacity: .6; }
+.math-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-weight: 700; }
+.math-header button { display: flex; align-items: center; gap: 4px; }
+.math-title { text-align: center; margin: 12px 0; }
+.math-title > span { font-size: 11px; letter-spacing: .12em; color: #865599; }
+.math-title h1 { font-size: clamp(25px,3.5vw,42px); margin: 4px 0; }
+.math-title p { margin: 4px; }
+.math-settings { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 24px; margin: 12px auto; }
+.math-settings > div { display: flex; gap: 6px; }
+.math-settings button { font-size: 13px; padding: 7px 10px; }
+.math-settings button[aria-pressed=true], .math-page .math-next { background: #8145a0; color: white; border-color: #8145a0; }
+.math-card { max-width: 760px; margin: auto; padding: clamp(12px,2vh,24px); background: #ffffffeb; border: 2px solid #e5d5ec; border-radius: 28px; text-align: center; box-shadow: 0 12px 32px #8b54aa12; }
+.math-round-top { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; }
+.math-equation { font-size: clamp(32px,5vh,54px); margin: 8px; }
+.math-garden { display: flex; justify-content: center; align-items: center; gap: 12px; background: #eef8e9; border-radius: 18px; padding: 12px; min-height: 62px; }
+.math-garden > div { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 2px; width: 46%; }
+.math-garden span { font-size: clamp(18px,2.6vh,26px); line-height:1.15; position: relative; }
+.picked-flower { opacity: .4; }
+.picked-flower::after { content: ''; position: absolute; top: 50%; left: 0; width: 100%; height: 3px; background: #823c69; transform: rotate(-45deg); }
+.math-guide { font-size: 13px; margin: 8px 0; }
+.math-listen { display: inline-flex; gap: 8px; align-items: center; }
+.math-answers { display: flex; justify-content: center; gap: 12px; margin: 12px 0; }
+.math-answers button { background: #fff0c9; border-color: #e6c67a; font-size: 28px; font-weight: 700; min-width: 58px; box-shadow: 0 4px 0 #e6c67a; }
+.math-card output { display: block; min-height: 24px; font-size: 14px; }
+.math-next { margin-top: 8px; }
+.math-won { border-color: #86bf81; }
+@media(min-width:700px) and (max-height:850px) { .math-title { margin:4px; } .math-title > span,.math-title p { display:none; } .math-title h1 { font-size:28px;line-height:1.15; } .math-card { padding:12px; } .math-equation { line-height:1.1; } }
+@media(max-width:600px) { .math-header > span:nth-child(2) { display: none; } .math-title > span { display: none; } .math-page { padding: 10px; } .math-settings { gap: 6px; } .math-card { border-radius: 20px; } }
+@media(max-height:650px) and (min-width:700px) { .math-title { margin: 4px; } .math-title > span,.math-title p { display:none; } .math-title h1 { font-size: 25px; } .math-settings { margin: 6px; } .math-card { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; padding: 12px; } .math-round-top,.math-card output { grid-column: 1 / -1; } .math-equation { grid-column:1; margin:0; } .math-garden { grid-column:1; grid-row:3 / 5; } .math-guide { grid-column:1; } .math-listen { grid-column:2; grid-row:2; justify-content:center; } .math-answers { grid-column:2; grid-row:3; margin:4px; gap:6px; } .math-answers button { min-width:48px; padding:8px; } .math-next { grid-column: 1 / -1; margin:0; } }
+@media(max-height:450px) and (min-width:700px) {
+ .math-page { padding:4px 12px; }.math-title { display:none; }.math-header { font-size:12px; }
+ .math-header button { padding:4px 10px; }.math-settings { margin:3px; }
+ .math-card { padding:8px;gap:3px 12px; }.math-round-top { font-size:12px; }
+ .math-equation { font-size:28px; }.math-garden { padding:4px; min-height:40px; }.math-garden span { font-size:16px;line-height:1; }
+ .math-guide { display:none; }.math-card output { grid-column:1;align-self:center;font-size:12px;line-height:1.2; }
+ .math-page .math-next { grid-column:2;padding:4px; }.math-answers { margin:0; }.math-answers button { font-size:23px;padding:4px; }
+}

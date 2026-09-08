@@ -13,7 +13,6 @@ const PHASE_DURATION = 15;
 
 export function TrafficLightGame({ onBack }: { onBack: () => void }) {
   const { soundOn, startAudio, playSfx, toggleSound } = useGameAudio('traffic');
-  const [started, setStarted] = useState(false);
   const [running, setRunning] = useState(true);
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [remaining, setRemaining] = useState(PHASE_DURATION);
@@ -23,7 +22,7 @@ export function TrafficLightGame({ onBack }: { onBack: () => void }) {
   const [answered, setAnswered] = useState(false);
   const [feedback, setFeedback] = useState('');
   useEffect(() => {
-    if (!started || !running) return;
+    if (!running) return;
     const timer = window.setInterval(() => {
       remainingRef.current -= 1;
       if (remainingRef.current <= 0) {
@@ -36,20 +35,15 @@ export function TrafficLightGame({ onBack }: { onBack: () => void }) {
       setRemaining(remainingRef.current);
     }, 1000);
     return () => window.clearInterval(timer);
-  }, [playSfx, running, started]);
+  }, [playSfx, running]);
+
+  useEffect(() => { startAudio(); }, [startAudio]);
 
   useEffect(() => {
     const pauseWhenHidden = () => { if (document.hidden) setRunning(false); };
     document.addEventListener('visibilitychange', pauseWhenHidden);
     return () => document.removeEventListener('visibilitychange', pauseWhenHidden);
   }, []);
-
-  const startSimulation = () => {
-    setStarted(true);
-    setRunning(true);
-    startAudio();
-    playSfx('select');
-  };
 
   const resetSimulation = () => {
     remainingRef.current = PHASE_DURATION;
@@ -75,7 +69,7 @@ export function TrafficLightGame({ onBack }: { onBack: () => void }) {
       <header className="topbar">
         <button className="back-button" onClick={onBack} aria-label="Retour aux jeux"><ChevronLeft /> <span>Les jeux</span></button>
         <div><p className="eyebrow">JEU DE FEU ROUGE</p><h1>Le feu de Lola</h1></div>
-        <div className={`status-pill ${running && started ? 'is-live' : ''}`}><span aria-hidden="true" />{running && started ? 'EN COURS' : 'EN PAUSE'}</div>
+        <div className={`status-pill ${running ? 'is-live' : ''}`}><span aria-hidden="true" />{running ? 'EN COURS' : 'EN PAUSE'}</div>
       </header>
 
       <section className="simulation" aria-label="Simulation de feu tricolore">
@@ -95,20 +89,14 @@ export function TrafficLightGame({ onBack }: { onBack: () => void }) {
             {PHASES.map((item, index) => <div className={index === phaseIndex ? 'current' : ''} key={item.name}><span style={{ backgroundColor: item.color }} /><p>{item.name}</p><small>15 s</small></div>)}
           </div>
           <div className="controls">
-            <Button size="lg" className="primary-control" onClick={() => { setRunning((value) => !value); playSfx('select'); }} disabled={!started}>{running ? <Pause /> : <Play />}{running ? 'Mettre en pause' : 'Reprendre'}</Button>
+            <Button size="lg" className="primary-control" onClick={() => { setRunning((value) => !value); playSfx('select'); }}>{running ? <Pause /> : <Play />}{running ? 'Mettre en pause' : 'Reprendre'}</Button>
             <Button size="icon-lg" variant="outline" className="icon-control" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique et les bruitages' : 'Activer la musique et les bruitages'}>{soundOn ? <Volume2 /> : <VolumeX />}</Button>
             <Button size="icon-lg" variant="outline" className="icon-control" onClick={resetSimulation} aria-label="Recommencer la simulation"><RotateCcw /></Button>
           </div>
-          <section className="traffic-challenge"><label><input type="checkbox" checked={challenge} onChange={event => setChallenge(event.target.checked)} /> Le défi des bons réflexes <span>★ {stars}</span></label>{challenge && <><p>Que dois-tu faire à cette couleur ?</p><div>{['M’arrêter','Avancer','Ralentir'].map((text,index) => <button key={text} disabled={!started || !running || answered} onClick={() => answer(index)}>{text}</button>)}</div><output>{feedback || 'Choisis une réponse et gagne une étoile.'}</output></>}</section>
+          <section className="traffic-challenge"><label><input type="checkbox" checked={challenge} onChange={event => setChallenge(event.target.checked)} /> Le défi des bons réflexes <span>★ {stars}</span></label>{challenge && <><p>Que dois-tu faire à cette couleur ?</p><div>{['M’arrêter','Avancer','Ralentir'].map((text,index) => <button key={text} disabled={!running || answered} onClick={() => answer(index)}>{text}</button>)}</div><output>{feedback || 'Choisis une réponse et gagne une étoile.'}</output></>}</section>
         </div>
       </section>
 
-      {!started && <dialog open className="start-screen" aria-labelledby="start-title"><div className="start-card">
-        <button className="dialog-back" onClick={onBack}><ChevronLeft /> Retour aux jeux</button>
-        <div className="mini-light" aria-hidden="true"><span /><span /><span /></div>
-        <p className="eyebrow">PRÊT À COMMENCER ?</p><h2 id="start-title">Le feu change toutes les 15 secondes</h2><p>Le son vous préviendra à chaque changement de couleur.</p>
-        <Button size="lg" className="start-button" onClick={startSimulation} autoFocus><Play />Démarrer la simulation</Button>
-      </div></dialog>}
     </main>
   );
 }
