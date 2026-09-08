@@ -187,13 +187,11 @@
 .letters-model span { font-size:19px; }
 .letters-choices { margin:18px 0; }
 .letters-trace { width:min(100%,440px);margin:10px auto; }
-.letters-trace>span { font-size:clamp(110px,23vw,190px); }
 .letters-word-list { margin:14px auto; }
 .letters-card-write .letters-picture { display:none; }
 .letters-card-write>.letters-model span { display:inline;margin-left:12px; }
 .letters-card-write>p:not(.letters-model),.letters-card-write .letters-feedback { display:none; }
 .letters-card-write .letters-trace { width:min(100%,calc(clamp(140px,100dvh - 610px,200px) * 600 / 320)); }
-.letters-card-write .letters-trace>span { font-size:clamp(100px,20vh,165px); }
 .letters-card-write .letters-next { margin-left:8px; }
 .magic-canvas { width:min(100%,calc(max(200px,100dvh - 430px) * 800 / 576)); }
 @media(min-width:651px) and (max-width:1000px) and (orientation:portrait) {

@@ -122,7 +122,7 @@ function TracePad({ letter }: { letter: string }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const drawing = useRef<number | null>(null);
   const point = (event: PointerEvent<HTMLCanvasElement>) => { const rect = event.currentTarget.getBoundingClientRect(); return { x: (event.clientX - rect.left) * 600 / rect.width, y: (event.clientY - rect.top) * 320 / rect.height }; };
-  return <div className="letters-trace"><span aria-hidden="true">{letter}</span><canvas ref={canvas} width={600} height={320} aria-label={`Zone de tracé libre de la lettre ${letter}`} onPointerDown={event => {
+  return <div className="letters-trace"><svg className="letters-trace-model" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><text x="300" y="245" textAnchor="middle" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="240" fill="#bca5ce">{letter}</text></svg><canvas ref={canvas} width={600} height={320} aria-label={`Zone de tracé libre de la lettre ${letter}`} onPointerDown={event => {
     if (drawing.current !== null) return;
     drawing.current = event.pointerId; event.currentTarget.setPointerCapture(event.pointerId);
     const ctx = canvas.current?.getContext('2d'); if (!ctx) return;
