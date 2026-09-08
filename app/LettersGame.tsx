@@ -29,13 +29,15 @@ function savedWins() {
 }
 
 export function LettersGame({ onBack }: { onBack: () => void }) {
+  const { startAudio } = useGameAudio('letters');
+  useEffect(() => { startAudio(); }, [startAudio]);
   const [mode, setMode] = useState<Mode>('build');
   const [level, setLevel] = useState(0);
   const [wins, setWins] = useState(savedWins);
   const [round, setRound] = useState(0);
   useEffect(() => () => { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); }, []);
   const change = (next: Mode) => { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); setMode(next); };
-  return <main className="letters-page">
+  return <main className="letters-page" onPointerDownCapture={startAudio}>
     <header className="letters-header"><button onClick={onBack}><ChevronLeft /> Les jeux</button><span>LE MONDE DE LOLA</span><span className="letters-stars">★ {wins.length} / 24</span></header>
     <div className="letters-title"><span>UN MOT APRÈS L’AUTRE</span><h1>La magie des lettres</h1><p>Écoute, joue et écris à ton rythme.</p></div>
     <nav className="letters-modes" aria-label="Choisir une activité">

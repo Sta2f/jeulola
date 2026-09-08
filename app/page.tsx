@@ -134,7 +134,7 @@ export default function Home() {
             <span className="sign-icon" aria-hidden="true">123</span>
             <span><strong>Les calculs enchantés</strong><small>Compte les fleurs avec les fées</small></span>
           </button>
-          <button className="wood-sign sign-purple" onClick={() => goTo('letters')}>
+          <button className="wood-sign sign-purple" onClick={() => goTo('letters', 'letters')}>
             <span className="sign-icon" aria-hidden="true">ABC</span>
             <span><strong>La magie des lettres</strong><small>Lis, compose et trace des mots</small></span>
           </button>
