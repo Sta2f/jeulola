@@ -78,7 +78,7 @@ function LetterRound({ mode, level, onWin, onNext }: { mode: Mode; level: number
     setPicked([...picked, id]); setMessage('Bien joué, continue !');
     if (picked.length + 1 === word.text.length) success();
   };
-  return <section className="letters-card" aria-label="Le jeu de lettres">
+  return <section className={`letters-card letters-card-${mode}`} aria-label="Le jeu de lettres">
     <div className="letters-card-top"><span>Mot {level + 1} / {words.length}</span><span>{mode === 'write' ? 'À toi de tracer' : won ? '★ Une étoile gagnée' : 'Chaque essai compte'}</span></div>
     <div className="letters-picture" aria-hidden="true">{word.picture}</div>
     <h2>{mode === 'build' ? 'Remets les lettres dans l’ordre' : mode === 'read' ? 'Trouve le mot de l’image' : 'Trace les lettres du mot'}</h2>
