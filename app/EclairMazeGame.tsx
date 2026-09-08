@@ -152,7 +152,12 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   const [moves, setMoves] = useState(0);
   const [visited, setVisited] = useState(() => new Set([cellKey(levelStart(LEVELS[level]))]));
   const [bones, setBones] = useState(() => new Set<string>());
-  const [hintsUsed, setHintsUsed] = useState(0);
+  const hintCounts = useRef<number[] | null>(null);
+  if (hintCounts.current === null) {
+    hintCounts.current = LEVELS.map((_, index) => Math.max(0, Math.min(5, Math.floor(Number(readSaved(`eclair-hints-${index}`, 0)) || 0))));
+  }
+  const [hintsUsed, setHintsUsed] = useState(() => Math.max(0, Math.min(5, Math.floor(Number(readSaved(`eclair-hints-${level}`, 0)) || 0))));
+  const hintsRemaining = Math.max(0, 5 - hintsUsed);
   const [boneFound, setBoneFound] = useState('');
   const [showBoneCelebration, setShowBoneCelebration] = useState(false);
   const [won, setWon] = useState(false);
@@ -304,6 +309,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   }, [move, startAudio]);
 
   const addHint = () => {
+    if (won || walking || hintCounts.current![level] >= 5) return;
     const path = findPath(maze, position, goal);
     if (path.length < 2) return;
     const existing = new Set(bones);
@@ -311,7 +317,10 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
     if (!candidates.length) return;
     const target = candidates[Math.min(5 + hintsUsed * 3, candidates.length - 1)];
     setBones((items) => new Set(items).add(cellKey(target)));
-    setHintsUsed((count) => count + 1);
+    const used = hintCounts.current![level] + 1;
+    hintCounts.current![level] = used;
+    saveValue(`eclair-hints-${level}`, used);
+    setHintsUsed(used);
     playSfx('sniff');
   };
 
@@ -325,7 +334,6 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
     setMoves(0);
     setVisited(new Set([cellKey(start)]));
     setBones(new Set());
-    setHintsUsed(0);
     setWon(false);
     setShowWinCard(false);
     setBoneFound('');
@@ -344,7 +352,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
     setMoves(0);
     setVisited(new Set([cellKey(nextStart)]));
     setBones(new Set());
-    setHintsUsed(0);
+    setHintsUsed(hintCounts.current![nextLevel]);
     setWon(false);
     setShowWinCard(false);
     setBoneFound('');
@@ -374,13 +382,13 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
             {LEVELS.map((item, index) => <button type="button" key={item.seed} className={index === level ? 'current' : ''} onClick={() => loadLevel(index)} aria-label={`Jouer directement au niveau ${index + 1}`} aria-current={index === level ? 'step' : undefined}>{index + 1}</button>)}
           </div>
           <div className="eclair-meter"><span style={{ transform: `scaleX(${progress / 100})` }} /><div><small>Exploration</small><strong>{progress}%</strong></div></div>
-          <Button className="hint-button" onClick={addHint}><Lightbulb /> Indice : pose un os</Button>
-          <p className="hint-copy"><Bone /> Chaque os apparaît sur le bon chemin.</p>
+          <Button className="hint-button" onClick={addHint} disabled={hintsRemaining === 0 || won || walking}><Lightbulb /> {hintsRemaining > 0 ? `Indice : pose un os (${hintsRemaining}/5)` : 'Plus d’indices pour ce niveau'}</Button>
+          <p className="hint-copy" aria-live="polite"><Bone /> {hintsRemaining} indice{hintsRemaining > 1 ? 's' : ''} restant{hintsRemaining > 1 ? 's' : ''} · 5 maximum par niveau.</p>
           <Button variant="outline" className="eclair-reset" onClick={resetLevel}><RotateCcw /> Recommencer</Button>
         </aside>
 
         <div className="eclair-stage">
-          <div className="board-focus-actions"><button className="board-focus-toggle" aria-pressed={focusBoard} onClick={() => setFocusBoard(v => !v)}>{focusBoard ? 'Afficher les niveaux' : 'Grand plateau'}</button>{focusBoard && <button className="board-focus-toggle" onClick={addHint}><Bone /> Poser un os</button>}</div>
+          <div className="board-focus-actions"><button className="board-focus-toggle" aria-pressed={focusBoard} onClick={() => setFocusBoard(v => !v)}>{focusBoard ? 'Afficher les niveaux' : 'Grand plateau'}</button>{focusBoard && <button className="board-focus-toggle" onClick={addHint} disabled={hintsRemaining === 0 || won || walking}><Bone /> {hintsRemaining > 0 ? `Poser un os (${hintsRemaining}/5)` : 'Plus d’indices'}</button>}</div>
           <div className={`eclair-board ${walking ? 'is-walking' : ''}`} onPointerDown={onBoardPointerDown} style={{ '--cols': levelSettings.cols, '--rows': levelSettings.rows, '--move-duration': `${walkDuration}ms`, aspectRatio: `${levelSettings.cols} / ${levelSettings.rows}` } as React.CSSProperties} aria-label={`Labyrinthe d’Éclair, niveau ${level + 1} sur ${LEVELS.length}`}>
             {/* oxlint-disable-next-line next/no-img-element -- Project-local generated game artwork. */}
             <img className="eclair-backdrop" src="/assets/eclair-forest.webp" alt="" aria-hidden="true" />
