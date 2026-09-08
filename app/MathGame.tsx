@@ -16,11 +16,13 @@ function question(level: number, mode: Mode) {
 }
 
 export function MathGame({ onBack }: { onBack: () => void }) {
+  const { startAudio } = useGameAudio('math');
+  useEffect(() => { startAudio(); }, [startAudio]);
   const [level, setLevel] = useState(0);
   const [mode, setMode] = useState<Mode>('plus');
   const [round, setRound] = useState(0);
   const [stars, setStars] = useState(() => { const value = readSaved<unknown>('math:stars', 0); return typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : 0; });
-  return <main className="math-page">
+  return <main className="math-page" onPointerDownCapture={startAudio}>
     <header className="math-header"><button onClick={onBack}><ChevronLeft /> Les jeux</button><span>LE JARDIN DES NOMBRES</span><span>★ {stars}</span></header>
     <div className="math-title"><span>UN PEU DE MAGIE, UN PEU DE CALCUL</span><h1>Les calculs enchantés</h1><p>Aide les petites fées à compter leur récolte.</p></div>
     <nav className="math-settings" aria-label="Choisir les calculs">

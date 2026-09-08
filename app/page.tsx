@@ -130,7 +130,7 @@ export default function Home() {
         <div className="signpost" aria-label="Les jeux de Lola">
           <div className="signpost-top"><Gamepad2 /><span>Choisis ton jeu</span></div>
           <div className="signpost-pole" aria-hidden="true" />
-          <button className="wood-sign sign-yellow" onClick={() => goTo('math')}>
+          <button className="wood-sign sign-yellow" onClick={() => goTo('math', 'math')}>
             <span className="sign-icon" aria-hidden="true">123</span>
             <span><strong>Les calculs enchantés</strong><small>Compte les fleurs avec les fées</small></span>
           </button>

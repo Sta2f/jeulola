@@ -2,8 +2,8 @@ import { useCallback, useEffect, useRef } from 'react';
 import { getAudioSettings, setAudioSettings, useAudioSettings } from './preferences';
 
 export type SoundEffect = 'step' | 'sniff' | 'bark' | 'bone' | 'sparkle' | 'paint' | 'erase' | 'select' | 'traffic' | 'win' | 'wrong' | 'hint';
-type MusicTheme = 'forest' | 'dog' | 'coloring' | 'traffic' | 'hide' | 'home' | 'letters';
-export type FileMusicTheme = 'forest' | 'dog' | 'coloring' | 'hide' | 'home' | 'letters';
+type MusicTheme = 'forest' | 'dog' | 'coloring' | 'traffic' | 'hide' | 'home' | 'letters' | 'math';
+export type FileMusicTheme = 'forest' | 'dog' | 'coloring' | 'hide' | 'home' | 'letters' | 'math';
 
 const MUSIC_NOTES: Record<MusicTheme, number[]> = {
   forest: [261.63, 329.63, 392, 523.25, 392, 329.63],
@@ -13,6 +13,7 @@ const MUSIC_NOTES: Record<MusicTheme, number[]> = {
   hide: [293.66, 369.99, 440, 587.33, 493.88, 369.99],
   home: [261.63, 329.63, 392, 523.25],
   letters: [261.63, 329.63, 392, 523.25],
+  math: [261.63, 329.63, 392, 523.25],
 };
 const FILE_MUSIC: Partial<Record<MusicTheme, { src: string; volume: number }>> = {
   forest: { src: '/assets/audio/glowing-maze-path.mp3', volume: .1 },
@@ -21,6 +22,7 @@ const FILE_MUSIC: Partial<Record<MusicTheme, { src: string; volume: number }>> =
   hide: { src: '/assets/audio/tiptoe-through-the-corners.mp3', volume: .1 },
   home: { src: '/assets/audio/miniature-wonderland.mp3', volume: .09 },
   letters: { src: '/assets/audio/word-hunt-time.mp3', volume: .06 },
+  math: { src: '/assets/audio/focus-flow.mp3', volume: .06 },
 };
 const fileMusicCache = new Map<FileMusicTheme, HTMLAudioElement>();
 const noiseBuffers = new WeakMap<AudioContext, AudioBuffer>();
@@ -85,7 +87,7 @@ function getFileMusic(theme: FileMusicTheme) {
 export function preloadFileMusic() {
   getFileMusic('home').load();
   window.setTimeout(() => {
-    (['forest', 'dog', 'coloring', 'hide', 'letters'] as FileMusicTheme[]).forEach((theme) => getFileMusic(theme).load());
+    (['forest', 'dog', 'coloring', 'hide', 'letters', 'math'] as FileMusicTheme[]).forEach((theme) => getFileMusic(theme).load());
   }, 300);
 }
 
