@@ -70,6 +70,13 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
   const [lost, setLost] = useState(false);
   const hintTimer = useRef<number | null>(null);
   const scene = SCENES[level];
+  const peekWidth = Math.max(17, scene.rabbitSize * 1.4);
+  // Three registered layers use exactly the same scene coordinates. The foreground
+  // is a masked copy of the photo, so its edge hides Betty without a visible patch.
+  const peekHeight = peekWidth * .6;
+  const leftEdge = scene.y - peekHeight * .02;
+  const rightEdge = scene.y - peekHeight * .17;
+  const foregroundClip = `polygon(0% ${leftEdge}%, ${scene.x - peekWidth / 2}% ${leftEdge}%, ${scene.x + peekWidth / 2}% ${rightEdge}%, 100% ${rightEdge}%, 100% 100%, 0% 100%)`;
   const confetti = useMemo(() => Array.from({ length: 22 }, (_, index) => ({
     x: `${8 + (index * 41) % 86}%`, delay: `${(index % 7) * 55}ms`, spin: `${index % 2 ? 210 : -180}deg`, color: ['#ff72b6', '#ffe06c', '#76e0d5', '#a88af5'][index % 4],
   })), []);
@@ -89,7 +96,7 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
     const x = ((event.clientX - rect.left) / rect.width) * 100;
     const y = ((event.clientY - rect.top) / rect.height) * 100;
     const distance = Math.hypot(x - scene.x, y - scene.y);
-    const rabbit = event.currentTarget.querySelector('.hidden-betty')!.getBoundingClientRect();
+    const rabbit = event.currentTarget.querySelector('.betty-peek-window')!.getBoundingClientRect();
     const padding = 4;
     if (event.clientX >= rabbit.left - padding && event.clientX <= rabbit.right + padding && event.clientY >= rabbit.top - padding && event.clientY <= rabbit.bottom + padding) {
       setFound(true);
@@ -156,7 +163,7 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
       <div className="betty-intro-copy">
         <span className="betty-kicker"><Rabbit /> 50 cachettes féeriques</span>
         <h2>Aide Lola à retrouver Betty !</h2>
-        <p>Betty la petite lapine touffue s’est cachée dans cinquante mondes merveilleux. Elle reste entière, mais se fond dans chaque décor.</p>
+        <p>Betty se cache derrière le décor de cinquante mondes merveilleux. Toutes les deux secondes, une oreille et un petit œil curieux dépassent… Ouvre bien les yeux !</p>
         <div className="betty-rules">
           <div><Heart /><span><strong>10 chances</strong><small>Chaque mauvais endroit retire un cœur.</small></span></div>
           <div><Eye /><span><strong>Chaud ou froid</strong><small>La marque change de couleur selon la distance.</small></span></div>
@@ -168,7 +175,7 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
       <aside className="betty-panel">
         <span className="betty-level">Décor {level + 1} sur {SCENES.length} · {scene.difficulty}</span>
         <h2>{scene.name}</h2>
-        <p>Regarde partout, puis touche l’endroit où Betty pourrait être cachée.</p>
+        <p>Observe le décor : Betty montre furtivement une oreille et un œil toutes les deux secondes. Touche sa cachette !</p>
         <div className="betty-hearts" aria-label={`${chances} chances restantes`}>
           {Array.from({ length: 10 }, (_, index) => <Heart key={index} className={index < chances ? 'alive' : 'gone'} />)}
         </div>
@@ -181,13 +188,17 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
 
       <div className="betty-stage-wrap">
         <button
-          className={`betty-scene ${marker ? 'made-mistake' : ''}`}
+          className={`betty-scene betty-layered ${marker ? 'made-mistake' : ''} ${found || lost ? 'betty-revealed' : ''} ${hintActive ? 'betty-peek-hint' : ''}`}
           style={{ '--atlas-x': scene.atlasX, '--atlas-y': scene.atlasY, '--scene-atlas': `url("${scene.atlas}")` } as React.CSSProperties}
           onPointerDown={chooseSpot}
           aria-label={`Chercher Betty dans ${scene.name}`}
         >
-          {/* oxlint-disable-next-line next/no-img-element -- Optimized project-local generated character in a Vite app. */}
-          <img className={`hidden-betty ${found || lost ? 'is-found' : ''}`} style={{ left: `${scene.x}%`, top: `${scene.y}%`, width: found || lost ? '18%' : `${scene.rabbitSize}%` }} src="/assets/betty-rabbit.webp" alt="" />
+          <span className="betty-photo-layer betty-background-layer" aria-hidden="true" />
+          <span key={level} className="betty-peek-window" style={{ left: `${scene.x}%`, top: `${scene.y}%`, width: `${peekWidth}%` }} aria-hidden="true">
+            {/* oxlint-disable-next-line next/no-img-element -- Optimized local WebP in this Vite game. */}
+            <img className="betty-peek-rabbit" src="/assets/betty-rabbit.webp" alt="" draggable={false} />
+          </span>
+          <span className="betty-photo-layer betty-foreground-layer" style={{ clipPath: foregroundClip }} aria-hidden="true" />
           {hintActive && <span className="betty-hint-ring" style={{ left: `${scene.x}%`, top: `${scene.y}%`, width: `${scene.hintSize ?? 32}%` }}><Lightbulb /></span>}
           {marker && <span key={marker.id} className={`betty-marker ${marker.warmth}`} style={{ left: `${marker.x}%`, top: `${marker.y}%` }}><span>{marker.warmth === 'hot' ? 'Très chaud !' : marker.warmth === 'warm' ? 'Tu chauffes…' : 'C’est froid !'}</span></span>}
         </button>
