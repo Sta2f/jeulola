@@ -83,11 +83,7 @@ export function TrafficLightGame({ onBack }: { onBack: () => void }) {
         <div className="control-panel">
           <div className="phase-heading"><span className="phase-dot" aria-hidden="true" /><p>FEU {phase.name.toUpperCase()}</p></div>
           <h2>{phase.instruction}</h2>
-          <p className="phase-copy">Le prochain feu s’allume automatiquement dans</p>
           <div className="countdown" style={{ '--progress': `${progress}deg` } as React.CSSProperties} aria-label={`${remaining} secondes restantes`}><div><strong>{remaining}</strong><span>SECONDES</span></div></div>
-          <div className="timeline" aria-label="Cycle des feux">
-            {PHASES.map((item, index) => <div className={index === phaseIndex ? 'current' : ''} key={item.name}><span style={{ backgroundColor: item.color }} /><p>{item.name}</p><small>15 s</small></div>)}
-          </div>
           <div className="controls">
             <Button size="lg" className="primary-control" onClick={() => { setRunning((value) => !value); playSfx('select'); }}>{running ? <Pause /> : <Play />}{running ? 'Mettre en pause' : 'Reprendre'}</Button>
             <Button size="icon-lg" variant="outline" className="icon-control" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique et les bruitages' : 'Activer la musique et les bruitages'}>{soundOn ? <Volume2 /> : <VolumeX />}</Button>

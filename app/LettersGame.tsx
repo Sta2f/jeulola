@@ -92,7 +92,7 @@ function LetterRound({ mode, level, onWin, onNext }: { mode: Mode; level: number
     if (picked.length + 1 === word.text.length) success();
   };
   return <section className={`letters-card letters-card-${mode}`} aria-label="Le jeu de lettres">
-    <div className="letters-card-top"><span>Mot {level + 1} / {words.length}</span><span aria-live="polite">{mode === 'write' ? 'À toi de tracer' : won ? '★ Une étoile gagnée' : mode === 'build' ? `${3 - errors} chances restantes · 3 erreurs maximum` : 'Chaque essai compte'}</span></div>
+    <div className="letters-card-top"><span>Mot {level + 1} / {words.length}</span><span aria-live="polite">{mode === 'write' ? '' : won ? '★ Bravo !' : mode === 'build' ? `${3 - errors} chances restantes` : ''}</span></div>
     <div className="letters-picture" aria-hidden="true">{word.picture}</div>
     <h2>{mode === 'build' ? 'Remets les lettres dans l’ordre' : mode === 'read' ? 'Trouve le mot de l’image' : 'Trace les lettres du mot'}</h2>
     <button className="letters-listen" onClick={() => speak(word.text, true)} disabled={!speechAvailable}><Volume2 /> Écouter le mot</button>
@@ -113,7 +113,7 @@ function LetterRound({ mode, level, onWin, onNext }: { mode: Mode; level: number
       <button className="letters-clear" onClick={() => setClear(clear + 1)}><Eraser /> Effacer le tracé</button>
       <p className="letters-note">Tu peux aussi recopier « {word.text.toLowerCase()} » sur une feuille.</p>
     </>}
-    <output className={`letters-feedback ${won ? 'is-won' : ''}`}>{message || (mode === 'write' ? 'Prends ton temps, tu peux recommencer autant que tu veux.' : 'Tu peux écouter le mot autant de fois que tu veux.')}</output>
+    <output className={`letters-feedback ${won ? 'is-won' : ''}`}>{message}</output>
     {won && <p className="letters-model">{word.text.toLowerCase()}<span>{word.syllables}</span></p>}
     {(won || mode === 'write') && <button className="letters-next" onClick={() => { if (speechAvailable) window.speechSynthesis.cancel(); onNext(); }}>{level === words.length - 1 ? 'Rejouer les mots' : 'Mot suivant'} <ArrowRight /></button>}
   </section>;

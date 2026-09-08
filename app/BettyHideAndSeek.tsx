@@ -183,15 +183,13 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
       <aside className="betty-panel">
         <span className="betty-level">Décor {level + 1} sur {SCENES.length} · {scene.difficulty}</span>
         <h2>{scene.name}</h2>
-        <p>Observe le décor : Betty montre furtivement une oreille et un œil toutes les deux secondes. Touche sa cachette !</p>
+        <p>Repère ses oreilles et touche sa cachette.</p>
         <div className="betty-hearts" aria-label={`${chances} chances restantes`}>
           {Array.from({ length: 10 }, (_, index) => <Heart key={index} className={index < chances ? 'alive' : 'gone'} />)}
         </div>
         <button className="betty-hint" onClick={showHint} disabled={hintUsed || found || lost}><Lightbulb /> {hintUsed ? scene.clue : 'Voir un indice'}</button>
-        <p className="betty-completed">✦ {completed.length} cachettes trouvées sur 50</p>
         <label className="betty-scene-label" htmlFor="betty-scene-choice">Changer de décor</label>
         <select id="betty-scene-choice" className="betty-scene-choice" value={level} onChange={event => loadScene(Number(event.target.value))}>{SCENES.map((item,index) => <option key={item.name} value={index}>{completed.includes(index) ? '★ ' : ''}{index+1}. {item.name}</option>)}</select>
-        <details className="betty-all-scenes"><summary>Voir mes 50 cachettes</summary><div className="betty-dots" aria-label={`Choisir directement un des ${SCENES.length} décors`}>{SCENES.map((item, index) => <button type="button" key={item.name} className={`${completed.includes(index) ? 'done' : ''} ${index === level ? 'current' : ''}`} onClick={() => loadScene(index)} aria-label={`Ouvrir le décor ${index + 1} : ${item.name}`} aria-current={index === level ? 'step' : undefined}>{index+1}</button>)}</div></details>
       </aside>
 
       <div className="betty-stage-wrap">

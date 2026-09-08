@@ -128,37 +128,35 @@ export default function Home() {
         </header>
 
         <div className="signpost" aria-label="Les jeux de Lola">
-          <div className="signpost-top"><Gamepad2 /><span>Choisis ton jeu</span></div>
           <div className="signpost-pole" aria-hidden="true" />
           <button className="wood-sign sign-yellow" onClick={() => goTo('math', 'math')}>
             <span className="sign-icon" aria-hidden="true">123</span>
-            <span><strong>Les calculs enchantés</strong><small>Compte les fleurs avec les fées</small></span>
+            <span><strong>Les calculs enchantés</strong></span>
           </button>
           <button className="wood-sign sign-purple" onClick={() => goTo('letters', 'letters')}>
             <span className="sign-icon" aria-hidden="true">ABC</span>
-            <span><strong>La magie des lettres</strong><small>Lis, compose et trace des mots</small></span>
+            <span><strong>La magie des lettres</strong></span>
           </button>
           <button className="wood-sign sign-pink" onClick={() => goTo('traffic')}>
             <span className="sign-icon"><TrafficCone /></span>
-            <span><strong>Le feu rouge</strong><small>Observe et réagis</small></span>
+            <span><strong>Le feu rouge</strong></span>
           </button>
           <button className="wood-sign sign-yellow" onClick={() => goTo('maze-menu')}>
             <span className="sign-icon"><Map /></span>
-            <span><strong>Les labyrinthes</strong><small>Choisis ton aventure</small></span>
+            <span><strong>Les labyrinthes</strong></span>
           </button>
           <button className="wood-sign sign-turquoise" onClick={() => goTo('coloring', 'coloring')}>
             <span className="sign-icon"><Palette /></span>
-            <span><strong>Les coloriages</strong><small>Crée avec les couleurs</small></span>
+            <span><strong>Les coloriages</strong></span>
           </button>
           <button className="wood-sign sign-green" onClick={() => goTo('betty-hide', 'hide')}>
             <span className="sign-icon"><Rabbit /></span>
-            <span><strong>Cache-cache avec Betty</strong><small>Retrouve la lapine touffue</small></span>
+            <span><strong>Cache-cache avec Betty</strong></span>
           </button>
         </div>
       </section>
 
-      <section className="lola-achievements" aria-label="Le carnet d’aventures de Lola"><div><Sparkles/><span>Mon carnet d’aventures<small>Les réussites restent sur cet appareil.</small></span></div><span><strong>{wins[0]+wins[1]}</strong> / 40 labyrinthes réussis</span><span><strong>{wins[2]}</strong> / 50 cachettes trouvées</span></section>
-      <footer className="home-footer"><span>12 mots à découvrir · 40 labyrinthes · 50 cachettes · 10 coloriages</span><span>Un petit monde, de grandes aventures</span></footer>
+      <details className="home-progress"><summary>★ Mes réussites</summary><p>{wins[0]+wins[1]} / 40 labyrinthes · {wins[2]} / 50 cachettes</p></details>
     </main>
   );
 }

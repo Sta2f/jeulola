@@ -379,15 +379,12 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
       <section className="eclair-layout">
         <aside className="eclair-story">
           <span className="expert-mark">Niveau {level + 1} · {levelSettings.rank} · {levelSettings.name}</span>
-          <h2>Aide Éclair à<br />retrouver Lola !</h2>
-          <p>Éclair a flairé la trace de Lola dans la forêt. Guide ce petit chihuahua chocolat jusqu’à elle.</p>
           <div className="eclair-level-track" aria-label="Choisir directement un des 20 niveaux">
             <span className="achievement-count">✦ {completed.length}/20 réussis</span>
             {LEVELS.map((item, index) => <button type="button" key={item.seed} className={index === level ? 'current' : ''} onClick={() => loadLevel(index)} aria-label={`Jouer directement au niveau ${index + 1}`} aria-current={index === level ? 'step' : undefined}>{index + 1}</button>)}
           </div>
           <div className="eclair-meter"><span style={{ transform: `scaleX(${progress / 100})` }} /><div><small>Exploration</small><strong>{progress}%</strong></div></div>
           <Button className="hint-button" onClick={addHint} disabled={hintsRemaining === 0 || won || walking}><Lightbulb /> {hintsRemaining > 0 ? `Indice : pose un os (${hintsRemaining}/5)` : 'Plus d’indices pour ce niveau'}</Button>
-          <p className="hint-copy" aria-live="polite"><Bone /> {hintsRemaining} indice{hintsRemaining > 1 ? 's' : ''} restant{hintsRemaining > 1 ? 's' : ''} · 5 maximum par niveau.</p>
           <Button variant="outline" className="eclair-reset" onClick={resetLevel}><RotateCcw /> Recommencer</Button>
         </aside>
 
@@ -414,7 +411,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
           </div>
 
           </MazeZoom>
-          <p className="tap-to-walk eclair-tap-help">Touche une case en ligne droite : Éclair suit le chemin et s’arrête devant les arbres.</p>
+          <p className="tap-to-walk eclair-tap-help">Touche le chemin ou utilise les flèches.</p>
           <div className="eclair-controls" aria-label="Commandes directionnelles">
             <button className="touch-up" onClick={() => move('up')} aria-label="Aller vers le haut"><ArrowUp /></button>
             <button className="touch-left" onClick={() => move('left')} aria-label="Aller à gauche"><ArrowLeft /></button>

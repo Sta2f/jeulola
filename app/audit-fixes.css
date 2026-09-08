@@ -1,4 +1,15 @@
 /* Final responsive contract: media above controls, generous touch targets. */
+.home-nav .home-brand span,.game-count,.welcome-cloud-copy>p,.welcome-cloud-copy>span { display:none; }
+.home-nav { background:transparent;box-shadow:none;border:0; }
+.home-progress { text-align:center;color:#69436d;padding:10px;font-size:14px; }
+.home-progress summary { cursor:pointer;min-height:44px;display:inline-flex;align-items:center; }
+.home-progress p { margin:0 0 10px; }
+.wood-sign strong { line-height:1.2; }
+.maze-title>p,.maze-menu-header>div>p,.topbar .eyebrow,.coloring-header p,.math-title>span,.math-title>p,.letters-header>span:not(.letters-stars) { display:none; }
+.math-header>span:nth-child(2) { display:none; }
+.letters-card-write>.letters-model { display:none; }
+.coloring-help { font-size:12px; }
+.letters-feedback:empty { display:none; }
 .betty-loading { position:absolute;inset:0;z-index:30;display:grid;place-content:center;text-align:center;border-radius:28px;background:#f5ecff;color:#634172;padding:20px; }
 .betty-loading button { min-height:44px;padding:10px 20px;border:1px solid #ac83c8;border-radius:14px;background:white; }
 .betty-scene[aria-busy=true] { visibility:hidden; }

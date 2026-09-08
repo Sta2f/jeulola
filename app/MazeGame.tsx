@@ -241,9 +241,7 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
         <aside className="maze-story">
           <span className="chapter-mark">Niveau {levelIndex + 1} sur {LEVELS.length}</span>
           <h2>{level.name}</h2>
-          <p>Guide Lola entre les vieux arbres jusqu’à la couronne dorée. Chaque forêt devient un peu plus mystérieuse.</p>
           <span className="difficulty-badge">Difficulté · {level.difficulty}</span>
-          <div className="key-hint"><span>↑ ↓ ← →</span><p>Utilise les flèches<br />de ton clavier</p></div>
           <Button variant="outline" className="maze-reset" onClick={reset}><RotateCcw /> Recommencer</Button>
         </aside>
 
@@ -262,7 +260,7 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
             </div>
           </div>
           </MazeZoom>
-          <p className="tap-to-walk">Touche une case dans la même ligne ou colonne : Lola avancera jusqu’au mur.</p>
+          <p className="tap-to-walk">Touche le chemin ou utilise les flèches.</p>
           <div className="touch-controls" aria-label="Commandes directionnelles">
             <button className="touch-up" onClick={() => move('up')} aria-label="Aller vers le haut"><ArrowUp /></button>
             <button className="touch-left" onClick={() => move('left')} aria-label="Aller à gauche"><ArrowLeft /></button>
