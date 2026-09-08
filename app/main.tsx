@@ -5,6 +5,7 @@ import { FullscreenControl } from './FullscreenControl';
 import './globals.css';
 import './polish.css';
 import './game-comfort.css';
+import './letters.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

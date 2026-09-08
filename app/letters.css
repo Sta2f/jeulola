@@ -1,0 +1,55 @@
+.sign-purple { --sign: #c6a2ed; }
+.letters-page { min-height: 100svh; padding: 24px max(16px, calc((100vw - 1040px) / 2)) 40px; color: #483151; background: radial-gradient(ellipse at top left,#ffe2ed,transparent 55%),#f7f2ff; }
+.letters-page button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 10px 18px; border: 2px solid #e2d3eb; border-radius: 16px; background: white; color: #513060; font-weight: 800; cursor: pointer; }
+.letters-page button:focus-visible { outline: 3px solid #7832b5; outline-offset: 4px; }
+.letters-page button:disabled { opacity: .4; cursor: default; }
+.letters-page button:hover:not(:disabled) { border-color: #8b52b6; }
+.letters-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; font-weight: 800; }
+.letters-stars { color: #6b4194; white-space: nowrap; }
+.letters-title { text-align: center; margin: 32px 0 24px; }
+.letters-title > span { font-size: 12px; font-weight: 800; letter-spacing: .16em; color: #85519d; }
+.letters-title h1 { margin: 6px 0; font-size: clamp(30px,5vw,46px); line-height: 1.2; }
+.letters-title p { margin: 10px 0; }
+.letters-modes { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+.letters-modes button[aria-pressed=true], .letters-trace-picker button[aria-pressed=true] { background: #74419b; border-color: #74419b; color: white; }
+.letters-modes button > span { font-size: 15px; }
+.letters-card { max-width: 760px; margin: auto; padding: 24px; background: #fffefd; border: 2px solid #e8d9ef; border-radius: 28px; box-shadow: 0 12px 35px #6d43730c; text-align: center; }
+.letters-card-top { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: #765780; font-weight: 700; }
+.letters-picture { font-size: 76px; line-height: 1.3; margin-top: 16px; }
+.letters-card h2 { font-size: clamp(20px,3vw,27px); margin: 10px 0 16px; }
+.letters-page .letters-listen { background: #f1e9fa; border-color: #e4d5f0; }
+.letters-slots, .letters-tiles, .letters-trace-picker { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 24px 0; }
+.letters-slots > span { display: grid; place-items: center; width: 58px; height: 64px; border-bottom: 4px solid #b28dcf; border-radius: 10px; background: #f7f1fc; font-size: 30px; font-weight: 800; }
+.letters-slots small { font-size: 14px; color: #8a7193; }
+.letters-page .letters-tiles button { width: 58px; min-height: 62px; padding: 6px; font-size: 30px; background: #fff0cc; border-color: #e2c77f; box-shadow: 0 4px 0 #ddc17a; }
+.letters-tiles button:disabled { visibility: hidden; }
+.letters-help { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.letters-model { margin: 20px 0; font-size: 30px; font-weight: 800; letter-spacing: .09em; }
+.letters-model span { display: block; font-size: 23px; font-weight: 500; margin-top: 4px; }
+.letters-feedback { display: block; min-height: 48px; margin: 20px 0 6px; color: #775382; line-height: 1.5; }
+.letters-feedback.is-won { color: #34714b; font-weight: 800; }
+.letters-page .letters-next { background: #74419b; color: white; border-color: #74419b; }
+.letters-choices { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin: 28px 0; }
+.letters-choices button { min-width: 150px; font-size: 28px; }
+.letters-word-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 760px; margin: 24px auto 0; }
+.letters-word-list button { flex-direction: column; gap: 0; width: 54px; padding: 7px; }
+.letters-word-list button[aria-pressed=true] { border-color: #8750b3; background: #eee2f8; }
+.letters-word-list button > span { font-size: 25px; }
+.letters-word-list small { font-size: 11px; }
+.letters-note { max-width: 640px; margin: 16px auto; text-align: center; color: #795f80; font-size: 13px; line-height: 1.6; }
+.letters-trace { position: relative; width: 100%; max-width: 600px; aspect-ratio: 600/320; margin: 16px auto; overflow: hidden; border: 2px dashed #ccb4dc; border-radius: 18px; background: repeating-linear-gradient(to bottom,#fff 0%,#fff 24.6%,#e8ddef 25%,#fff 25.5%); }
+.letters-trace > span { position: absolute; inset: 0; display: grid; place-items: center; font-family: Arial,sans-serif; font-weight: bold; font-size: clamp(130px,32vw,265px); color: #d9cde2; user-select: none; }
+.letters-trace canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
+@media(max-width: 540px) {
+  .letters-page { padding-top: 14px; }
+  .letters-header > span:not(.letters-stars) { display: none; }
+  .letters-title { margin-top: 24px; }
+  .letters-modes { gap: 6px; }
+  .letters-modes button { flex: 1; flex-direction: column; padding: 10px 6px; font-size: 12px; }
+  .letters-card { padding: 18px 12px; }
+  .letters-slots,.letters-tiles { gap: 6px; }
+  .letters-slots > span,.letters-page .letters-tiles button { width: 39px; height: 52px; min-height: 52px; font-size: 24px; }
+  .letters-choices { flex-direction: column; }
+  .letters-trace-picker { gap: 6px; }
+  .letters-trace-picker button { padding: 8px 12px; }
+}
