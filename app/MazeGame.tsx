@@ -4,6 +4,7 @@ import { readSaved, saveValue } from './preferences';
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, ChevronLeft, Crown, Footprints, RotateCcw, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useGameAudio } from './useGameAudio';
+import { useFittedBoard } from './useFittedBoard';
 
 type Direction = 'up' | 'down' | 'left' | 'right';
 type Position = { row: number; col: number };
@@ -114,8 +115,9 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
   const [position, setPosition] = useState(level.start);
   const [moves, setMoves] = useState(0);
   const [won, setWon] = useState(false);
-  const [focusBoard, setFocusBoard] = useState(() => window.matchMedia('(max-width: 650px), (max-width: 1000px) and (orientation: portrait)').matches);
+  const [focusBoard, setFocusBoard] = useState(() => window.matchMedia('(max-width: 650px), (max-height: 650px), (max-width: 1000px) and (orientation: portrait)').matches);
   const completed = useAchievements('princess', levelIndex, won);
+  const fittedStage = useFittedBoard(levelIndex, focusBoard);
   const [walking, setWalking] = useState(false);
   const [walkDuration, setWalkDuration] = useState(170);
   const walkTimer = useRef<number | null>(null);
@@ -130,7 +132,7 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
   }, []);
 
   const loadLevel = useCallback((nextLevelIndex: number) => {
-    if (window.matchMedia('(max-width: 650px), (max-width: 1000px) and (orientation: portrait)').matches) setFocusBoard(true);
+    if (window.matchMedia('(max-width: 650px), (max-height: 650px), (max-width: 1000px) and (orientation: portrait)').matches) setFocusBoard(true);
     stopWalking();
     const nextLevel = LEVELS[nextLevelIndex];
     setLevelIndex(nextLevelIndex);
@@ -244,7 +246,7 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
           <Button variant="outline" className="maze-reset" onClick={reset}><RotateCcw /> Recommencer</Button>
         </aside>
 
-        <div className="maze-stage">
+        <div className="maze-stage" ref={fittedStage}>
           <button className="board-focus-toggle" aria-pressed={focusBoard} onClick={() => setFocusBoard(v => !v)}>{focusBoard ? 'Afficher les niveaux' : 'Grand plateau'}</button>
           <div className={`maze-board ${walking ? 'is-walking' : ''}`} onPointerDown={onBoardPointerDown} aria-label={`Labyrinthe de la forêt enchantée, niveau ${levelIndex + 1}`} style={{ '--cols': level.grid[0].length, '--rows': level.grid.length, '--move-duration': `${walkDuration}ms`, aspectRatio: `${level.grid[0].length} / ${level.grid.length}` } as React.CSSProperties}>
             {/* oxlint-disable-next-line next/no-img-element -- Vite app with a project-local generated game asset. */}

@@ -75,22 +75,25 @@ function noiseAt(x: number, y: number) {
 
 function paintColor(effect: PaintEffect, colors: readonly (readonly number[])[], x: number, y: number, width: number, height: number) {
   if (effect === 'solid') return colors[0];
+  const u = x / Math.max(1, width - 1);
+  const v = y / Math.max(1, height - 1);
   if (effect === 'rainbow') {
-    const position = ((x / width) * .72 + (y / height) * .28) * (colors.length - 1);
+    const position = (width >= height ? u : v) * (colors.length - 1);
     const index = Math.min(colors.length - 2, Math.floor(position));
     return mixColors(colors[index], colors[index + 1], position - index);
   }
   if (effect === 'glitter') {
     const grain = noiseAt(x, y);
-    if (grain > .975 || (x + y * 3) % 67 === 0) return [255, 255, 255, 255];
+    if (grain > .987) return [255, 255, 255, 255];
     if (grain > .91) return colors[1];
-    return mixColors(colors[0], colors[2], grain * .28);
+    return mixColors(colors[0], colors[2], (u * .55 + v * .45) * .42);
   }
-  const wave = (Math.sin(x / 29) + Math.cos(y / 37) + Math.sin((x + y) / 53) + 3) / 6;
-  const wash = Math.min(.999, Math.max(0, wave * .82 + noiseAt(Math.floor(x / 5), Math.floor(y / 5)) * .18));
+  const wave = Math.sin(u * Math.PI * 2) * Math.cos(v * Math.PI * 2);
+  const wash = Math.min(1, Math.max(0, u * .6 + v * .4 + wave * .12));
   const position = wash * (colors.length - 1);
   const index = Math.min(colors.length - 2, Math.floor(position));
-  return mixColors(colors[index], colors[index + 1], position - index).map((channel, channelIndex) => channelIndex === 3 ? 255 : Math.round(channel * .88 + 255 * .12));
+  const paper = .10 + noiseAt(x, y) * .035;
+  return mixColors(colors[index], colors[index + 1], position - index).map((channel, channelIndex) => channelIndex === 3 ? 255 : Math.round(channel * (1 - paper) + 255 * paper));
 }
 
 function floodFill(imageData: ImageData, startX: number, startY: number, paint: Paint, regions: Uint32Array) {
@@ -98,12 +101,21 @@ function floodFill(imageData: ImageData, startX: number, startY: number, paint: 
   const target = regions[startY * width + startX];
   if (!target) return false;
   const colors = paint.colors.map(hexToRgb);
+  // The fixed region map preserves outlines even when repainting an old fill.
+  // Normalize effects to this object's bounds, never the whole drawing.
+  let minX = width, minY = height, maxX = 0, maxY = 0;
+  for (let pixel = 0; pixel < regions.length; pixel++) {
+    if (regions[pixel] !== target) continue;
+    const x = pixel % width, y = Math.floor(pixel / width);
+    minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+    minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+  }
   let paintedPixels = 0;
   for (let pixel = 0; pixel < regions.length; pixel++) {
     if (regions[pixel] !== target) continue;
     const index = pixel * 4;
     const x = pixel % width;
-    const color = paintColor(paint.effect, colors, x, Math.floor(pixel / width), width, height);
+    const color = paintColor(paint.effect, colors, x - minX, Math.floor(pixel / width) - minY, maxX - minX + 1, maxY - minY + 1);
     data[index] = color[0];
     data[index + 1] = color[1];
     data[index + 2] = color[2];
