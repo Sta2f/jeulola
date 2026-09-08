@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronLeft, Eye, Heart, Lightbulb, Rabbit, RotateCcw, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import { useGameAudio } from './useGameAudio';
 import { useAchievements } from './useAchievements';
+import { BETTY_HIDING_PLACES } from './bettyHidingPlaces';
 
 type Scene = {
   name: string;
@@ -69,14 +70,10 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
   const [marker, setMarker] = useState<Marker | null>(null);
   const [lost, setLost] = useState(false);
   const hintTimer = useRef<number | null>(null);
-  const scene = SCENES[level];
-  const peekWidth = Math.max(17, scene.rabbitSize * 1.4);
-  // Three registered layers use exactly the same scene coordinates. The foreground
-  // is a masked copy of the photo, so its edge hides Betty without a visible patch.
-  const peekHeight = peekWidth * .6;
-  const leftEdge = scene.y - peekHeight * .02;
-  const rightEdge = scene.y - peekHeight * .17;
-  const foregroundClip = `polygon(0% ${leftEdge}%, ${scene.x - peekWidth / 2}% ${leftEdge}%, ${scene.x + peekWidth / 2}% ${rightEdge}%, 100% ${rightEdge}%, 100% 100%, 0% 100%)`;
+  const hidingPlace = BETTY_HIDING_PLACES[level];
+  const scene = { ...SCENES[level], ...hidingPlace };
+  const peekWidth = hidingPlace.width;
+  const foregroundClip = hidingPlace.clip;
   const confetti = useMemo(() => Array.from({ length: 22 }, (_, index) => ({
     x: `${8 + (index * 41) % 86}%`, delay: `${(index % 7) * 55}ms`, spin: `${index % 2 ? 210 : -180}deg`, color: ['#ff72b6', '#ffe06c', '#76e0d5', '#a88af5'][index % 4],
   })), []);
@@ -194,7 +191,7 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
           aria-label={`Chercher Betty dans ${scene.name}`}
         >
           <span className="betty-photo-layer betty-background-layer" aria-hidden="true" />
-          <span key={level} className="betty-peek-window" style={{ left: `${scene.x}%`, top: `${scene.y}%`, width: `${peekWidth}%` }} aria-hidden="true">
+          <span key={level} className={`betty-peek-window ${hidingPlace.sideways ? 'betty-peek-sideways' : ''}`} style={{ left: `${scene.x}%`, top: `${scene.y}%`, width: `${peekWidth}%` }} aria-hidden="true">
             {/* oxlint-disable-next-line next/no-img-element -- Optimized local WebP in this Vite game. */}
             <img className="betty-peek-rabbit" src="/assets/betty-rabbit.webp" alt="" draggable={false} />
           </span>

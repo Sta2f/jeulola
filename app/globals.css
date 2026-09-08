@@ -837,6 +837,13 @@ button { font: inherit; }
 .betty-peek-window { position:absolute;z-index:1;aspect-ratio:1;transform:translate(-50%,-50%);overflow:hidden;pointer-events:none; }
 .betty-peek-rabbit { display:block;width:100%;height:100%;object-fit:contain;transform:translateY(55%) rotate(-4deg);transform-origin:50% 80%;animation:betty-curious-peek 2s infinite;will-change:transform; }
 .betty-foreground-layer { z-index:2; }
+.betty-peek-sideways .betty-peek-rabbit { animation-name:betty-tree-peek;transform:translateX(-70%) rotate(7deg); }
+@keyframes betty-tree-peek {
+  0%,55%,100% { transform:translateX(-70%) rotate(7deg);animation-timing-function:ease-out; }
+  65% { transform:translateX(-12%) rotate(5deg); }
+  72%,80% { transform:translateX(0%) rotate(7deg);animation-timing-function:ease-in; }
+  91% { transform:translateX(-70%) rotate(7deg); }
+}
 .betty-layered .betty-hint-ring,.betty-layered .betty-marker { z-index:4; }
 @keyframes betty-curious-peek {
   0%,55%,100% { transform:translateY(55%) rotate(-4deg);animation-timing-function:ease-out; }

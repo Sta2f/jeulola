@@ -1,0 +1,62 @@
+// Coordinates are percentages of each 307 × 512 scene, not the whole atlas.
+// Each edge follows a particular photographed prop. Keep these authored edges:
+// a generic diagonal across the picture makes Betty look sliced in mid-air.
+type Point = readonly [number, number];
+type Place = { x: number; y: number; width: number; clue: string; clip: string; sideways?: boolean };
+function behind(x: number, rim: number, width: number, object: string, edge: Point[]): Place {
+  return { x, y: rim + width * .03, width, clue: `Regarde derrière ${object}.`,
+    clip: `polygon(${[...edge, [edge[edge.length - 1][0], 100], [edge[0][0], 100]].map(([a,b]) => `${a}% ${b}%`).join(',')})` };
+}
+
+export const BETTY_HIDING_PLACES: Place[] = [
+  behind(38,55,16,'la petite caisse du jardin',[[28,56],[33,54.5],[42,54.5],[49,55.5],[49,61]]),
+  behind(32,64,18,'le coffre au pied du lit',[[18,65],[26,63],[38,63],[47,65],[47,77]]),
+  behind(87,60,16,'le grand gâteau rose',[[72,63],[76,61],[83,60],[90,60],[100,61]]),
+  {x:24,y:39,width:18,sideways:true,clue:'Regarde derrière le grand tronc, à gauche.',clip:'polygon(0% 0%, 42% 0%, 31% 17%, 25% 27%, 23% 34%, 24% 40%, 27% 46%, 34% 51%, 0% 57%)'},
+  behind(42,72,15,'le panier de pommes',[[29,74],[33,72],[37,71],[40,72],[44,70],[48,71],[52,74]]),
+  behind(80,73,16,'le coquillage rose',[[66,78],[69,74],[73,73],[76,71.5],[81,71],[85,72],[89,72],[93,75],[95,80]]),
+  behind(57,67,14,'le cadeau bleu sous le sapin',[[48,68],[55,66.5],[64,67],[65,76]]),
+  behind(53,64,16,'le dossier du fauteuil',[[41,66],[43,64],[48,63],[56,63],[62,64],[65,68]]),
+  behind(33,78,15,'les fleurs à côté du banc',[[22,81],[25,79],[28,77],[31,78],[33,76],[36,77],[39,79],[42,81]]),
+  behind(20,64,17,'le gros nuage à gauche',[[0,65],[4,62],[10,61],[15,62],[19,62],[24,64],[27,64],[33,67],[39,70]]),
+  behind(74,71,13,'le pot en terre cuite',[[66,72],[70,70.5],[76,70.5],[80,72],[80,78]]),
+  behind(76,75,17,'le panier tressé',[[65,78],[67,76],[72,74.5],[78,74.5],[84,76],[87,79]]),
+  behind(39,79,16,'le rocher au bord de l’eau',[[26,81],[30,79],[38,78.5],[45,79],[50,80],[51,84]]),
+  behind(89,69,13,'la valise sur le chariot',[[83,70],[87,68],[94,69],[99,70]]),
+  behind(11,75,17,'le tambour rouge',[[0,75],[9,73.5],[17,74],[23,76],[24,80]]),
+  behind(26,66,17,'la botte de paille',[[15,69],[19,66],[23,65.5],[25,66],[29,65],[33,67],[38,69]]),
+  behind(9,74,16,'le dossier de la chaise verte',[[0,76],[2,73],[5,72],[8,72.5],[11,74],[17,81],[19,86]]),
+  behind(19,70,18,'le tabouret en bois',[[5,72],[9,70],[17,69],[24,69.5],[30,71],[32,74]]),
+  behind(47,73,16,'les lavandes du chariot',[[32,76],[35,73],[38,75],[41,71],[44,73],[47,70],[50,73],[54,72],[59,75]]),
+  behind(34,55,17,'le bord de la barque',[[14,55],[23,54.5],[31,55],[40,55.5],[50,55],[57,54.5]]),
+  behind(49,73,17,'le bassin de la fontaine',[[27,75],[33,73],[43,72.5],[52,72.5],[63,73],[71,75]]),
+  behind(20,60,17,'le dossier du fauteuil bleu',[[4,64],[7,61],[13,59.5],[20,59],[26,59.5],[30,61],[32,65]]),
+  behind(54,74,17,'le rocher sur la plage',[[40,80],[44,77],[49,74],[53,73],[59,74],[63,76],[67,80]]),
+  behind(72,75,18,'le tabouret champignon rouge',[[59,79],[62,76],[68,74.5],[74,74.5],[79,75.5],[84,78],[85,81]]),
+  behind(69,91,16,'le paquet cadeau rose',[[54,92],[66,90],[86,92],[86,99]]),
+  behind(46,72,14,'la haie en forme de cœur',[[36,76],[39,73],[44,71],[48,71],[52,73],[54,78]]),
+  behind(39,47,17,'le berceau en coquille d’œuf',[[19,49],[23,47],[27,48],[32,46],[36,47],[41,45.5],[46,47],[51,47],[56,49]]),
+  behind(25,38,17,'le grand coquillage nacré',[[9,46],[12,41],[17,38],[22,38],[26,36],[31,36],[36,38],[42,39],[45,43]]),
+  behind(72,68,16,'la table du pavillon',[[59,68.5],[69,66.5],[81,67],[99,69]]),
+  behind(13,60,15,'le sac à dos vert',[[3,63],[5,60],[10,59],[15,59.5],[18,62],[20,68]]),
+  behind(88,79,16,'le tonneau du premier plan',[[77,81],[81,78.5],[89,77.5],[96,79],[100,81]]),
+  behind(53,77,15,'le panier de pelotes',[[43,79],[47,77],[51,76],[55,76.5],[59,78],[62,80]]),
+  behind(22,89,17,'la brouette fleurie',[[8,91],[12,89],[17,88],[22,89],[27,88],[33,90]]),
+  behind(80,81,15,'la pile de livres au premier plan',[[71,82],[77,80],[86,81],[94,82]]),
+  behind(28,79,16,'le sac à dos au pied du lit',[[17,82],[20,79],[25,78],[30,78.5],[35,81],[39,86]]),
+  behind(81,77,17,'le buisson enneigé',[[66,84],[69,80],[74,78],[78,77],[82,77.5],[86,78],[90,81],[93,86]]),
+  behind(77,65,15,'le petit tonneau près de l’ancre',[[68,68],[71,65],[76,63.5],[81,64.5],[85,67]]),
+  behind(47,63,18,'le tabouret de piano',[[34,65],[39,63],[47,62],[55,63],[60,65],[60,69]]),
+  behind(80,71,16,'les pommes rouges du quai',[[64,74],[68,71],[72,70],[76,71],[79,68.5],[82,70],[86,70],[90,73]]),
+  behind(25,54,17,'le fauteuil en osier',[[7,59],[10,56],[16,54],[24,53],[32,54],[38,56],[41,60]]),
+  behind(83,84,17,'le sac de cadeaux',[[72,85],[74,82],[79,83],[83,85],[89,85],[97,84],[100,87]]),
+  behind(20,57,16,'le fauteuil de la serre',[[7,60],[11,57],[16,55.5],[21,55.5],[25,57],[28,60]]),
+  behind(79,66,17,'le wagon de la mine',[[62,66],[72,67],[83,66.5],[99,66]]),
+  behind(90,76,14,'le tonneau de friandises',[[77,77],[82,75],[90,75],[98,76],[100,79]]),
+  behind(84,80,17,'le grand coffre à droite',[[68,81],[77,78],[90,78.5],[100,80]]),
+  behind(13,70,17,'le panier de pommes',[[0,72],[4,69],[8,70],[12,67],[16,68],[20,70],[25,72]]),
+  behind(28,48,15,'le banc de pierre',[[12,50],[19,48],[27,47],[34,47.5],[40,49]]),
+  behind(74,72,16,'le petit tabouret de l’atelier',[[63,73],[68,71],[76,71],[82,72],[85,74]]),
+  behind(39,55,14,'la rambarde du petit pont',[[26,57],[31,55],[36,54],[41,54],[47,55],[52,58]]),
+  behind(20,54,17,'le dossier bleu du fauteuil',[[0,57],[6,55],[13,53],[21,54],[27,55],[32,57],[35,63]]),
+];
