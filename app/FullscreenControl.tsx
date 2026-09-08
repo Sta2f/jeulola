@@ -51,12 +51,12 @@ export function FullscreenControl() {
     }
   };
 
-  return <>
+  return <aside className="app-toolbar" aria-label="Réglages de l’application">
     <details className="sound-settings"><summary aria-label="Régler le volume">♪ <span>Volume</span></summary><label>Musique et sons <output>{Math.round(audio.volume * 100)} %</output><input aria-label="Volume de la musique et des bruitages" type="range" min="0" max="100" value={Math.round(audio.volume * 100)} onChange={(event) => setAudioSettings({ volume: Number(event.target.value) / 100 })} /></label></details>
     <button className="app-fullscreen-button" type="button" onClick={toggleFullscreen} aria-label={isFullscreen ? 'Quitter le plein écran' : 'Passer en plein écran'}>
       {isFullscreen ? <Minimize2 /> : <Maximize2 />}
       <span>{isFullscreen ? 'Quitter' : 'Plein écran'}</span>
     </button>
     {showTip && <output className="fullscreen-tip">Sur iPad Safari : touche Partager, puis « Sur l’écran d’accueil » pour jouer réellement comme dans une app.</output>}
-  </>;
+  </aside>;
 }

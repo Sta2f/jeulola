@@ -6,6 +6,7 @@ import './globals.css';
 import './polish.css';
 import './game-comfort.css';
 import './letters.css';
+import './responsive.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

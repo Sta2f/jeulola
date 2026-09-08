@@ -114,7 +114,7 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
   const [position, setPosition] = useState(level.start);
   const [moves, setMoves] = useState(0);
   const [won, setWon] = useState(false);
-  const [focusBoard, setFocusBoard] = useState(false);
+  const [focusBoard, setFocusBoard] = useState(() => window.matchMedia('(max-width: 650px), (max-width: 1000px) and (orientation: portrait)').matches);
   const completed = useAchievements('princess', levelIndex, won);
   const [walking, setWalking] = useState(false);
   const [walkDuration, setWalkDuration] = useState(170);
@@ -130,6 +130,7 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
   }, []);
 
   const loadLevel = useCallback((nextLevelIndex: number) => {
+    if (window.matchMedia('(max-width: 650px), (max-width: 1000px) and (orientation: portrait)').matches) setFocusBoard(true);
     stopWalking();
     const nextLevel = LEVELS[nextLevelIndex];
     setLevelIndex(nextLevelIndex);

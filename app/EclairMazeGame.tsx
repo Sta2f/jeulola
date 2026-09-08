@@ -161,7 +161,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   const [boneFound, setBoneFound] = useState('');
   const [showBoneCelebration, setShowBoneCelebration] = useState(false);
   const [won, setWon] = useState(false);
-  const [focusBoard, setFocusBoard] = useState(false);
+  const [focusBoard, setFocusBoard] = useState(() => window.matchMedia('(max-width: 650px), (max-width: 1000px) and (orientation: portrait)').matches);
   const completed = useAchievements('eclair', level, won);
   const [showWinCard, setShowWinCard] = useState(false);
   const [walking, setWalking] = useState(false);
@@ -341,6 +341,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   };
 
   const loadLevel = (nextLevel: number) => {
+    if (window.matchMedia('(max-width: 650px), (max-width: 1000px) and (orientation: portrait)').matches) setFocusBoard(true);
     const nextStart = levelStart(LEVELS[nextLevel]);
     setLevel(nextLevel);
     stopWalking();
