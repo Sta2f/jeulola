@@ -162,6 +162,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   const hintsRemaining = Math.max(0, 5 - hintsUsed);
   const [boneFound, setBoneFound] = useState('');
   const [showBoneCelebration, setShowBoneCelebration] = useState(false);
+  const [boneAnimationReady, setBoneAnimationReady] = useState(false);
   const [won, setWon] = useState(false);
   const [focusBoard, setFocusBoard] = useState(() => window.matchMedia('(max-width: 650px), (max-width: 1000px) and (orientation: portrait)').matches);
   const fittedStage = useFittedBoard(level, focusBoard);
@@ -171,6 +172,11 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   const [walkDuration, setWalkDuration] = useState(170);
   const walkTimer = useRef<number | null>(null);
   const boneCelebrationTimer = useRef<number | null>(null);
+  useEffect(() => {
+    const image = new Image();
+    image.src = '/assets/eclair-lick-transparent.png';
+    void image.decode().catch(() => undefined);
+  }, []);
   const dogStepCounter = useRef(0);
   const maze = useMemo(() => createHardMaze(levelSettings), [levelSettings]);
   const gridCells = useMemo(() => maze.flatMap((row, rowIndex) => row.map((cell, colIndex) => (
@@ -188,15 +194,11 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
 
   const celebrateBone = useCallback((key: string) => {
     setBoneFound(key);
+    setBoneAnimationReady(false);
     setShowBoneCelebration(true);
-    playSfx('bone');
     if (boneCelebrationTimer.current !== null) window.clearTimeout(boneCelebrationTimer.current);
-    boneCelebrationTimer.current = window.setTimeout(() => {
-      setBoneFound('');
-      setShowBoneCelebration(false);
-      boneCelebrationTimer.current = null;
-    }, 1250);
-  }, [playSfx]);
+    boneCelebrationTimer.current = null;
+  }, []);
 
   const move = useCallback((direction: Direction) => {
     if (won || walking) return;
@@ -421,9 +423,20 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
         </div>
       </section>
 
-      {showBoneCelebration && !won && <div className="lick-screen bone-celebration" aria-label="Éclair est heureux d’avoir trouvé un os">
+      {showBoneCelebration && !won && <div className={`lick-screen bone-celebration ${boneAnimationReady ? 'is-ready' : 'is-preparing'}`} aria-label="Éclair est heureux d’avoir trouvé un os">
         {/* oxlint-disable-next-line next/no-img-element -- Project-local generated celebration artwork. */}
-        <img src="/assets/eclair-lick-transparent.png" alt="Éclair fête son os" />
+        <img key={boneFound} src="/assets/eclair-lick-transparent.png" alt="Éclair fête son os" onLoad={event => {
+          const image = event.currentTarget;
+          void image.decode().then(() => {
+            if (!image.isConnected) return;
+            setBoneAnimationReady(true);
+            playSfx('bone');
+            if (boneCelebrationTimer.current !== null) window.clearTimeout(boneCelebrationTimer.current);
+            boneCelebrationTimer.current = window.setTimeout(() => {
+              setBoneFound(''); setShowBoneCelebration(false); boneCelebrationTimer.current = null;
+            }, 1250);
+          }).catch(() => { if (image.isConnected) setShowBoneCelebration(false); });
+        }} onError={() => setShowBoneCelebration(false)} />
         <div><Bone /> MIAM ! ÉCLAIR A TROUVÉ UN OS ! <Bone /></div>
       </div>}
 

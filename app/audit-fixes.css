@@ -1,4 +1,9 @@
 /* Final responsive contract: media above controls, generous touch targets. */
+.lick-screen { z-index:110; }
+.bone-celebration.is-preparing { visibility:hidden;pointer-events:none;animation:none; }
+.bone-celebration.is-preparing img,.bone-celebration.is-preparing>div { animation:none; }
+.bone-celebration.is-ready>div { animation:bone-celebration-copy 1.25s ease both; }
+.bone-celebration img { filter:none;will-change:transform,opacity; }
 .home-nav .home-brand span,.game-count,.welcome-cloud-copy>p,.welcome-cloud-copy>span { display:none; }
 .home-nav { background:transparent;box-shadow:none;border:0; }
 .home-progress { text-align:center;color:#69436d;padding:10px;font-size:14px; }
