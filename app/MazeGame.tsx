@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAchievements } from './useAchievements';
 import { readSaved, saveValue } from './preferences';
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, ChevronLeft, Crown, Footprints, RotateCcw, Sparkles, Volume2, VolumeX } from 'lucide-react';
+import { ChevronLeft, Crown, Footprints, RotateCcw, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useGameAudio } from './useGameAudio';
 import { MazeZoom } from './MazeZoom';
+import { MazeDirectionControls } from './MazeDirectionControls';
+import { mazePointerTarget, useMazeInputQueue } from './mazeInput';
 
 type Direction = 'up' | 'down' | 'left' | 'right';
 type Position = { row: number; col: number };
@@ -124,24 +126,6 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
     <span key={`${rowIndex}-${colIndex}`} className={`maze-cell ${cell ? 'wall' : 'path'}`} />
   ))), [level]);
 
-  const stopWalking = useCallback(() => {
-    if (walkTimer.current !== null) window.clearTimeout(walkTimer.current);
-    walkTimer.current = null;
-    setWalking(false);
-  }, []);
-
-  const loadLevel = useCallback((nextLevelIndex: number) => {
-    if (window.matchMedia('(max-width: 650px), (max-height: 650px), (max-width: 1000px) and (orientation: portrait)').matches) setFocusBoard(true);
-    stopWalking();
-    const nextLevel = LEVELS[nextLevelIndex];
-    setLevelIndex(nextLevelIndex);
-    setPosition(nextLevel.start);
-    setMoves(0);
-    setWon(false);
-    setWalkDuration(170);
-    playSfx('select');
-  }, [playSfx, stopWalking]);
-
   const move = useCallback((direction: Direction) => {
     if (won || walking) return;
     const delta = { up: [-1, 0], down: [1, 0], left: [0, -1], right: [0, 1] }[direction];
@@ -193,13 +177,32 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
     }, duration);
   }, [level, playSfx, position, walking, won]);
 
+  const { dispatch: dispatchInput, clear: clearPendingInput } = useMazeInputQueue({ walking, won, move, walkStraight });
   const onBoardPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!event.isPrimary || event.button !== 0) return;
     event.preventDefault();
     const bounds = event.currentTarget.getBoundingClientRect();
-    const targetCol = Math.min(level.grid[0].length - 1, Math.max(0, Math.floor((event.clientX - bounds.left) / bounds.width * level.grid[0].length)));
-    const targetRow = Math.min(level.grid.length - 1, Math.max(0, Math.floor((event.clientY - bounds.top) / bounds.height * level.grid.length)));
-    walkStraight(targetRow, targetCol);
+    dispatchInput(mazePointerTarget(level.grid, position, bounds, event.clientX, event.clientY, event.pointerType !== 'mouse'));
   };
+
+  const stopWalking = useCallback(() => {
+    clearPendingInput();
+    if (walkTimer.current !== null) window.clearTimeout(walkTimer.current);
+    walkTimer.current = null;
+    setWalking(false);
+  }, [clearPendingInput]);
+
+  const loadLevel = useCallback((nextLevelIndex: number) => {
+    if (window.matchMedia('(max-width: 650px), (max-height: 650px), (max-width: 1000px) and (orientation: portrait)').matches) setFocusBoard(true);
+    stopWalking();
+    const nextLevel = LEVELS[nextLevelIndex];
+    setLevelIndex(nextLevelIndex);
+    setPosition(nextLevel.start);
+    setMoves(0);
+    setWon(false);
+    setWalkDuration(170);
+    playSfx('select');
+  }, [playSfx, stopWalking]);
 
   useEffect(() => stopWalking, [stopWalking]);
 
@@ -209,11 +212,11 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
       if (!direction) return;
       event.preventDefault();
       startAudio();
-      move(direction);
+      dispatchInput({ direction });
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [move, startAudio]);
+  }, [dispatchInput, startAudio]);
 
   const reset = () => loadLevel(levelIndex);
   const isFinalLevel = levelIndex === LEVELS.length - 1;
@@ -246,12 +249,7 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
         <div className="maze-stage">
           <MazeZoom level={levelIndex} tools={close => <>
 <button className="board-focus-toggle" aria-pressed={focusBoard} onClick={() => { close(); setFocusBoard(v => !v); }}>{focusBoard ? 'Afficher les niveaux' : 'Grand plateau'}</button>
-<div className="touch-controls" aria-label="Commandes directionnelles">
-            <button className="touch-up" onClick={() => move('up')} aria-label="Aller vers le haut"><ArrowUp /></button>
-            <button className="touch-left" onClick={() => move('left')} aria-label="Aller à gauche"><ArrowLeft /></button>
-            <button className="touch-down" onClick={() => move('down')} aria-label="Aller vers le bas"><ArrowDown /></button>
-            <button className="touch-right" onClick={() => move('right')} aria-label="Aller à droite"><ArrowRight /></button>
-          </div>
+<MazeDirectionControls className="touch-controls" onMove={direction => dispatchInput({ direction })} />
           </>}>
           <div className={`maze-board ${walking ? 'is-walking' : ''}`} onPointerDown={onBoardPointerDown} aria-label={`Labyrinthe de la forêt enchantée, niveau ${levelIndex + 1}`} style={{ '--cols': level.grid[0].length, '--rows': level.grid.length, '--move-duration': `${walkDuration}ms`, aspectRatio: `${level.grid[0].length} / ${level.grid.length}` } as React.CSSProperties}>
             {/* oxlint-disable-next-line next/no-img-element -- Vite app with a project-local generated game asset. */}

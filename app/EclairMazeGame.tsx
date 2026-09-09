@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAchievements } from './useAchievements';
 import { readSaved, saveValue } from './preferences';
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Bone, ChevronLeft, Footprints, Heart, Lightbulb, RotateCcw, Sparkles, Volume2, VolumeX } from 'lucide-react';
+import { ArrowRight, Bone, ChevronLeft, Footprints, Heart, Lightbulb, RotateCcw, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useGameAudio } from './useGameAudio';
 import { MazeZoom } from './MazeZoom';
+import { MazeDirectionControls } from './MazeDirectionControls';
+import { mazePointerTarget, useMazeInputQueue } from './mazeInput';
 
 type Direction = 'up' | 'down' | 'left' | 'right';
 type Position = { row: number; col: number };
@@ -277,19 +279,20 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
     }, duration);
   }, [bones, celebrateBone, goal, maze, playSfx, position, walking, won]);
 
+  const { dispatch: dispatchInput, clear: clearPendingInput } = useMazeInputQueue({ walking, won, move, walkStraight });
   const onBoardPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!event.isPrimary || event.button !== 0) return;
     event.preventDefault();
     const bounds = event.currentTarget.getBoundingClientRect();
-    const targetCol = Math.min(levelSettings.cols - 1, Math.max(0, Math.floor((event.clientX - bounds.left) / bounds.width * levelSettings.cols)));
-    const targetRow = Math.min(levelSettings.rows - 1, Math.max(0, Math.floor((event.clientY - bounds.top) / bounds.height * levelSettings.rows)));
-    walkStraight(targetRow, targetCol);
+    dispatchInput(mazePointerTarget(maze, position, bounds, event.clientX, event.clientY, event.pointerType !== 'mouse'));
   };
 
   const stopWalking = useCallback(() => {
+    clearPendingInput();
     if (walkTimer.current !== null) window.clearTimeout(walkTimer.current);
     walkTimer.current = null;
     setWalking(false);
-  }, []);
+  }, [clearPendingInput]);
 
   useEffect(() => stopWalking, [stopWalking]);
 
@@ -303,11 +306,11 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
       if (!direction) return;
       event.preventDefault();
       startAudio();
-      move(direction);
+      dispatchInput({ direction });
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [move, startAudio]);
+  }, [dispatchInput, startAudio]);
 
   const addHint = () => {
     if (won || walking || hintCounts.current![level] >= 5) return;
@@ -389,12 +392,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
         <div className="eclair-stage">
           <MazeZoom level={level} tools={close => <>
 <div className="board-focus-actions"><button className="board-focus-toggle" aria-pressed={focusBoard} onClick={() => { close(); setFocusBoard(v => !v); }}>{focusBoard ? 'Afficher les niveaux' : 'Grand plateau'}</button>{focusBoard && <button className="board-focus-toggle" onClick={addHint} disabled={hintsRemaining === 0 || won || walking}><Bone /> {hintsRemaining > 0 ? `Poser un os (${hintsRemaining}/5)` : 'Plus d’indices'}</button>}</div>
-<div className="eclair-controls" aria-label="Commandes directionnelles">
-            <button className="touch-up" onClick={() => move('up')} aria-label="Aller vers le haut"><ArrowUp /></button>
-            <button className="touch-left" onClick={() => move('left')} aria-label="Aller à gauche"><ArrowLeft /></button>
-            <button className="touch-down" onClick={() => move('down')} aria-label="Aller vers le bas"><ArrowDown /></button>
-            <button className="touch-right" onClick={() => move('right')} aria-label="Aller à droite"><ArrowRight /></button>
-          </div>
+<MazeDirectionControls className="eclair-controls" onMove={direction => dispatchInput({ direction })} />
           </>}>
           <div className={`eclair-board ${walking ? 'is-walking' : ''}`} onPointerDown={onBoardPointerDown} style={{ '--cols': levelSettings.cols, '--rows': levelSettings.rows, '--move-duration': `${walkDuration}ms`, aspectRatio: `${levelSettings.cols} / ${levelSettings.rows}` } as React.CSSProperties} aria-label={`Labyrinthe d’Éclair, niveau ${level + 1} sur ${LEVELS.length}`}>
             {/* oxlint-disable-next-line next/no-img-element -- Project-local generated game artwork. */}

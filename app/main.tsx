@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import Home from './page';
 import { FullscreenControl } from './FullscreenControl';
+import { ResponsiveTouch } from './ResponsiveTouch';
 import './globals.css';
 import './polish.css';
 import './game-comfort.css';
@@ -13,6 +14,7 @@ import './play-space.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <ResponsiveTouch />
     <Home />
     <FullscreenControl />
   </StrictMode>,

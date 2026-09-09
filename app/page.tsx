@@ -7,6 +7,7 @@ import { EclairMazeGame } from './EclairMazeGame';
 import { BettyHideAndSeek } from './BettyHideAndSeek';
 import { LettersGame } from './LettersGame';
 import { MathGame } from './MathGame';
+import { FairyGameButton } from './FairyGameButton';
 import { type FileMusicTheme, preloadFileMusic, startFileMusic, stopAllFileMusic, useGameAudio } from './useGameAudio';
 import { readSaved } from './preferences';
 
@@ -125,32 +126,14 @@ export default function Home() {
           </div>
         </header>
 
-        <div className="signpost" aria-label="Les jeux de Lola">
-          <button className="wood-sign sign-yellow" onClick={() => goTo('math', 'math')}>
-            <span className="sign-icon" aria-hidden="true">123</span>
-            <span><strong>Les calculs enchantés</strong></span>
-          </button>
-          <button className="wood-sign sign-purple" onClick={() => goTo('letters', 'letters')}>
-            <span className="sign-icon" aria-hidden="true">ABC</span>
-            <span><strong>La magie des lettres</strong></span>
-          </button>
-          <button className="wood-sign sign-pink" onClick={() => goTo('traffic')}>
-            <span className="sign-icon"><TrafficCone /></span>
-            <span><strong>Le feu rouge</strong></span>
-          </button>
-          <button className="wood-sign sign-yellow" onClick={() => goTo('maze-menu')}>
-            <span className="sign-icon"><Map /></span>
-            <span><strong>Les labyrinthes</strong></span>
-          </button>
-          <button className="wood-sign sign-turquoise" onClick={() => goTo('coloring', 'coloring')}>
-            <span className="sign-icon"><Palette /></span>
-            <span><strong>Les coloriages</strong></span>
-          </button>
-          <button className="wood-sign sign-green" onClick={() => goTo('betty-hide', 'hide')}>
-            <span className="sign-icon"><Rabbit /></span>
-            <span><strong>Cache-cache avec Betty</strong></span>
-          </button>
-        </div>
+        <nav className="fairy-menu" aria-label="Les jeux de Lola">
+          <FairyGameButton tone="honey" icon="123" onClick={() => goTo('math', 'math')}>Les calculs enchantés</FairyGameButton>
+          <FairyGameButton tone="lilac" icon="ABC" onClick={() => goTo('letters', 'letters')}>La magie des lettres</FairyGameButton>
+          <FairyGameButton tone="rose" icon={<TrafficCone />} onClick={() => goTo('traffic')}>Le feu rouge</FairyGameButton>
+          <FairyGameButton tone="honey" icon={<Map />} onClick={() => goTo('maze-menu')}>Les labyrinthes</FairyGameButton>
+          <FairyGameButton tone="sky" icon={<Palette />} onClick={() => goTo('coloring', 'coloring')}>Les coloriages</FairyGameButton>
+          <FairyGameButton tone="mint" icon={<Rabbit />} onClick={() => goTo('betty-hide', 'hide')}>Cache-cache avec Betty</FairyGameButton>
+        </nav>
       </section>
 
     </main>
