@@ -18,3 +18,4 @@ Les mots et les questions de calcul utilisent des enregistrements neuronaux fran
 `scripts/generate-voices.py` recrée les 454 petits fichiers statiques avec `edge-tts` et FFmpeg. Le service de synthèse n’est utilisé qu’à la préparation : aucun texte ni donnée de Lola n’est envoyé pendant le jeu. Le navigateur charge seulement le mot ou le calcul sélectionné.
 
 Pour de futurs sons, prendre ces quatre fichiers comme références de style et garder la même discrétion sonore. Contrôler les niveaux, le mute, le réglage sur iOS, l’arrêt au retour arrière et le premier déclenchement avec cache vide.
+- Histoires : voix du soir plus lente et douce, surbrillance basée sur les vrais repères WordBoundary, berceuse originale et FX feutrés. Voir `STORIES.md` pour les fichiers, réglages et procédure d’ajout. Ne pas utiliser les sons de défaite ou les aboiements énergiques dans la lecture du coucher.

@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState, type PointerEvent } from 'react';
-import { ArrowRight, BookOpen, ChevronLeft, Eraser, Lightbulb, Pencil, RotateCcw, Volume2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ArrowRight, BookOpen, ChevronLeft, Lightbulb, Pencil, RotateCcw, Volume2 } from 'lucide-react';
+import { TracePad } from './TracePad';
 import { readSaved, saveValue } from './preferences';
 import { useGameAudio } from './useGameAudio';
 import { preloadRecording, useRecordedAudio } from './useRecordedAudio';
@@ -63,7 +64,6 @@ function LetterRound({ mode, level, onWin, onNext }: { mode: Mode; level: number
   const [won, setWon] = useState(false);
   const [message, setMessage] = useState('');
   const [traceLetter, setTraceLetter] = useState(0);
-  const [clear, setClear] = useState(0);
   const { playSfx } = useGameAudio('traffic', false);
   const { playRecording, stopRecording } = useRecordedAudio();
   const wordAudio = `/assets/audio/voices/word-${level}.mp3`;
@@ -100,24 +100,11 @@ function LetterRound({ mode, level, onWin, onNext }: { mode: Mode; level: number
       <p className="letters-model">{word.text} <span>{word.text.toLowerCase()}</span></p>
       <div className="letters-trace-picker" aria-label="Lettre à tracer">{word.text.split('').map((letter, index) => <button key={index} aria-pressed={traceLetter === index} onClick={() => setTraceLetter(index)}>{letter}</button>)}</div>
       <p>Suis la grande lettre avec ton doigt ou ta souris.</p>
-      <TracePad key={`${traceLetter}-${clear}`} letter={word.text[traceLetter]} />
-      <button className="letters-clear" onClick={() => setClear(clear + 1)}><Eraser /> Effacer le tracé</button>
+      <TracePad key={traceLetter} letter={word.text[traceLetter]} />
       <p className="letters-note">Tu peux aussi recopier « {word.text.toLowerCase()} » sur une feuille.</p>
     </>}
     <output className={`letters-feedback ${won ? 'is-won' : ''}`}>{message}</output>
     {won && <p className="letters-model">{word.text.toLowerCase()}<span>{word.syllables}</span></p>}
     {(won || mode === 'write') && <button className="letters-next" onClick={() => { stopRecording(); onNext(); }}>{level === words.length - 1 ? 'Rejouer les mots' : 'Mot suivant'} <ArrowRight /></button>}
   </section>;
-}
-
-function TracePad({ letter }: { letter: string }) {
-  const canvas = useRef<HTMLCanvasElement>(null);
-  const drawing = useRef<number | null>(null);
-  const point = (event: PointerEvent<HTMLCanvasElement>) => { const rect = event.currentTarget.getBoundingClientRect(); return { x: (event.clientX - rect.left) * 600 / rect.width, y: (event.clientY - rect.top) * 320 / rect.height }; };
-  return <div className="letters-trace"><svg className="letters-trace-model" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><text x="300" y="245" textAnchor="middle" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="240" fill="#bca5ce">{letter}</text></svg><canvas ref={canvas} width={600} height={320} aria-label={`Zone de tracé libre de la lettre ${letter}`} onPointerDown={event => {
-    if (drawing.current !== null) return;
-    drawing.current = event.pointerId; event.currentTarget.setPointerCapture(event.pointerId);
-    const ctx = canvas.current?.getContext('2d'); if (!ctx) return;
-    const p = point(event); ctx.strokeStyle = '#7b43ad'; ctx.lineWidth = 10; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + .1, p.y); ctx.stroke();
-  }} onPointerMove={event => { if (drawing.current !== event.pointerId) return; const p = point(event); const ctx = canvas.current?.getContext('2d'); ctx?.lineTo(p.x, p.y); ctx?.stroke(); }} onPointerUp={() => { drawing.current = null; }} onPointerCancel={() => { drawing.current = null; }} onLostPointerCapture={() => { drawing.current = null; }} /></div>;
 }

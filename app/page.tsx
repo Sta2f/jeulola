@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ChevronLeft, Crown, Dog, Gamepad2, Map, Palette, Pause, Rabbit, Sparkles, TrafficCone, Volume2, VolumeX } from 'lucide-react';
+import { ChevronLeft, Crown, Dog, Gamepad2, Map, Moon, Palette, Pause, Rabbit, Sparkles, TrafficCone, Volume2, VolumeX } from 'lucide-react';
 import { TrafficLightGame } from './TrafficLightGame';
 import { MazeGame } from './MazeGame';
 import { ColoringGame } from './ColoringGame';
@@ -9,12 +9,13 @@ import { LettersGame } from './LettersGame';
 import { MathGame } from './MathGame';
 import { FairyGameButton } from './FairyGameButton';
 import { HomeEnchantment } from './HomeEnchantment';
+import { Stories } from './Stories';
 import { type FileMusicTheme, preloadFileMusic, startFileMusic, stopAllFileMusic, useGameAudio } from './useGameAudio';
 import { readSaved, saveValue } from './preferences';
 
 declare const __BUILD_ID__: string;
 
-type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'eclair-maze' | 'betty-hide' | 'letters' | 'math';
+type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'eclair-maze' | 'betty-hide' | 'letters' | 'math' | 'stories';
 
 export default function Home() {
   const [screen, setScreen] = useState<GameScreen>('home');
@@ -43,7 +44,7 @@ export default function Home() {
     window.history.replaceState({ lolaScreen: 'home' }, '', '#home');
     const back = (event: PopStateEvent) => {
       const next = event.state?.lolaScreen as GameScreen;
-      const valid: GameScreen[] = ['home', 'traffic', 'maze-menu', 'maze', 'coloring', 'eclair-maze', 'betty-hide', 'letters', 'math'];
+      const valid: GameScreen[] = ['home', 'traffic', 'maze-menu', 'maze', 'coloring', 'eclair-maze', 'betty-hide', 'letters', 'math', 'stories'];
       stopAudio();
       stopAllFileMusic();
       setScreen(valid.includes(next) ? next : 'home');
@@ -103,6 +104,7 @@ export default function Home() {
   if (screen === 'betty-hide') return <BettyHideAndSeek onBack={() => goTo('home')} />;
   if (screen === 'letters') return <LettersGame onBack={() => goTo('home')} />;
   if (screen === 'math') return <MathGame onBack={() => goTo('home')} />;
+  if (screen === 'stories') return <Stories onBack={() => goTo('home')} />;
 
   return (
     <main className="games-home" onPointerDownCapture={startAudio}>
@@ -139,6 +141,7 @@ export default function Home() {
             <span>Joue · Explore · Découvre</span>
           </div>
         </header>
+        <button className="home-stories-tab" onClick={() => goTo('stories')}><Moon /><span>Histoires</span><Sparkles /></button>
 
         <nav className="fairy-menu" aria-label="Les jeux de Lola">
           <FairyGameButton tone="honey" icon="123" onClick={() => goTo('math', 'math')}>Les calculs enchantés</FairyGameButton>

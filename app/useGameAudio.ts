@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useSyncExternalStore } from 'react';
 import { getAudioSettings, setAudioSettings, useAudioSettings } from './preferences';
 import { preloadRecording, useRecordedAudio } from './useRecordedAudio';
 
@@ -9,8 +9,8 @@ const RECORDED_EFFECTS: Partial<Record<SoundEffect, string>> = {
   'lost': '/assets/audio/effects/lost.mp3',
   'dog-win': '/assets/audio/effects/eclair-win.mp3',
 };
-type MusicTheme = 'forest' | 'dog' | 'coloring' | 'traffic' | 'hide' | 'home' | 'letters' | 'math';
-export type FileMusicTheme = 'forest' | 'dog' | 'coloring' | 'hide' | 'home' | 'letters' | 'math';
+type MusicTheme = 'forest' | 'dog' | 'coloring' | 'traffic' | 'hide' | 'home' | 'letters' | 'math' | 'story';
+export type FileMusicTheme = Exclude<MusicTheme, 'traffic'>;
 
 const MUSIC_NOTES: Record<MusicTheme, number[]> = {
   forest: [261.63, 329.63, 392, 523.25, 392, 329.63],
@@ -21,6 +21,7 @@ const MUSIC_NOTES: Record<MusicTheme, number[]> = {
   home: [261.63, 329.63, 392, 523.25],
   letters: [261.63, 329.63, 392, 523.25],
   math: [261.63, 329.63, 392, 523.25],
+  story: [261.63, 329.63, 392, 523.25],
 };
 const FILE_MUSIC: Partial<Record<MusicTheme, { src: string; volume: number }>> = {
   forest: { src: '/assets/audio/glowing-maze-path.mp3', volume: .1 },
@@ -30,21 +31,37 @@ const FILE_MUSIC: Partial<Record<MusicTheme, { src: string; volume: number }>> =
   home: { src: '/assets/audio/miniature-wonderland.mp3', volume: .09 },
   letters: { src: '/assets/audio/word-hunt-time.mp3', volume: .06 },
   math: { src: '/assets/audio/focus-flow.mp3', volume: .06 },
+  story: { src: '/assets/stories/eclair-dodo/lullaby.mp3', volume: .075 },
 };
-const fileMusicCache = new Map<FileMusicTheme, HTMLAudioElement>();
+// Reuse the element unlocked by the entry tap. Safari grants autoplay per element.
+let musicElement: HTMLAudioElement | null = null;
+let loadedTheme: FileMusicTheme | null = null;
+let desiredTheme: FileMusicTheme | null = null;
+let musicGeneration = 0;
+let playPending = false;
+let musicStatus: 'idle' | 'playing' | 'blocked' = 'idle';
+const musicListeners = new Set<() => void>();
+const subscribeMusic = (listener: () => void) => { musicListeners.add(listener); return () => { musicListeners.delete(listener); }; };
+export const useMusicPlaybackStatus = () => useSyncExternalStore(subscribeMusic, () => musicStatus);
+function setMusicStatus(status: typeof musicStatus) {
+  if (musicStatus === status) return;
+  musicStatus = status;
+  musicListeners.forEach(listener => listener());
+}
 const noiseBuffers = new WeakMap<AudioContext, AudioBuffer>();
 // iOS ignores HTMLMediaElement.volume. Route music through Web Audio instead.
 let musicContext: AudioContext | null = null;
-const musicGains = new Map<FileMusicTheme, GainNode>();
+let musicGain: GainNode | null = null;
 const effectGains = new Map<AudioContext, GainNode>();
 
 function level() { const settings = getAudioSettings(); return settings.enabled ? settings.volume : 0; }
 
 function updateVolumes() {
-  musicGains.forEach((gain, theme) => {
-    gain.gain.cancelScheduledValues(gain.context.currentTime);
-    gain.gain.setTargetAtTime(FILE_MUSIC[theme]!.volume * level(), gain.context.currentTime, .015);
-  });
+  const volume = loadedTheme ? FILE_MUSIC[loadedTheme]!.volume * level() : 0;
+  if (musicGain) {
+    musicGain.gain.cancelScheduledValues(musicGain.context.currentTime);
+    musicGain.gain.setTargetAtTime(volume, musicGain.context.currentTime, .015);
+  } else if (musicElement) musicElement.volume = volume;
   effectGains.forEach((gain, context) => {
     gain.gain.cancelScheduledValues(context.currentTime);
     gain.gain.setTargetAtTime(level(), context.currentTime, .015);
@@ -62,58 +79,95 @@ function effectsOutput(context: AudioContext) {
   return gain;
 }
 
-function connectMusic(theme: FileMusicTheme, audio: HTMLAudioElement) {
+function connectMusic(audio: HTMLAudioElement) {
   const Context = audioContextClass();
-  if (!Context) { audio.volume = FILE_MUSIC[theme]!.volume * level(); return; }
+  if (!Context) { updateVolumes(); return; }
   musicContext ??= new Context();
-  if (!musicGains.has(theme)) {
-    const gain = musicContext.createGain();
-    gain.gain.value = FILE_MUSIC[theme]!.volume * level();
-    musicContext.createMediaElementSource(audio).connect(gain).connect(musicContext.destination);
-    musicGains.set(theme, gain);
+  if (!musicGain) {
+    musicGain = musicContext.createGain();
+    musicGain.gain.value = loadedTheme ? FILE_MUSIC[loadedTheme]!.volume * level() : 0;
+    musicContext.createMediaElementSource(audio).connect(musicGain).connect(musicContext.destination);
+    musicContext.addEventListener('statechange', () => {
+      if (musicContext?.state === 'running') retryFileMusic();
+      else if (desiredTheme && !document.hidden) setMusicStatus('blocked');
+    });
   }
   audio.volume = 1;
   updateVolumes();
-  void musicContext.resume().catch(() => undefined);
 }
 
-function getFileMusic(theme: FileMusicTheme) {
-  let audio = fileMusicCache.get(theme);
-  const settings = FILE_MUSIC[theme]!;
-  if (audio) {
-    return audio;
-  }
-  audio = new Audio(settings.src);
+function getMusicElement() {
+  if (musicElement) return musicElement;
+  const audio = new Audio();
   audio.loop = true;
-  audio.volume = settings.volume * level();
-  audio.preload = 'none';
-  fileMusicCache.set(theme, audio);
+  audio.preload = 'auto';
+  audio.setAttribute('playsinline', '');
+  musicElement = audio;
+  audio.addEventListener('canplay', retryFileMusic);
+  audio.addEventListener('error', () => { if (desiredTheme) setMusicStatus('blocked'); });
+  // Retry on the trusted gesture itself, not only inside a delayed React effect.
+  for (const event of ['pointerdown', 'pointerup', 'touchend', 'keydown']) document.addEventListener(event, retryFileMusic, { capture: true, passive: true });
+  for (const event of ['pageshow', 'focus', 'online']) window.addEventListener(event, retryFileMusic);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      audio.pause();
+      if (musicContext?.state === 'running') void musicContext.suspend().catch(() => undefined).finally(() => {
+        // A quick app switch can return before suspend() settles.
+        if (!document.hidden) retryFileMusic();
+      });
+    } else retryFileMusic();
+  });
   return audio;
 }
 
 export function preloadFileMusic() {
-  getFileMusic('home').load();
+  const audio = getMusicElement();
+  if (!loadedTheme) { loadedTheme = 'home'; audio.src = FILE_MUSIC.home!.src; }
+}
+
+export function retryFileMusic() {
+  if (!desiredTheme || document.hidden || !getAudioSettings().enabled) return;
+  const audio = getMusicElement();
+  const generation = musicGeneration;
+  if (audio.error) audio.load();
+  connectMusic(audio);
+  if (musicContext && musicContext.state !== 'running') {
+    void musicContext.resume().then(() => {
+      if (generation === musicGeneration && desiredTheme && musicContext?.state === 'running' && !audio.paused) setMusicStatus('playing');
+    }).catch(() => { if (generation === musicGeneration && desiredTheme) setMusicStatus('blocked'); });
+  }
+  if (!audio.paused || playPending) return;
+  // play() and resume() must both be invoked synchronously during the gesture.
+  playPending = true;
+  void audio.play().then(() => {
+    if (generation === musicGeneration && desiredTheme) setMusicStatus(!musicContext || musicContext.state === 'running' ? 'playing' : 'blocked');
+  }).catch(() => {
+    if (generation === musicGeneration && desiredTheme && !document.hidden) setMusicStatus('blocked');
+  }).finally(() => { if (generation === musicGeneration) playPending = false; });
 }
 
 export function startFileMusic(theme: FileMusicTheme) {
-  const audio = getFileMusic(theme);
-  if (!getAudioSettings().enabled) return audio;
-  connectMusic(theme, audio);
-  fileMusicCache.forEach((otherAudio, otherTheme) => {
-    if (otherTheme !== theme) {
-      otherAudio.pause();
-      otherAudio.currentTime = 0;
-    }
-  });
-  if (audio.paused) void audio.play().catch(() => undefined);
+  const audio = getMusicElement();
+  desiredTheme = theme;
+  if (loadedTheme !== theme) {
+    musicGeneration += 1;
+    playPending = false;
+    audio.pause();
+    loadedTheme = theme;
+    audio.src = FILE_MUSIC[theme]!.src;
+  }
+  updateVolumes();
+  retryFileMusic();
   return audio;
 }
 
 export function stopAllFileMusic(rewind = true) {
-  fileMusicCache.forEach((audio) => {
-    audio.pause();
-    if (rewind) audio.currentTime = 0;
-  });
+  desiredTheme = null;
+  musicGeneration += 1;
+  playPending = false;
+  musicElement?.pause();
+  if (rewind && musicElement) musicElement.currentTime = 0;
+  setMusicStatus('idle');
 }
 
 function audioContextClass() {
@@ -163,8 +217,8 @@ export function useGameAudio(theme: MusicTheme, musicEnabled = true) {
   }, [theme]);
   const { enabled: soundOn, volume } = useAudioSettings();
   const activeRef = useRef(false);
+  const inheritedMusicIntent = useRef(musicEnabled && desiredTheme === theme);
   const contextRef = useRef<AudioContext | null>(null);
-  const fileMusicRef = useRef<HTMLAudioElement | null>(null);
   const musicTimer = useRef<number | null>(null);
   const noteIndex = useRef(0);
 
@@ -180,15 +234,15 @@ export function useGameAudio(theme: MusicTheme, musicEnabled = true) {
     activeRef.current = false;
     if (musicTimer.current !== null) window.clearInterval(musicTimer.current);
     musicTimer.current = null;
-    fileMusicRef.current?.pause();
-  }, [stopRecording]);
+    if (desiredTheme === theme) stopAllFileMusic(false);
+  }, [stopRecording, theme]);
 
   const beginMusic = useCallback(() => {
     if (!musicEnabled) return;
     activeRef.current = true;
     const fileMusic = FILE_MUSIC[theme];
     if (fileMusic) {
-      fileMusicRef.current = startFileMusic(theme as FileMusicTheme);
+      startFileMusic(theme as FileMusicTheme);
       return;
     }
     if (musicTimer.current !== null) return;
@@ -260,27 +314,34 @@ export function useGameAudio(theme: MusicTheme, musicEnabled = true) {
     else { stopAllFileMusic(false); stopMusic(); }
   }, [beginMusic, stopMusic]);
 
-  useEffect(() => () => {
-    stopMusic();
-    if (fileMusicRef.current) fileMusicRef.current.currentTime = 0;
-    const context = contextRef.current;
-    contextRef.current = null;
-    if (context) { effectGains.get(context)?.disconnect(); effectGains.delete(context); }
-    if (context && context.state !== 'closed') void context.close().catch(() => undefined);
-  }, [stopMusic]);
+  useEffect(() => {
+    // Navigation starts music inside the trusted tap, before mounting the game.
+    // Preserve that ownership through React's development setup/cleanup replay.
+    if (inheritedMusicIntent.current && getAudioSettings().enabled) beginMusic();
+    return () => {
+      stopMusic();
+      const context = contextRef.current;
+      contextRef.current = null;
+      if (context) { effectGains.get(context)?.disconnect(); effectGains.delete(context); }
+      if (context && context.state !== 'closed') void context.close().catch(() => undefined);
+    };
+  }, [stopMusic, beginMusic]);
 
   useEffect(() => {
     updateVolumes();
     if (!FILE_MUSIC[theme]) return;
-    const audio = getFileMusic(theme as FileMusicTheme);
-    fileMusicRef.current = audio;
-    if (!musicGains.has(theme as FileMusicTheme)) audio.volume = FILE_MUSIC[theme]!.volume * level();
-    if (!soundOn) audio.pause();
+    if (!soundOn && desiredTheme === theme) musicElement?.pause();
   }, [soundOn, theme, volume]);
 
   useEffect(() => {
     let resume = false;
     const visibility = () => {
+      // The singleton owns file-music recovery. Clearing its intent here lost the
+      // track on iPad when navigation had started it before the game mounted.
+      if (FILE_MUSIC[theme]) {
+        if (document.hidden) stopRecording();
+        return;
+      }
       if (document.hidden) {
         resume = activeRef.current;
         stopMusic();
@@ -289,7 +350,7 @@ export function useGameAudio(theme: MusicTheme, musicEnabled = true) {
     };
     document.addEventListener('visibilitychange', visibility);
     return () => document.removeEventListener('visibilitychange', visibility);
-  }, [beginMusic, stopMusic]);
+  }, [beginMusic, stopMusic, stopRecording, theme]);
 
   return { soundOn, startAudio: startMusic, stopAudio: stopMusic, playSfx, toggleSound };
 }

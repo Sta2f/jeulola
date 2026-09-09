@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Maximize2, Minimize2 } from 'lucide-react';
 import { setAudioSettings, useAudioSettings } from './preferences';
+import { retryFileMusic, useMusicPlaybackStatus } from './useGameAudio';
 
 type WebkitDocument = Document & {
   webkitFullscreenElement?: Element | null;
@@ -13,6 +14,7 @@ type WebkitElement = HTMLElement & {
 
 export function FullscreenControl() {
   const audio = useAudioSettings();
+  const musicStatus = useMusicPlaybackStatus();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showTip, setShowTip] = useState(false);
   const volumePanel = useRef<HTMLDetailsElement>(null);
@@ -61,7 +63,8 @@ export function FullscreenControl() {
   };
 
   return <aside className="app-toolbar" aria-label="Réglages de l’application">
-    <details className="sound-settings" ref={volumePanel}><summary aria-label="Régler le volume">♪ <span>Volume</span></summary><label>Musique et sons <output>{Math.round(audio.volume * 100)} %</output><input aria-label="Volume de la musique et des bruitages" type="range" min="0" max="100" value={Math.round(audio.volume * 100)} onPointerDown={() => window.clearTimeout(closeTimer.current)} onPointerUp={scheduleClose} onChange={(event) => { setAudioSettings({ volume: Number(event.target.value) / 100 }); scheduleClose(); }} /></label></details>
+    {musicStatus === 'blocked' && audio.enabled && <button className="audio-retry" onClick={retryFileMusic}>♪ Relancer le son</button>}
+    <details className="sound-settings" ref={volumePanel}><summary aria-label="Régler le volume">♪ <span>Volume</span></summary><label>Musique et sons <output>{Math.round(audio.volume * 100)} %</output><input aria-label="Volume de la musique et des bruitages" type="range" min="0" max="100" value={Math.round(audio.volume * 100)} onPointerDown={() => window.clearTimeout(closeTimer.current)} onPointerUp={scheduleClose} onChange={(event) => { const volume = Number(event.target.value) / 100; setAudioSettings({ volume, ...(volume > 0 ? { enabled: true } : {}) }); retryFileMusic(); scheduleClose(); }} /></label></details>
     <button className="app-fullscreen-button" type="button" onClick={toggleFullscreen} aria-label={isFullscreen ? 'Quitter le plein écran' : 'Passer en plein écran'}>
       {isFullscreen ? <Minimize2 /> : <Maximize2 />}
       <span>{isFullscreen ? 'Quitter' : 'Plein écran'}</span>

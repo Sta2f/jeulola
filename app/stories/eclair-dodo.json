@@ -1,0 +1,17 @@
+{
+  "id": "eclair-dodo",
+  "title": "Éclair et le dernier bisou",
+  "subtitle": "Une petite histoire pour fermer les yeux",
+  "cover": "sleep.webp",
+  "coverAlt": "Éclair endormi dans son panier",
+  "category": "Histoire du soir",
+  "duration": "2 min",
+  "pages": [
+    { "title": "Le soir arrive", "image": "window", "alt": "Éclair regarde les étoiles près de son panier dans la chambre de Lola.", "text": "Le soir arrive dans la chambre de Lola. Éclair, son petit chien chocolat, regarde le ciel. Tout est calme. Pourtant, ses grandes oreilles restent dressées. Il attend quelque chose… mais quoi ?" },
+    { "title": "Un petit signe", "image": "window", "alt": "La lune et une étoile brillent doucement à la fenêtre, près d’Éclair.", "text": "Une étoile brille derrière la fenêtre. Éclair penche la tête. Lola sourit et murmure : Bonne nuit, petite étoile. Bonne nuit, jolie lune. Le petit chien remue la queue. Lui aussi veut un mot tout doux." },
+    { "title": "Le dernier bisou", "image": "cuddle", "alt": "Lola caresse Éclair et le borde avec une couverture rose.", "text": "Lola s’assoit près du panier. Elle caresse les oreilles d’Éclair, puis dépose un bisou sur son front. Voilà ce qu’il attendait ! Le petit chien se blottit dans sa couverture. Elle est douce comme un nuage." },
+    { "title": "Tout doucement", "image": "cuddle", "alt": "Bien au chaud près de Lola, Éclair ferme doucement ses yeux.", "text": "Éclair pose son museau sur ses pattes. Lola souffle tout doucement, comme pour faire voler une plume. Encore une fois… puis une dernière. Les oreilles du petit chien se détendent. Ses paupières deviennent lourdes." },
+    { "title": "Le pays des rêves", "image": "sleep", "alt": "Éclair dort en boule dans son panier, sous la lumière de la lune.", "text": "Dans son rêve, Éclair marche sur un chemin de nuages. Il n’a rien à chercher et personne à rattraper. Lola est tout près. Une étoile lui offre un coussin de lumière. Il s’y installe, bien au chaud." },
+    { "title": "Bonne nuit, Éclair", "image": "sleep", "alt": "Éclair dort paisiblement sous sa couverture rose. La chambre est calme.", "text": "La chambre est silencieuse. Lola se glisse dans son lit. Bonne nuit, Éclair, chuchote-t-elle. Le petit chien pousse un soupir heureux. Son dernier bisou est bien gardé, juste là, dans son cœur. Bonne nuit, Lola. Fais de jolis rêves." }
+  ]
+}
