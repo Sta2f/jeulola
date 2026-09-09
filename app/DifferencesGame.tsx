@@ -24,7 +24,7 @@ export function DifferencesGame({ onBack }: { onBack: () => void }) {
   useEffect(() => { startAudio(); }, [startAudio]);
   const choose = (next: number) => { setLevel(next); saveValue('differences:level', next); };
   return <main className="differences-page">
-    <header className="differences-header"><button onClick={onBack}><ChevronLeft /><span>Les jeux</span></button><h1><Search /> Les 7 différences</h1><label>Niveau <select aria-label="Choisir le niveau" value={level} onChange={e => choose(Number(e.target.value))}>{differenceLevels.map((l, i) => <option key={l.scene} value={i}>{i + 1} · {l.title}</option>)}</select></label></header>
+    <header className="differences-header"><button onClick={onBack} aria-label="Les jeux"><ChevronLeft /><span>Les jeux</span></button><h1><Search /> Les 7 différences</h1><label>Niveau <select aria-label="Choisir le niveau" value={level} onChange={e => choose(Number(e.target.value))}>{differenceLevels.map((l, i) => <option key={l.scene} value={i}>{i + 1} · {l.title}</option>)}</select></label></header>
     <DifferenceRound key={level} index={level} onNext={() => choose((level + 1) % differenceLevels.length)} />
   </main>;
 }

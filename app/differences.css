@@ -8,7 +8,7 @@
 .differences-header { display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0; }
 .differences-header h1 { font-size:clamp(18px,2vw,27px);margin:0;display:flex;align-items:center;gap:8px;line-height:1.15; }
 .differences-header label { display:flex;align-items:center;gap:8px;font-size:13px; }
-.differences-header select { max-width:240px;font-size:13px; }
+.differences-header select { max-width:240px;font-size:13px;color-scheme:light; }
 .differences-summary { display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0; }
 .differences-summary small { font-size:10px;letter-spacing:.12em;color:#806484;font-weight:700; }
 .differences-summary h2 { margin:2px 0 0;font-size:clamp(18px,2vw,26px);line-height:1.18; }
@@ -88,4 +88,45 @@
  .differences-footer { min-height:36px; }
  .differences-footer output { font-size:12px; }
  .differences-page button { min-height:34px;padding:4px 8px; }
+}
+
+/* Tablet: give the drawings the space previously reserved for repeated headings.
+   Portrait controls live in the unused side margin, not above/below the pair. */
+@media(min-width:651px) and (orientation:portrait) {
+ #root > .differences-page { display:grid;grid-template-columns:152px minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);gap:14px 10px;padding:6px; }
+ .differences-header { grid-column:1;grid-row:1;flex-direction:column;align-items:stretch;gap:14px;min-width:0; }
+ .differences-header h1 { font-size:20px;line-height:1.2; }
+ .differences-header h1 svg { display:none; }
+ .differences-header label { display:block;min-width:0; }
+ .differences-header select { display:block;width:100%;max-width:100%;margin-top:5px;padding:8px 5px; }
+ .differences-summary { grid-column:1;grid-row:2;flex-direction:column;align-items:flex-start;gap:12px;min-width:0; }
+ .differences-summary small { display:none; }
+ .differences-summary h2 { font-size:18px;line-height:1.25;overflow-wrap:break-word; }
+ .differences-progress { flex-wrap:wrap;gap:6px; }
+ .differences-progress i { width:18px;height:18px;line-height:1; }
+ .differences-progress > span { gap:3px; }
+ .differences-comparison { grid-column:2;grid-row:1 / -1;align-self:stretch;min-height:0; }
+ .differences-footer { grid-column:1;grid-row:3;min-height:0;flex-direction:column;justify-content:flex-end;align-items:stretch;gap:14px; }
+ .differences-footer output { font-size:13px;overflow-wrap:break-word; }
+ .differences-footer > div { flex-wrap:wrap;gap:8px; }
+ .differences-wins { width:100%; }
+ .differences-footer .differences-next { width:100%;font-size:13px; }
+}
+/* Landscape keeps both pictures side by side, almost edge to edge. */
+@media(min-width:651px) and (orientation:landscape) {
+ #root > .differences-page { display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto minmax(0,1fr) auto;gap:6px 12px;padding:6px; }
+ .differences-header { grid-column:1;grid-row:1;min-width:0; }
+ .differences-header h1 { font-size:clamp(17px,1.8vw,25px); }
+ .differences-header label { min-width:0; }
+ .differences-header select { min-width:0;width:min(26vw,240px);max-width:240px; }
+ .differences-summary { grid-column:2;grid-row:1; }
+ .differences-summary > div:first-child,.differences-progress > span { display:none; }
+ .differences-progress strong { font-size:21px; }
+ .differences-comparison { grid-column:1 / -1;grid-row:2;gap:8px; }
+ .differences-drawing { width:min(calc((100cqw - 8px)/2),100cqh);height:min(calc((100cqw - 8px)/2),100cqh); }
+ .differences-footer { grid-column:1 / -1;grid-row:3;min-height:42px; }
+}
+@media(min-width:651px) and (max-width:900px) and (orientation:landscape) {
+ .differences-header > button span { display:none; }
+ .differences-header h1 svg { display:none; }
 }
