@@ -149,6 +149,8 @@
  .app-shell .controls { gap:6px; }.app-shell .controls button { min-height:40px;height:40px;font-size:12px; }.app-shell .traffic-challenge { margin-top:6px;padding:7px; }
 }
 @media(max-height:500px) and (min-width:651px) {
+ .app-shell .traffic-light { width:clamp(70px,calc((100dvh - 150px) / 2.7),120px);padding:8px;gap:5px; }
+ .app-shell .pole { height:20px; }.app-shell .pole-base { height:8px; }
  .app-shell .topbar { min-height:52px;padding:6px 12px; }
  .app-shell .simulation { padding:6px 0; }
  .app-shell .control-panel { display:grid;grid-template-columns:96px minmax(0,1fr);gap:4px 10px;align-items:center; }
