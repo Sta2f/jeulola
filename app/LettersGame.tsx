@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, type PointerEvent } from 'react';
 import { ArrowRight, BookOpen, ChevronLeft, Eraser, Lightbulb, Pencil, RotateCcw, Volume2 } from 'lucide-react';
-import { getAudioSettings, readSaved, saveValue } from './preferences';
+import { readSaved, saveValue } from './preferences';
 import { useGameAudio } from './useGameAudio';
+import { preloadRecording, useRecordedAudio } from './useRecordedAudio';
 
 const words = [
   { text: 'LUNE', picture: '🌙', syllables: 'lu · ne' },
@@ -35,8 +36,7 @@ export function LettersGame({ onBack }: { onBack: () => void }) {
   const [level, setLevel] = useState(0);
   const [wins, setWins] = useState(savedWins);
   const [round, setRound] = useState(0);
-  useEffect(() => () => { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); }, []);
-  const change = (next: Mode) => { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); setMode(next); };
+  const change = (next: Mode) => { setMode(next); };
   return <main className={`letters-page letters-mode-${mode}`} onPointerDownCapture={startAudio}>
     <header className="letters-header"><button onClick={onBack}><ChevronLeft /> Les jeux</button><span>LE MONDE DE LOLA</span><span className="letters-stars">★ {wins.length} / 24</span></header>
     <div className="letters-title"><span>UN MOT APRÈS L’AUTRE</span><h1>La magie des lettres</h1><p>Écoute, joue et écris à ton rythme.</p></div>
@@ -45,11 +45,11 @@ export function LettersGame({ onBack }: { onBack: () => void }) {
       <button aria-pressed={mode === 'read'} onClick={() => change('read')}><BookOpen /> Je lis</button>
       <button aria-pressed={mode === 'write'} onClick={() => change('write')}><Pencil /> Je trace</button>
     </nav>
-    <label className="letters-word-select">Choisis ton mot <select value={level} onChange={event => { setLevel(Number(event.target.value)); if ('speechSynthesis' in window) window.speechSynthesis.cancel(); }}>{words.map((word,index) => <option key={word.text} value={index}>{index + 1}. {word.picture} {word.text.toLowerCase()}</option>)}</select></label>
+    <label className="letters-word-select">Choisis ton mot <select value={level} onChange={event => { setLevel(Number(event.target.value)); }}>{words.map((word,index) => <option key={word.text} value={index}>{index + 1}. {word.picture} {word.text.toLowerCase()}</option>)}</select></label>
     <LetterRound key={`${mode}-${level}-${round}`} mode={mode} level={level} onWin={() => {
       const next = [...new Set([...wins, `${mode}:${level}`])]; setWins(next); saveValue('letters:wins', next);
     }} onNext={() => { setLevel((level + 1) % words.length); setRound(round + 1); }} />
-    <nav className="letters-word-list" aria-label="Choisir un mot">{words.map((word, index) => <button key={word.text} aria-label={`Mot ${index + 1} : ${word.text.toLowerCase()}`} aria-pressed={level === index} onClick={() => { setLevel(index); if ('speechSynthesis' in window) window.speechSynthesis.cancel(); }}><span aria-hidden="true">{word.picture}</span><small>{index + 1}{wins.includes(`${mode}:${index}`) ? ' ★' : ''}</small></button>)}</nav>
+    <nav className="letters-word-list" aria-label="Choisir un mot">{words.map((word, index) => <button key={word.text} aria-label={`Mot ${index + 1} : ${word.text.toLowerCase()}`} aria-pressed={level === index} onClick={() => { setLevel(index); }}><span aria-hidden="true">{word.picture}</span><small>{index + 1}{wins.includes(`${mode}:${index}`) ? ' ★' : ''}</small></button>)}</nav>
     <p className="letters-note">Les étoiles récompensent les mots lus et composés. Le tracé est un entraînement libre, à partager avec un adulte.</p>
   </main>;
 }
@@ -65,24 +65,16 @@ function LetterRound({ mode, level, onWin, onNext }: { mode: Mode; level: number
   const [traceLetter, setTraceLetter] = useState(0);
   const [clear, setClear] = useState(0);
   const { playSfx } = useGameAudio('traffic', false);
+  const { playRecording, stopRecording } = useRecordedAudio();
+  const wordAudio = `/assets/audio/voices/word-${level}.mp3`;
+  useEffect(() => { void preloadRecording(wordAudio).catch(() => undefined); }, [wordAudio]);
   const [errors, setErrors] = useState(0);
   const lost = errors >= 3;
-  const speechAvailable = 'speechSynthesis' in window;
-  const speak = (text: string, requested = false) => {
-    if (!speechAvailable) return;
-    const audio = getAudioSettings();
-    if (!requested && !audio.enabled) return;
-    window.speechSynthesis.cancel();
-    const speech = new SpeechSynthesisUtterance(text.toLowerCase()); speech.lang = 'fr-FR'; speech.rate = .8;
-    speech.volume = audio.volume;
-    speech.onerror = (event) => { if (event.error !== 'interrupted' && event.error !== 'canceled') setMessage('La voix ne répond pas. Tu peux jouer avec le modèle ou demander à un adulte de lire le mot.'); };
-    window.speechSynthesis.speak(speech);
-  };
-  const success = () => { setWon(true); setMessage('Bravo Lola ! Tu as trouvé le mot !'); onWin(); speak(`Bravo Lola ! ${word.text}`); };
+  const success = () => { setWon(true); setMessage('Bravo Lola ! Tu as trouvé le mot !'); onWin(); void playRecording('/assets/audio/voices/bravo.mp3'); };
   const pick = (id: number, letter: string) => {
     if (won || lost || picked.includes(id)) return;
     if (letter !== word.text[picked.length]) {
-      playSfx('wrong');
+      stopRecording(); playSfx(errors === 2 ? 'letter-lost' : 'letter-wrong');
       setErrors(errors + 1);
       setMessage(errors === 2 ? 'Trois erreurs. Regarde le modèle, puis réessaie !' : 'Essaie une autre lettre. Tu peux regarder le modèle !');
       return;
@@ -95,8 +87,7 @@ function LetterRound({ mode, level, onWin, onNext }: { mode: Mode; level: number
     <div className="letters-card-top"><span>Mot {level + 1} / {words.length}</span><span aria-live="polite">{mode === 'write' ? '' : won ? '★ Bravo !' : mode === 'build' ? `${3 - errors} chances restantes` : ''}</span></div>
     <div className="letters-picture" aria-hidden="true">{word.picture}</div>
     <h2>{mode === 'build' ? 'Remets les lettres dans l’ordre' : mode === 'read' ? 'Trouve le mot de l’image' : 'Trace les lettres du mot'}</h2>
-    <button className="letters-listen" onClick={() => speak(word.text, true)} disabled={!speechAvailable}><Volume2 /> Écouter le mot</button>
-    {!speechAvailable && <p>La voix n’est pas disponible ici. Regarde le modèle ou lis avec un adulte.</p>}
+    <button className="letters-listen" onClick={() => void playRecording(wordAudio)}><Volume2 /> Écouter le mot</button>
     {mode === 'build' && <>
       <div className="letters-slots" aria-label="Le mot à composer">{word.text.split('').map((letter, index) => <span key={index} aria-label={index < picked.length ? letter : `Lettre ${index + 1} à trouver`}>{index < picked.length ? letter : <small>{index + 1}</small>}</span>)}</div>
       <div className="letters-tiles">{tiles.map(tile => <button key={tile.id} aria-label={`Lettre ${tile.letter}`} disabled={picked.includes(tile.id) || won || lost} onClick={() => pick(tile.id, tile.letter)}>{tile.letter}</button>)}</div>
@@ -104,7 +95,7 @@ function LetterRound({ mode, level, onWin, onNext }: { mode: Mode; level: number
       {lost && <button className="letters-next" onClick={() => { setErrors(0); setPicked([]); setMessage('Nouvel essai !'); playSfx('select'); }}>Réessayer ce mot <RotateCcw /></button>}
       {hint && <p className="letters-model">{word.text} <span>{word.text.toLowerCase()}</span></p>}
     </>}
-    {mode === 'read' && <div className="letters-choices">{choices.map(choice => <button key={choice.text} disabled={won} onClick={() => { playSfx(choice === word ? 'win' : 'wrong'); if (choice === word) success(); else setMessage('Pas encore. Écoute le mot et essaie à nouveau.'); }}>{choice.text.toLowerCase()}</button>)}</div>}
+    {mode === 'read' && <div className="letters-choices">{choices.map(choice => <button key={choice.text} disabled={won} onClick={() => { stopRecording(); playSfx(choice === word ? 'win' : 'letter-wrong'); if (choice === word) success(); else setMessage('Pas encore. Écoute le mot et essaie à nouveau.'); }}>{choice.text.toLowerCase()}</button>)}</div>}
     {mode === 'write' && <>
       <p className="letters-model">{word.text} <span>{word.text.toLowerCase()}</span></p>
       <div className="letters-trace-picker" aria-label="Lettre à tracer">{word.text.split('').map((letter, index) => <button key={index} aria-pressed={traceLetter === index} onClick={() => setTraceLetter(index)}>{letter}</button>)}</div>
@@ -115,7 +106,7 @@ function LetterRound({ mode, level, onWin, onNext }: { mode: Mode; level: number
     </>}
     <output className={`letters-feedback ${won ? 'is-won' : ''}`}>{message}</output>
     {won && <p className="letters-model">{word.text.toLowerCase()}<span>{word.syllables}</span></p>}
-    {(won || mode === 'write') && <button className="letters-next" onClick={() => { if (speechAvailable) window.speechSynthesis.cancel(); onNext(); }}>{level === words.length - 1 ? 'Rejouer les mots' : 'Mot suivant'} <ArrowRight /></button>}
+    {(won || mode === 'write') && <button className="letters-next" onClick={() => { stopRecording(); onNext(); }}>{level === words.length - 1 ? 'Rejouer les mots' : 'Mot suivant'} <ArrowRight /></button>}
   </section>;
 }
 

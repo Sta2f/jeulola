@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Maximize2, Minimize2 } from 'lucide-react';
 import { setAudioSettings, useAudioSettings } from './preferences';
 
@@ -15,6 +15,15 @@ export function FullscreenControl() {
   const audio = useAudioSettings();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showTip, setShowTip] = useState(false);
+  const volumePanel = useRef<HTMLDetailsElement>(null);
+  const closeTimer = useRef<number | undefined>(undefined);
+  const scheduleClose = () => {
+    window.clearTimeout(closeTimer.current);
+    closeTimer.current = window.setTimeout(() => {
+      if (volumePanel.current) volumePanel.current.open = false;
+    }, 2000);
+  };
+  useEffect(() => () => window.clearTimeout(closeTimer.current), []);
 
   useEffect(() => {
     const update = () => {
@@ -52,7 +61,7 @@ export function FullscreenControl() {
   };
 
   return <aside className="app-toolbar" aria-label="Réglages de l’application">
-    <details className="sound-settings"><summary aria-label="Régler le volume">♪ <span>Volume</span></summary><label>Musique et sons <output>{Math.round(audio.volume * 100)} %</output><input aria-label="Volume de la musique et des bruitages" type="range" min="0" max="100" value={Math.round(audio.volume * 100)} onChange={(event) => setAudioSettings({ volume: Number(event.target.value) / 100 })} /></label></details>
+    <details className="sound-settings" ref={volumePanel}><summary aria-label="Régler le volume">♪ <span>Volume</span></summary><label>Musique et sons <output>{Math.round(audio.volume * 100)} %</output><input aria-label="Volume de la musique et des bruitages" type="range" min="0" max="100" value={Math.round(audio.volume * 100)} onPointerDown={() => window.clearTimeout(closeTimer.current)} onPointerUp={scheduleClose} onChange={(event) => { setAudioSettings({ volume: Number(event.target.value) / 100 }); scheduleClose(); }} /></label></details>
     <button className="app-fullscreen-button" type="button" onClick={toggleFullscreen} aria-label={isFullscreen ? 'Quitter le plein écran' : 'Passer en plein écran'}>
       {isFullscreen ? <Minimize2 /> : <Maximize2 />}
       <span>{isFullscreen ? 'Quitter' : 'Plein écran'}</span>

@@ -115,7 +115,7 @@ export function BettyHideAndSeek({ onBack }: { onBack: () => void }) {
     const nextChances = chances - 1;
     setChances(nextChances);
     setMarker({ x, y, warmth: distance < (scene.hotDistance ?? 19) ? 'hot' : distance < (scene.warmDistance ?? 32) ? 'warm' : 'cold', id: Date.now() });
-    playSfx('wrong');
+    playSfx(nextChances === 0 ? 'lost' : 'wrong');
     if (nextChances === 0) setLost(true);
   };
 

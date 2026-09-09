@@ -1,7 +1,14 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { getAudioSettings, setAudioSettings, useAudioSettings } from './preferences';
+import { preloadRecording, useRecordedAudio } from './useRecordedAudio';
 
-export type SoundEffect = 'step' | 'sniff' | 'bark' | 'bone' | 'sparkle' | 'paint' | 'erase' | 'select' | 'traffic' | 'win' | 'wrong' | 'hint';
+export type SoundEffect = 'step' | 'sniff' | 'bark' | 'bone' | 'sparkle' | 'paint' | 'erase' | 'select' | 'traffic' | 'win' | 'wrong' | 'hint' | 'letter-wrong' | 'letter-lost' | 'lost' | 'dog-win';
+const RECORDED_EFFECTS: Partial<Record<SoundEffect, string>> = {
+  'letter-wrong': '/assets/audio/effects/wrong-letter.mp3',
+  'letter-lost': '/assets/audio/effects/letters-lost.mp3',
+  'lost': '/assets/audio/effects/lost.mp3',
+  'dog-win': '/assets/audio/effects/eclair-win.mp3',
+};
 type MusicTheme = 'forest' | 'dog' | 'coloring' | 'traffic' | 'hide' | 'home' | 'letters' | 'math';
 export type FileMusicTheme = 'forest' | 'dog' | 'coloring' | 'hide' | 'home' | 'letters' | 'math';
 
@@ -149,6 +156,11 @@ function noise(context: AudioContext, start: number, duration: number, frequency
 }
 
 export function useGameAudio(theme: MusicTheme, musicEnabled = true) {
+  const { playRecording, stopRecording } = useRecordedAudio();
+  useEffect(() => {
+    const effects = theme === 'dog' ? ['dog-win'] : theme === 'hide' || theme === 'math' ? ['lost'] : theme === 'letters' ? ['letter-wrong', 'letter-lost'] : [];
+    effects.forEach(effect => { void preloadRecording(RECORDED_EFFECTS[effect as SoundEffect]!).catch(() => undefined); });
+  }, [theme]);
   const { enabled: soundOn, volume } = useAudioSettings();
   const activeRef = useRef(false);
   const contextRef = useRef<AudioContext | null>(null);
@@ -164,11 +176,12 @@ export function useGameAudio(theme: MusicTheme, musicEnabled = true) {
   }, []);
 
   const stopMusic = useCallback(() => {
+    stopRecording();
     activeRef.current = false;
     if (musicTimer.current !== null) window.clearInterval(musicTimer.current);
     musicTimer.current = null;
     fileMusicRef.current?.pause();
-  }, []);
+  }, [stopRecording]);
 
   const beginMusic = useCallback(() => {
     if (!musicEnabled) return;
@@ -200,6 +213,7 @@ export function useGameAudio(theme: MusicTheme, musicEnabled = true) {
 
   const playSfx = useCallback((effect: SoundEffect) => {
     if (!soundOn) return;
+    if (RECORDED_EFFECTS[effect]) { void playRecording(RECORDED_EFFECTS[effect]!); return; }
     const context = ensureContext();
     if (!context) return;
     void context.resume();
@@ -236,7 +250,7 @@ export function useGameAudio(theme: MusicTheme, musicEnabled = true) {
     if (effect === 'hint') [392, 523.25, 659.25].forEach((frequency, index) => tone(context, frequency, now + index * .09, .28, .05, 'sine'));
     if (effect === 'traffic') [660, 880].forEach((frequency, index) => tone(context, frequency, now + index * .13, .12, .16));
     if (effect === 'win') [523.25, 659.25, 783.99, 1046.5].forEach((frequency, index) => tone(context, frequency, now + index * .11, .5, .075, 'triangle'));
-  }, [ensureContext, soundOn]);
+  }, [ensureContext, soundOn, playRecording]);
 
   const toggleSound = useCallback(() => {
     const enabled = !getAudioSettings().enabled;

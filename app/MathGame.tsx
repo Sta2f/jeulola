@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { ChevronLeft, Volume2 } from 'lucide-react';
-import { getAudioSettings, readSaved, saveValue } from './preferences';
+import { readSaved, saveValue } from './preferences';
 import { useGameAudio } from './useGameAudio';
+import { preloadRecording, useRecordedAudio } from './useRecordedAudio';
 
 type Mode = 'plus' | 'minus' | 'mix';
 function question(level: number, mode: Mode) {
@@ -39,20 +40,18 @@ function MathRound({ level, mode, onWin, onNext }: { level: number; mode: Mode; 
   const [won, setWon] = useState(false);
   const [message, setMessage] = useState('Choisis le bon nombre. Tu as 3 chances !');
   const { playSfx } = useGameAudio('traffic', false);
+  const { playRecording, stopRecording } = useRecordedAudio();
+  const questionAudio = `/assets/audio/voices/${q.minus ? 'minus' : 'plus'}-${q.a}-${q.b}.mp3`;
+  useEffect(() => { void preloadRecording(questionAudio).catch(() => undefined); }, [questionAudio]);
   const lost = errors >= 3;
-  useEffect(() => () => { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); }, []);
   const listen = () => {
-    const audio = getAudioSettings();
-    if (!audio.enabled || !('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const speech = new SpeechSynthesisUtterance(`Combien font ${q.a} ${q.minus ? 'moins' : 'plus'} ${q.b} ?`);
-    speech.lang = 'fr-FR'; speech.rate = .85; speech.volume = audio.volume;
-    window.speechSynthesis.speak(speech);
+    void playRecording(questionAudio);
   };
   const choose = (value: number) => {
     if (lost || won) return;
-    if (value === q.answer) { setWon(true); setMessage('Bravo Lola ! Une étoile pour ton jardin !'); playSfx('win'); onWin(); }
-    else { setErrors(errors + 1); playSfx('wrong'); setMessage(errors === 2 ? 'Les 3 chances sont utilisées. Compte les fleurs puis réessaie !' : 'Pas tout à fait. Compte doucement les fleurs !'); }
+    stopRecording();
+    if (value === q.answer) { setWon(true); setMessage('Bravo Lola ! Une étoile pour ton jardin !'); playSfx('win'); void playRecording('/assets/audio/voices/math-bravo.mp3'); onWin(); }
+    else { setErrors(errors + 1); playSfx(errors === 2 ? 'lost' : 'wrong'); setMessage(errors === 2 ? 'Les 3 chances sont utilisées. Compte les fleurs puis réessaie !' : 'Pas tout à fait. Compte doucement les fleurs !'); }
   };
   return <section className={`math-card ${won ? 'math-won' : ''}`} aria-label="Le calcul à résoudre">
     <div className="math-round-top"><span aria-live="polite">{3 - errors} chances restantes</span><span aria-hidden="true">{won ? '✨ 🌟 ✨' : '🧚 🌷 🦋'}</span></div>
@@ -62,7 +61,7 @@ function MathRound({ level, mode, onWin, onNext }: { level: number; mode: Mode; 
       {!q.minus && <><b aria-hidden="true">+</b><div>{q.b === 0 ? <span>0</span> : Array.from({ length: q.b }, (_, i) => <span key={i} aria-hidden="true">🌼</span>)}</div></>}
     </div>
     <p className="math-guide">{q.minus ? 'Les fleurs barrées sont cueillies. Combien en reste-t-il ?' : 'Compte toutes les fleurs des deux groupes.'}</p>
-    <button className="math-listen" onClick={listen} disabled={!('speechSynthesis' in window)}><Volume2 /> Écouter le calcul</button>
+    <button className="math-listen" onClick={listen}><Volume2 /> Écouter le calcul</button>
     <div className="math-answers">{q.options.map(value => <button key={value} disabled={won || lost} onClick={() => choose(value)} aria-label={`Réponse ${value}`}>{value}</button>)}</div>
     <output aria-live="polite">{message}</output>
     {won && <button className="math-next" onClick={onNext}>Un autre calcul →</button>}

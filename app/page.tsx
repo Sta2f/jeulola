@@ -98,17 +98,15 @@ export default function Home() {
     <main className="games-home" onPointerDownCapture={startAudio}>
       {!entered && <section className="home-entry" aria-labelledby="home-entry-title">
         <div className="home-entry-card">
-          <span className="home-entry-sparkles" aria-hidden="true">✦　✧　✦</span>
-          <p><Sparkles /> Une aventure féerique</p>
-          <h2 id="home-entry-title">Bienvenue dans<br />le monde de Lola</h2>
-          <span>Des jeux, des couleurs et de la musique t’attendent.</span>
-          <button onClick={() => { startAudio(); setEntered(true); }}><Gamepad2 /> Entrer dans le monde de Lola</button>
-          <small>La musique commencera dès ton entrée.</small>
+          <p><Sparkles /> La magie t’attend</p>
+          <h2 id="home-entry-title">Le monde de Lola</h2>
+          <button onClick={() => { startAudio(); setEntered(true); }}><Gamepad2 /> On joue ?</button>
+          <small>Avec une douce musique ♪</small>
         </div>
       </section>}
 
       <nav className="home-nav" aria-label="Navigation principale">
-        <a className="home-brand" href="#games" aria-label="Le monde de Lola — accueil"><Crown /><span>Le monde de Lola</span></a>
+        <details className="home-achievements"><summary aria-label="Mes réussites" title="Mes réussites"><Crown /></summary><div><strong>Mes réussites</strong><p>✦ {wins[0]+wins[1]} / 40 labyrinthes</p><p>🐾 {wins[2]} / 50 cachettes</p></div></details>
         <div className="home-nav-actions"><span className="game-count"><Gamepad2 /> 7 jeux</span><button className="game-sound-toggle light home-sound-toggle" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique d’accueil' : 'Activer la musique d’accueil'}>{soundOn ? <Volume2 /> : <VolumeX />}</button></div>
       </nav>
 
@@ -128,7 +126,6 @@ export default function Home() {
         </header>
 
         <div className="signpost" aria-label="Les jeux de Lola">
-          <div className="signpost-pole" aria-hidden="true" />
           <button className="wood-sign sign-yellow" onClick={() => goTo('math', 'math')}>
             <span className="sign-icon" aria-hidden="true">123</span>
             <span><strong>Les calculs enchantés</strong></span>
@@ -156,7 +153,6 @@ export default function Home() {
         </div>
       </section>
 
-      <details className="home-progress"><summary>★ Mes réussites</summary><p>{wins[0]+wins[1]} / 40 labyrinthes · {wins[2]} / 50 cachettes</p></details>
     </main>
   );
 }

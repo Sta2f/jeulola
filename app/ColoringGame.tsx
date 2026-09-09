@@ -127,6 +127,7 @@ function floodFill(imageData: ImageData, startX: number, startY: number, paint: 
 }
 
 export function ColoringGame({ onBack }: { onBack: () => void }) {
+  const [paletteOpen, setPaletteOpen] = useState(true);
   const fittedPanel = useFittedColoring();
   const { soundOn, startAudio, playSfx, toggleSound } = useGameAudio('coloring');
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -267,7 +268,7 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
   };
 
   return (
-    <main className="coloring-page" onPointerDownCapture={startAudio}>
+    <main className={`coloring-page ${paletteOpen ? '' : 'palette-hidden'}`} onPointerDownCapture={startAudio}>
       <header className="coloring-header">
         <button className="back-button coloring-back" aria-label="Les jeux" onClick={onBack}><ChevronLeft /><span>Les jeux</span></button>
         <div><p>L’ATELIER ENCHANTÉ</p><h1>Les coloriages de Lola</h1></div>
@@ -292,6 +293,7 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
           <div className="canvas-heading">
             <div><span>Dessin {drawingIndex + 1} sur 10</span><h2>{drawing.title}</h2></div>
             <div className="canvas-actions">
+              <Button variant="outline" className="palette-toggle" aria-expanded={paletteOpen} onClick={() => setPaletteOpen(value => !value)}><Palette /> Couleurs</Button>
               <Button variant="outline" disabled={!ready} onClick={() => { const link = document.createElement('a'); link.download = `Lola-${drawing.id}.png`; link.href = canvasRef.current!.toDataURL('image/png'); link.click(); playSfx('sparkle'); }}><Download /> Garder</Button>
               <Button variant="outline" onClick={undo} disabled={!canUndo}><Undo2 /> Annuler</Button>
               <Button variant="outline" onClick={resetDrawing}><RotateCcw /> {confirmClear ? 'Tout effacer ?' : 'Effacer'}</Button>
@@ -299,7 +301,7 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
             </div>
           </div>
 
-          <div className="magic-canvas">
+          <div className="coloring-art-space"><div className="magic-canvas">
             {!ready && <output className="drawing-loading">Ton dessin arrive…</output>}
             <canvas ref={canvasRef} width="800" height="576" onPointerDown={paintAt} aria-label={`Coloriage interactif : ${drawing.title}`} />
             <div className="sparkle-burst" key={sparkle} style={{ left: `${sparklePoint.x}%`, top: `${sparklePoint.y}%` }} aria-hidden="true">
@@ -307,6 +309,7 @@ export function ColoringGame({ onBack }: { onBack: () => void }) {
             </div>
           </div>
 
+          </div>
           <div className="palette-board" aria-label="Palette de couleurs">
             <div className="palette-label"><Palette /><span>Choisis une couleur</span></div>
             <div className="color-swatches">

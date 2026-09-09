@@ -4,7 +4,6 @@ import { readSaved, saveValue } from './preferences';
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, ChevronLeft, Crown, Footprints, RotateCcw, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { useGameAudio } from './useGameAudio';
-import { useFittedBoard } from './useFittedBoard';
 import { MazeZoom } from './MazeZoom';
 
 type Direction = 'up' | 'down' | 'left' | 'right';
@@ -118,7 +117,6 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
   const [won, setWon] = useState(false);
   const [focusBoard, setFocusBoard] = useState(() => window.matchMedia('(max-width: 650px), (max-height: 650px), (max-width: 1000px) and (orientation: portrait)').matches);
   const completed = useAchievements('princess', levelIndex, won);
-  const fittedStage = useFittedBoard(levelIndex, focusBoard);
   const [walking, setWalking] = useState(false);
   const [walkDuration, setWalkDuration] = useState(170);
   const walkTimer = useRef<number | null>(null);
@@ -245,9 +243,16 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
           <Button variant="outline" className="maze-reset" onClick={reset}><RotateCcw /> Recommencer</Button>
         </aside>
 
-        <div className="maze-stage" ref={fittedStage}>
-          <button className="board-focus-toggle" aria-pressed={focusBoard} onClick={() => setFocusBoard(v => !v)}>{focusBoard ? 'Afficher les niveaux' : 'Grand plateau'}</button>
-          <MazeZoom row={position.row} col={position.col}>
+        <div className="maze-stage">
+          <MazeZoom level={levelIndex} tools={close => <>
+<button className="board-focus-toggle" aria-pressed={focusBoard} onClick={() => { close(); setFocusBoard(v => !v); }}>{focusBoard ? 'Afficher les niveaux' : 'Grand plateau'}</button>
+<div className="touch-controls" aria-label="Commandes directionnelles">
+            <button className="touch-up" onClick={() => move('up')} aria-label="Aller vers le haut"><ArrowUp /></button>
+            <button className="touch-left" onClick={() => move('left')} aria-label="Aller à gauche"><ArrowLeft /></button>
+            <button className="touch-down" onClick={() => move('down')} aria-label="Aller vers le bas"><ArrowDown /></button>
+            <button className="touch-right" onClick={() => move('right')} aria-label="Aller à droite"><ArrowRight /></button>
+          </div>
+          </>}>
           <div className={`maze-board ${walking ? 'is-walking' : ''}`} onPointerDown={onBoardPointerDown} aria-label={`Labyrinthe de la forêt enchantée, niveau ${levelIndex + 1}`} style={{ '--cols': level.grid[0].length, '--rows': level.grid.length, '--move-duration': `${walkDuration}ms`, aspectRatio: `${level.grid[0].length} / ${level.grid.length}` } as React.CSSProperties}>
             {/* oxlint-disable-next-line next/no-img-element -- Vite app with a project-local generated game asset. */}
             <img className="maze-backdrop" src="/assets/enchanted-forest.webp" alt="" aria-hidden="true" />
@@ -260,13 +265,6 @@ export function MazeGame({ onBack }: { onBack: () => void }) {
             </div>
           </div>
           </MazeZoom>
-          <p className="tap-to-walk">Touche le chemin ou utilise les flèches.</p>
-          <div className="touch-controls" aria-label="Commandes directionnelles">
-            <button className="touch-up" onClick={() => move('up')} aria-label="Aller vers le haut"><ArrowUp /></button>
-            <button className="touch-left" onClick={() => move('left')} aria-label="Aller à gauche"><ArrowLeft /></button>
-            <button className="touch-down" onClick={() => move('down')} aria-label="Aller vers le bas"><ArrowDown /></button>
-            <button className="touch-right" onClick={() => move('right')} aria-label="Aller à droite"><ArrowRight /></button>
-          </div>
         </div>
       </section>
 

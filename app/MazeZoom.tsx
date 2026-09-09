@@ -1,30 +1,38 @@
-import { cloneElement, useEffect, useLayoutEffect, useRef, useState, type ReactElement, type PointerEventHandler } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { Maximize2, Minimize2 } from 'lucide-react';
 
-/** Keep the same interactive board, enlarged to finger-sized cells. */
-export function MazeZoom({ children, row, col }: { children: ReactElement<{ onPointerDown?: PointerEventHandler<HTMLElement>; onPointerUp?: PointerEventHandler<HTMLElement> }>; row: number; col: number }) {
+/** The same board stays fully visible, including in the enlarged view. */
+export function MazeZoom({ children, tools, level }: { children: ReactNode; tools: (close: () => void) => ReactNode; level: number }) {
   const [zoom, setZoom] = useState(false);
-  const scroller = useRef<HTMLDivElement>(null);
-  const [down, setDown] = useState({x:0,y:0});
-  const onZoomPointerUp: PointerEventHandler<HTMLElement> = event => {
-    if (Math.hypot(event.clientX-down.x,event.clientY-down.y)<8) children.props.onPointerDown?.(event);
-  };
+  const viewport = useRef<HTMLDivElement>(null);
+  const toggle = useRef<HTMLButtonElement>(null);
   useEffect(() => {
-    const escape = (event: KeyboardEvent) => { if (event.key === 'Escape') setZoom(false); };
+    const escape = (event: KeyboardEvent) => { if (event.key === 'Escape') { setZoom(false); toggle.current?.focus(); } };
     window.addEventListener('keydown', escape);
     return () => window.removeEventListener('keydown', escape);
   }, []);
   useLayoutEffect(() => {
-    if (!zoom || !scroller.current) return;
-    const el = scroller.current;
-    el.scrollLeft = (col + .5) * 44 - el.clientWidth / 2;
-    el.scrollTop = (row + .5) * 44 - el.clientHeight / 2;
-  }, [zoom, row, col]);
+    const host = viewport.current;
+    const board = host?.querySelector<HTMLElement>('.maze-board,.eclair-board');
+    if (!host || !board) return;
+    let frame = 0;
+    const fit = () => {
+      const cols = Number(board.style.getPropertyValue('--cols'));
+      const rows = Number(board.style.getPropertyValue('--rows'));
+      const width = Math.floor(Math.min(host.clientWidth, host.clientHeight * cols / rows));
+      board.style.width = `${width}px`;
+      board.style.height = `${Math.floor(width * rows / cols)}px`;
+    };
+    const observer = new ResizeObserver(() => { cancelAnimationFrame(frame); frame = requestAnimationFrame(fit); });
+    observer.observe(host);
+    fit();
+    return () => { observer.disconnect(); cancelAnimationFrame(frame); };
+  }, [zoom, level]);
   return <div className={`maze-zoom-shell ${zoom ? 'is-zoomed' : ''}`} data-zoom={zoom}>
-    <button className="maze-zoom-toggle" aria-pressed={zoom} onClick={() => setZoom(v => !v)}>{zoom ? '↙ Vue d’ensemble' : '🔎 Agrandir le chemin'}</button>
-    {zoom && <p className="maze-zoom-help">Touche le chemin en ligne droite. La vue suit ton personnage. Fais glisser pour explorer.</p>}
-    <div className="maze-zoom-scroll" ref={scroller} onPointerDownCapture={event => { if (zoom) setDown({x:event.clientX,y:event.clientY}); }}>{zoom ? cloneElement(children, {
-      onPointerDown: undefined,
-      onPointerUp: onZoomPointerUp,
-    }) : children}</div>
+    <div className="maze-side-tools" aria-label="Outils du labyrinthe">
+      <button className="maze-zoom-toggle" ref={toggle} aria-pressed={zoom} onClick={() => setZoom(v => !v)}>{zoom ? <Minimize2 /> : <Maximize2 />}<span>{zoom ? 'Réduire' : 'Agrandir le chemin'}</span></button>
+      {tools(() => setZoom(false))}
+    </div>
+    <div className="maze-zoom-scroll" ref={viewport}>{children}</div>
   </div>;
 }

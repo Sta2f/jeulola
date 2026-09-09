@@ -42,7 +42,6 @@
 .maze-zoom-toggle { display:block;margin:5px auto;min-height:44px;padding:7px 16px;border:1px solid #8d915e;border-radius:12px;background:#233f33;color:#fff3c6;font:inherit;cursor:pointer; }
 .maze-zoom-shell.is-zoomed { position:fixed;inset:8px 8px 64px;z-index:90;display:flex;flex-direction:column;background:#10231c;border:2px solid #c3ad68;border-radius:18px;padding:8px;box-shadow:0 0 0 100vmax #07140fe8; }
 .is-zoomed .maze-zoom-scroll { display:block;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;border-radius:10px; }
-.is-zoomed .maze-board,.is-zoomed .eclair-board { width:calc(var(--cols) * 44px)!important;min-width:calc(var(--cols) * 44px)!important;max-width:none!important;height:calc(var(--rows) * 44px)!important;max-height:none!important;margin:0;touch-action:pan-x pan-y; }
 .maze-zoom-help { text-align:center;color:#f3e6be;font-size:12px;line-height:1.25;margin:4px 0 8px; }
 .eclair-page { display:flex;flex-direction:column; }
 .eclair-header { flex:0 0 auto; }

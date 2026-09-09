@@ -5,7 +5,6 @@ import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Bone, ChevronLeft, Footprint
 import { Button } from '../components/ui/button';
 import { useGameAudio } from './useGameAudio';
 import { MazeZoom } from './MazeZoom';
-import { useFittedBoard } from './useFittedBoard';
 
 type Direction = 'up' | 'down' | 'left' | 'right';
 type Position = { row: number; col: number };
@@ -165,7 +164,6 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
   const [boneAnimationReady, setBoneAnimationReady] = useState(false);
   const [won, setWon] = useState(false);
   const [focusBoard, setFocusBoard] = useState(() => window.matchMedia('(max-width: 650px), (max-width: 1000px) and (orientation: portrait)').matches);
-  const fittedStage = useFittedBoard(level, focusBoard);
   const completed = useAchievements('eclair', level, won);
   const [showWinCard, setShowWinCard] = useState(false);
   const [walking, setWalking] = useState(false);
@@ -222,8 +220,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
       });
       if (next.row === goal.row && next.col === goal.col) {
         setShowBoneCelebration(false);
-        playSfx('bark');
-        playSfx('win');
+        playSfx('dog-win');
         setWon(true);
       }
       return next;
@@ -268,8 +265,7 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
     walkTimer.current = window.setTimeout(() => {
       if (reachesGoal) {
         setShowBoneCelebration(false);
-        playSfx('bark');
-        playSfx('win');
+        playSfx('dog-win');
         setWon(true);
       } else if (crossedBone) {
         celebrateBone(crossedBone);
@@ -390,9 +386,16 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
           <Button variant="outline" className="eclair-reset" onClick={resetLevel}><RotateCcw /> Recommencer</Button>
         </aside>
 
-        <div className="eclair-stage" ref={fittedStage}>
-          <div className="board-focus-actions"><button className="board-focus-toggle" aria-pressed={focusBoard} onClick={() => setFocusBoard(v => !v)}>{focusBoard ? 'Afficher les niveaux' : 'Grand plateau'}</button>{focusBoard && <button className="board-focus-toggle" onClick={addHint} disabled={hintsRemaining === 0 || won || walking}><Bone /> {hintsRemaining > 0 ? `Poser un os (${hintsRemaining}/5)` : 'Plus d’indices'}</button>}</div>
-          <MazeZoom row={position.row} col={position.col}>
+        <div className="eclair-stage">
+          <MazeZoom level={level} tools={close => <>
+<div className="board-focus-actions"><button className="board-focus-toggle" aria-pressed={focusBoard} onClick={() => { close(); setFocusBoard(v => !v); }}>{focusBoard ? 'Afficher les niveaux' : 'Grand plateau'}</button>{focusBoard && <button className="board-focus-toggle" onClick={addHint} disabled={hintsRemaining === 0 || won || walking}><Bone /> {hintsRemaining > 0 ? `Poser un os (${hintsRemaining}/5)` : 'Plus d’indices'}</button>}</div>
+<div className="eclair-controls" aria-label="Commandes directionnelles">
+            <button className="touch-up" onClick={() => move('up')} aria-label="Aller vers le haut"><ArrowUp /></button>
+            <button className="touch-left" onClick={() => move('left')} aria-label="Aller à gauche"><ArrowLeft /></button>
+            <button className="touch-down" onClick={() => move('down')} aria-label="Aller vers le bas"><ArrowDown /></button>
+            <button className="touch-right" onClick={() => move('right')} aria-label="Aller à droite"><ArrowRight /></button>
+          </div>
+          </>}>
           <div className={`eclair-board ${walking ? 'is-walking' : ''}`} onPointerDown={onBoardPointerDown} style={{ '--cols': levelSettings.cols, '--rows': levelSettings.rows, '--move-duration': `${walkDuration}ms`, aspectRatio: `${levelSettings.cols} / ${levelSettings.rows}` } as React.CSSProperties} aria-label={`Labyrinthe d’Éclair, niveau ${level + 1} sur ${LEVELS.length}`}>
             {/* oxlint-disable-next-line next/no-img-element -- Project-local generated game artwork. */}
             <img className="eclair-backdrop" src="/assets/eclair-forest.webp" alt="" aria-hidden="true" />
@@ -413,13 +416,6 @@ export function EclairMazeGame({ onBack }: { onBack: () => void }) {
           </div>
 
           </MazeZoom>
-          <p className="tap-to-walk eclair-tap-help">Touche le chemin ou utilise les flèches.</p>
-          <div className="eclair-controls" aria-label="Commandes directionnelles">
-            <button className="touch-up" onClick={() => move('up')} aria-label="Aller vers le haut"><ArrowUp /></button>
-            <button className="touch-left" onClick={() => move('left')} aria-label="Aller à gauche"><ArrowLeft /></button>
-            <button className="touch-down" onClick={() => move('down')} aria-label="Aller vers le bas"><ArrowDown /></button>
-            <button className="touch-right" onClick={() => move('right')} aria-label="Aller à droite"><ArrowRight /></button>
-          </div>
         </div>
       </section>
 
