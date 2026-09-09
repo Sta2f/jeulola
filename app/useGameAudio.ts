@@ -9,7 +9,7 @@ const RECORDED_EFFECTS: Partial<Record<SoundEffect, string>> = {
   'lost': '/assets/audio/effects/lost.mp3',
   'dog-win': '/assets/audio/effects/eclair-win.mp3',
 };
-type MusicTheme = 'forest' | 'dog' | 'coloring' | 'traffic' | 'hide' | 'home' | 'letters' | 'math' | 'story';
+type MusicTheme = 'forest' | 'dog' | 'coloring' | 'traffic' | 'hide' | 'home' | 'letters' | 'math' | 'story' | 'differences';
 export type FileMusicTheme = Exclude<MusicTheme, 'traffic'>;
 
 const MUSIC_NOTES: Record<MusicTheme, number[]> = {
@@ -22,6 +22,7 @@ const MUSIC_NOTES: Record<MusicTheme, number[]> = {
   letters: [261.63, 329.63, 392, 523.25],
   math: [261.63, 329.63, 392, 523.25],
   story: [261.63, 329.63, 392, 523.25],
+  differences: [261.63, 329.63, 392, 523.25],
 };
 const FILE_MUSIC: Partial<Record<MusicTheme, { src: string; volume: number }>> = {
   forest: { src: '/assets/audio/glowing-maze-path.mp3', volume: .1 },
@@ -32,6 +33,7 @@ const FILE_MUSIC: Partial<Record<MusicTheme, { src: string; volume: number }>> =
   letters: { src: '/assets/audio/word-hunt-time.mp3', volume: .06 },
   math: { src: '/assets/audio/focus-flow.mp3', volume: .06 },
   story: { src: '/assets/stories/eclair-dodo/stars-in-the-lullaby.mp3', volume: .075 },
+  differences: { src: '/assets/differences/hidden-clues.mp3', volume: .07 },
 };
 // Reuse the element unlocked by the entry tap. Safari grants autoplay per element.
 let musicElement: HTMLAudioElement | null = null;

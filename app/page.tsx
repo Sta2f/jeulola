@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ChevronLeft, Crown, Dog, Gamepad2, Map, Moon, Palette, Pause, Rabbit, Sparkles, TrafficCone, Volume2, VolumeX } from 'lucide-react';
+import { ChevronLeft, Crown, Dog, Gamepad2, Map, Moon, Palette, Pause, Rabbit, Search, Sparkles, TrafficCone, Volume2, VolumeX } from 'lucide-react';
 import { TrafficLightGame } from './TrafficLightGame';
 import { MazeGame } from './MazeGame';
 import { ColoringGame } from './ColoringGame';
@@ -10,12 +10,13 @@ import { MathGame } from './MathGame';
 import { FairyGameButton } from './FairyGameButton';
 import { HomeEnchantment } from './HomeEnchantment';
 import { Stories } from './Stories';
+import { DifferencesGame } from './DifferencesGame';
 import { type FileMusicTheme, preloadFileMusic, startFileMusic, stopAllFileMusic, useGameAudio } from './useGameAudio';
 import { readSaved, saveValue } from './preferences';
 
 declare const __BUILD_ID__: string;
 
-type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'eclair-maze' | 'betty-hide' | 'letters' | 'math' | 'stories';
+type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'eclair-maze' | 'betty-hide' | 'letters' | 'math' | 'stories' | 'differences';
 
 export default function Home() {
   const [screen, setScreen] = useState<GameScreen>('home');
@@ -44,7 +45,7 @@ export default function Home() {
     window.history.replaceState({ lolaScreen: 'home' }, '', '#home');
     const back = (event: PopStateEvent) => {
       const next = event.state?.lolaScreen as GameScreen;
-      const valid: GameScreen[] = ['home', 'traffic', 'maze-menu', 'maze', 'coloring', 'eclair-maze', 'betty-hide', 'letters', 'math', 'stories'];
+      const valid: GameScreen[] = ['home', 'traffic', 'maze-menu', 'maze', 'coloring', 'eclair-maze', 'betty-hide', 'letters', 'math', 'stories', 'differences'];
       stopAudio();
       stopAllFileMusic();
       setScreen(valid.includes(next) ? next : 'home');
@@ -105,6 +106,7 @@ export default function Home() {
   if (screen === 'letters') return <LettersGame onBack={() => goTo('home')} />;
   if (screen === 'math') return <MathGame onBack={() => goTo('home')} />;
   if (screen === 'stories') return <Stories onBack={() => goTo('home')} />;
+  if (screen === 'differences') return <DifferencesGame onBack={() => goTo('home')} />;
 
   return (
     <main className="games-home" onPointerDownCapture={startAudio}>
@@ -120,7 +122,7 @@ export default function Home() {
       <nav className="home-nav" aria-label="Navigation principale">
         <details className="home-achievements"><summary aria-label="Mes réussites" title="Mes réussites"><Crown /></summary><div><strong>Mes réussites</strong><p>✦ {wins[0]+wins[1]} / 40 labyrinthes</p><p>🐾 {wins[2]} / 50 cachettes</p></div></details>
         <div className="home-nav-actions">
-          <span className="game-count"><Gamepad2 /> 7 jeux</span>
+          <span className="game-count"><Gamepad2 /> 8 jeux</span>
           <button className="game-sound-toggle light home-motion-toggle" onClick={() => setMotionPaused(value => !value)} aria-label={motionPaused ? 'Animer le décor' : 'Mettre les animations en pause'} title={motionPaused ? 'Animer le décor' : 'Mettre les animations en pause'}>{motionPaused ? <Sparkles /> : <Pause />}</button>
           <button className="game-sound-toggle light home-sound-toggle" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique d’accueil' : 'Activer la musique d’accueil'}>{soundOn ? <Volume2 /> : <VolumeX />}</button>
         </div>
@@ -150,6 +152,7 @@ export default function Home() {
           <FairyGameButton tone="sky" icon={<Palette />} onClick={() => goTo('coloring', 'coloring')}>Les coloriages</FairyGameButton>
           <FairyGameButton tone="mint" icon={<Rabbit />} onClick={() => goTo('betty-hide', 'hide')}>Cache-cache avec Betty</FairyGameButton>
           <FairyGameButton className="fairy-game-stories" tone="lilac" icon={<Moon />} onClick={() => goTo('stories')}>Histoires</FairyGameButton>
+          <FairyGameButton className="fairy-game-differences" tone="sky" icon={<Search />} onClick={() => goTo('differences', 'differences')}>Les 7 différences</FairyGameButton>
         </nav>
       </section>
 
