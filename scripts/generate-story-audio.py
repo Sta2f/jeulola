@@ -4,6 +4,7 @@ Uses the existing Edge TTS workflow. Timings are kept intact (no silence trimmin
 The lullaby is an original seamless, slowly plucked C/F/Am/G instrumental loop.
 """
 import asyncio
+import argparse
 import html
 import json
 import math
@@ -20,14 +21,14 @@ OUT.mkdir(parents=True, exist_ok=True)
 WORK = ROOT / '.media/story-audio'
 WORK.mkdir(parents=True, exist_ok=True)
 
-async def record(key, text, rate='-14%', pitch='+2Hz'):
+async def record(key, text, rate='-14%', pitch='+2Hz', speaker='fr-FR-DeniseNeural'):
     target = OUT / f'{key}.mp3'
     metadata = OUT / f'{key}.json'
     if target.exists() and metadata.exists():
         return
     boundaries = []
     source = WORK / f'{key}.mp3'
-    voice = edge_tts.Communicate(text, 'fr-FR-DeniseNeural', rate=rate, pitch=pitch, boundary='WordBoundary')
+    voice = edge_tts.Communicate(text, speaker, rate=rate, pitch=pitch, boundary='WordBoundary')
     with source.open('wb') as stream:
         async for chunk in voice.stream():
             if chunk['type'] == 'audio':
@@ -63,8 +64,16 @@ def lullaby():
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', str(source), '-c:a', 'libmp3lame', '-b:a', '96k', str(OUT / 'lullaby.mp3')], check=True)
 
 async def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--voice', default='fr-FR-VivienneMultilingualNeural')
+    parser.add_argument('--prefix', default='voice-v2-page')
+    parser.add_argument('--rate', default='-8%')
+    parser.add_argument('--narration-only', action='store_true')
+    args = parser.parse_args()
     for i, page in enumerate(STORY['pages']):
-        await record(f'page-{i + 1}', page['text'])
+        await record(f'{args.prefix}-{i + 1}', page['text'], rate=args.rate, pitch='+0Hz', speaker=args.voice)
+    if args.narration_only:
+        return
     for key, text in [
         ('trace-good', 'Bravo Lola ! Ta lettre est réussie !'),
         ('trace-almost', 'C’est presque bon ! Continue sur les parties claires de la lettre.'),

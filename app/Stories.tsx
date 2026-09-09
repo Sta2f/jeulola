@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BookOpen, ChevronLeft, ChevronRight, Moon, Music2, Pause, Play, RotateCcw, Sparkles } from 'lucide-react';
+import { BookOpen, ChevronLeft, ChevronRight, Info, Moon, Music2, Pause, Play, RotateCcw, Sparkles } from 'lucide-react';
 import { storyAsset, storyLibrary, type Story } from './storyLibrary';
 import { useStoryNarration } from './useStoryNarration';
 import { stopAllFileMusic, useGameAudio } from './useGameAudio';
@@ -32,7 +32,7 @@ function StoryReader({ story, onBack }: { story: Story; onBack: () => void }) {
   useEffect(() => {
     // Preload just the following illustration; avoid decoding a whole library.
     const next = story.pages[narration.page + 1];
-    if (next) { const image = new Image(); image.src = storyAsset(story, `${next.image}.webp`); }
+    if (next) { const image = new Image(); image.src = storyAsset(story, `${next.image}.webp`); void image.decode().catch(() => undefined); }
   }, [narration.page, story]);
   useEffect(() => { if (finished) stopAudio(); }, [finished, stopAudio]);
   useEffect(() => { if (narration.status === 'paused' || narration.status === 'error') stopAudio(); }, [narration.status, stopAudio]);
@@ -43,9 +43,9 @@ function StoryReader({ story, onBack }: { story: Story; onBack: () => void }) {
   return <main className="story-reader" data-playing={animating}>
     <header className="story-header"><button onClick={() => { narration.pause(); stopAudio(); onBack(); }}><ChevronLeft />Histoires</button><h1>{story.title}</h1><div className="story-sound-options"><button onClick={() => { setEffects(!effects); narration.setEffectsEnabled(!effects); }} aria-pressed={effects} aria-label={effects ? 'Couper les bruitages' : 'Activer les bruitages'}><Sparkles /></button><button onClick={() => { setMusic(!music); if (music) stopAudio(); else if (animating) startAudio(); }} aria-pressed={music} aria-label={music ? 'Couper la berceuse' : 'Activer la berceuse'}><Music2 /></button></div></header>
     <article className="story-spread" aria-label={`Page ${narration.page + 1} sur ${story.pages.length}`}>
-      <figure className="story-illustration">
+      <figure className="story-illustration" data-art={current.image}>
         {/* oxlint-disable-next-line next/no-img-element -- Optimized local WebP in a Vite app. */}
-        <img key={current.image} src={storyAsset(story, `${current.image}.webp`)} alt={current.alt} />
+        <img src={storyAsset(story, `${current.image}.webp`)} alt={current.alt} />
         <div className="story-stardust" aria-hidden="true">{Array.from({ length: 6 }, (_, i) => <i key={i} style={{ left: `${12 + i * 15}%`, top: `${12 + (i % 3) * 12}%`, animationDelay: `${-i * 1.3}s` }}>✦</i>)}</div>
       </figure>
       <div className="story-reading-page">
@@ -58,6 +58,7 @@ function StoryReader({ story, onBack }: { story: Story; onBack: () => void }) {
       <button aria-label="Page précédente" disabled={narration.page === 0} onClick={() => { void narration.selectPage(narration.page - 1, animating); }}><ChevronLeft /></button>
       {narration.status === 'error' ? <button className="story-play" onClick={() => void narration.selectPage(narration.page, true)}><RotateCcw />Réessayer</button> : finished ? <button className="story-play" onClick={() => { if (music) startAudio(); void narration.selectPage(0, true); }}><RotateCcw />Réécouter</button> : <button className="story-play" disabled={narration.status === 'loading'} onClick={listen}>{animating || narration.status === 'ended' ? <Pause /> : <Play />}{narration.status === 'loading' ? 'Préparation…' : animating || narration.status === 'ended' ? 'Pause' : 'Écouter'}</button>}
       <button aria-label="Page suivante" disabled={narration.page === story.pages.length - 1} onClick={() => { void narration.selectPage(narration.page + 1, animating); }}><ChevronRight /></button>
+      <a className="story-credits" href={storyAsset(story, 'credits.txt')} target="_blank" rel="noreferrer" aria-label="Crédits des voix et bruitages"><Info /></a>
     </footer>
   </main>;
 }

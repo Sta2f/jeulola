@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getAudioSettings, useAudioSettings } from './preferences';
 import { alignStoryWords, storyAsset, type SpokenToken, type Story, type WordTiming } from './storyLibrary';
-import { playStoryEffect, type StoryEffect } from './storySoundEffects';
+import { playStoryEffect, preloadStoryEffects, type StoryEffect } from './storySoundEffects';
 
 export function useStoryNarration(story: Story) {
   const settings = useAudioSettings();
@@ -45,6 +45,7 @@ export function useStoryNarration(story: Story) {
     const Context = window.AudioContext ?? (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (Context) {
       ctx.current ??= new Context();
+      void preloadStoryEffects(ctx.current);
       if (!gain.current) {
         gain.current = ctx.current.createGain();
         ctx.current.createMediaElementSource(element).connect(gain.current).connect(ctx.current.destination);
@@ -58,11 +59,11 @@ export function useStoryNarration(story: Story) {
     } else element.volume = getAudioSettings().volume * .75;
     setError('');
     void element.play().then(() => {
-      if (generation.current === current) { setStatus('playing'); playEffect('page'); }
+      if (generation.current === current) setStatus('playing');
     }).catch(() => {
       if (generation.current === current) { setStatus('paused'); setError('Touche Écouter pour reprendre la voix.'); }
     });
-  }, [playEffect]);
+  }, []);
   const selectPage = useCallback(async (next: number, autoplay = false) => {
     if (next < 0 || next >= story.pages.length) return;
     const element = audio.current;
@@ -72,10 +73,10 @@ export function useStoryNarration(story: Story) {
     ready.current = false;
     effects.current.clear();
     index.current = next; setPage(next); setStatus('loading'); setActiveWord(-1); setTokens([]); setError('');
-    element.src = storyAsset(story, `page-${next + 1}.mp3`);
+    element.src = storyAsset(story, `${story.narrationPrefix}-${next + 1}.mp3`);
     element.load();
     try {
-      const response = await fetch(storyAsset(story, `page-${next + 1}.json`));
+      const response = await fetch(storyAsset(story, `${story.narrationPrefix}-${next + 1}.json`));
       if (!response.ok) throw new Error('Timing unavailable');
       const timing = await response.json() as WordTiming[];
       const words = alignStoryWords(story.pages[next].text, timing);
@@ -122,11 +123,9 @@ export function useStoryNarration(story: Story) {
     if (status !== 'playing') return;
     const tick = () => {
       const time = audio.current?.currentTime ?? 0;
-      if (time < .7) playEffect('page');
       const wordIndex = tokens.findIndex(token => token.start !== undefined && token.end !== undefined && time >= token.start && time < token.end);
       setActiveWord(wordIndex);
       const word = tokens[wordIndex]?.text.toLocaleLowerCase('fr') ?? '';
-      if (word.includes('étoile')) playEffect('star');
       if (word.includes('couverture')) playEffect('blanket');
       if (word.includes('soupir')) playEffect('sigh');
     };
