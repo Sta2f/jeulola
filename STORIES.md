@@ -63,6 +63,8 @@ Objectif 80 %. Le score est le minimum entre la couverture du modèle et la pré
 
 ## Safari et musique
 
+Continuité sur les six pages : la pause native émise à la fin de chaque fichier de narration n'est pas une pause du livre. Elle est ignorée, ainsi que les événements de pause périmés pendant le remplacement d'une page. La berceuse conserve sa position pendant les cinq changements automatiques et les chargements. Contrôle Chromium/WebKit : six fins de passage réelles, chargements JSON retardés, aucune pause ni remise à zéro de la musique, arrêt à la fin de la sixième page. Pause volontaire, reprise, volume, replay et sortie restent testés séparément.
+
 Un seul élément audio de musique est conservé entre les jeux afin de réutiliser l’autorisation obtenue au premier toucher. Gain Web Audio pour le volume iPad, reprise sur toucher / retour au premier plan / reconnexion, erreur visible « Relancer le son ». Un retour rapide pendant `suspend()` est géré. Une reprise n’annule jamais une coupure volontaire ni un retour au menu sans musique.
 
 Les tests Chromium/WebKit Windows couvrent les interactions et les tailles ; WebKit Windows ne dispose pas du contexte Web Audio. Les interruptions iPad sont simulées, la vérification sur un iPad physique reste nécessaire.

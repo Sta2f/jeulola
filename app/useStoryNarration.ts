@@ -98,7 +98,13 @@ export function useStoryNarration(story: Story) {
     const element = new Audio(); element.preload = 'auto'; element.setAttribute('playsinline', ''); audio.current = element;
     const ended = () => endHandler.current();
     const failed = () => { setStatus('error'); setError('La voix n’a pas pu charger. Touche Réessayer.'); };
-    const paused = () => setStatus(value => value === 'playing' ? 'paused' : value);
+    const paused = () => {
+      // A clip naturally pauses before `ended`; that is a page turn, not a
+      // request to pause the book (and its continuous background music).
+      // Ignore queued pause events from replacing an earlier page as well.
+      if (element.ended || !ready.current || !element.paused) return;
+      setStatus(value => value === 'playing' ? 'paused' : value);
+    };
     const visibility = () => {
       if (document.hidden) {
         pause();
