@@ -6,17 +6,19 @@ export function FairyGameButton({
   children,
   tone,
   onClick,
+  className = '',
 }: {
   icon: ReactNode;
   children: string;
   tone: 'honey' | 'lilac' | 'rose' | 'sky' | 'mint';
   onClick: () => void;
+  className?: string;
 }) {
   const pearl = useId();
   return (
     <button
       type="button"
-      className={`fairy-game fairy-game--${tone}`}
+      className={`fairy-game fairy-game--${tone} ${className}`.trim()}
       onClick={onClick}
       aria-label={children}
     >

@@ -141,7 +141,6 @@ export default function Home() {
             <span>Joue · Explore · Découvre</span>
           </div>
         </header>
-        <button className="home-stories-tab" onClick={() => goTo('stories')}><Moon /><span>Histoires</span><Sparkles /></button>
 
         <nav className="fairy-menu" aria-label="Les jeux de Lola">
           <FairyGameButton tone="honey" icon="123" onClick={() => goTo('math', 'math')}>Les calculs enchantés</FairyGameButton>
@@ -150,6 +149,7 @@ export default function Home() {
           <FairyGameButton tone="honey" icon={<Map />} onClick={() => goTo('maze-menu')}>Les labyrinthes</FairyGameButton>
           <FairyGameButton tone="sky" icon={<Palette />} onClick={() => goTo('coloring', 'coloring')}>Les coloriages</FairyGameButton>
           <FairyGameButton tone="mint" icon={<Rabbit />} onClick={() => goTo('betty-hide', 'hide')}>Cache-cache avec Betty</FairyGameButton>
+          <FairyGameButton className="fairy-game-stories" tone="lilac" icon={<Moon />} onClick={() => goTo('stories')}>Histoires</FairyGameButton>
         </nav>
       </section>
 

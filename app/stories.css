@@ -1,8 +1,27 @@
-/* The new library is a small permanent tab, not another squeezed cloud row. */
-.games-home .welcome-board { justify-self:start;max-width:calc(100% - 108px); }
-.home-stories-tab { position:relative;z-index:3;grid-column:2;grid-row:1;align-self:center;justify-self:end;display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:9px 12px;border:1px solid #fff4d8;border-radius:18px;color:#523a6b;background:#fff8ecef;box-shadow:0 5px 16px #60407418;font-size:14px;font-weight:800;cursor:pointer; }
-.home-stories-tab>svg { width:19px;height:19px; }.home-stories-tab>svg:last-child { display:none; }
-.home-stories-tab:focus-visible { outline:3px solid #774791;outline-offset:3px; }
+/* A seventh cloud beside the games, with the same stable touch target and drift. */
+.fairy-game-stories {
+ position:absolute;right:calc(100% + 12px);top:calc((100% + 8px) / 3);
+ width:calc((100% - 8px) / 2);height:calc((100% - 16px) / 3);
+}
+.fairy-game-stories .fairy-game-float { animation-delay:-3s; }
+/* When the portrait takes more of the scene, keep all clouds on its right. */
+@media(min-width:651px) and (max-width:1100px) and (min-height:501px) {
+ .games-home .fairy-menu { grid-template-rows:repeat(4,minmax(0,1fr));height:min(100%,520px); }
+ .fairy-game-stories { position:relative;inset:auto;width:calc((100% - 8px) / 2);height:100%;grid-column:1 / -1;justify-self:center; }
+}
+@media(max-height:500px) and (min-width:651px) {
+ .games-home .welcome-board { display:block; }
+ .fairy-game-stories { inset:auto auto calc(100% + 4px) 0;width:calc((100% - 8px) / 3);height:min(72px,calc((100% - 4px) / 2)); }
+}
+@media(max-height:500px) and (min-width:651px) and (max-width:750px) {
+ .fairy-game-stories { left:auto;right:0; }
+}
+@media(max-width:650px) {
+ .games-home .park-hero { grid-template-rows:minmax(160px,33%) minmax(0,1fr); }
+ .games-home .park-hero>img { height:33%; }
+ .games-home .fairy-menu { grid-template-rows:repeat(4,minmax(0,1fr));height:min(100%,440px); }
+ .fairy-game-stories { position:relative;inset:auto;width:calc((100% - 4px) / 2);height:100%;grid-column:1 / -1;justify-self:center; }
+}
 .audio-retry { min-height:40px;border:1px solid #d7c1e1;border-radius:12px;padding:5px 10px;background:#fff;color:#674273;font-size:12px; }
 
 /* A book spread: the text owns the space; the picture never crops or covers it. */
@@ -67,8 +86,6 @@
  .story-reading-page { padding:18px 24px;gap:10px;background:#fff7e9; }.story-words { font-size:clamp(19px,3vw,25px);line-height:1.6; }
 }
 @media(max-width:650px) {
- .games-home .welcome-board { max-width:100%; }
- .home-stories-tab { position:absolute;top:100px;right:12px;grid-area:auto;font-size:13px;padding:7px 12px; }
  #root>.stories-library,#root>.story-reader { padding:6px 10px; }
  .story-header { gap:8px;flex-basis:48px; }.story-header h1 { font-size:16px; }.story-header button { padding:6px 8px;font-size:12px; }
  .story-shelf { gap:16px;padding:10px 0; }.story-shelf-heading h1 { font-size:28px; }.story-shelf-heading p { font-size:13px; }
