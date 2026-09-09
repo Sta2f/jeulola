@@ -14,3 +14,6 @@ Les auteurs des sons ne sont pas affiliés au Monde de Lola et ne le parrainent 
 
 Narration synthétique française : VivienneMultilingualNeural (Microsoft Edge TTS),
 préparée en fichiers audio avec leurs repères de mots, débit -8 %, hauteur naturelle.
+
+Musique de fond : « Stars in the Lullaby », morceau fourni par Julien.
+Version web stéréo : niveau réduit de 5,5 dB, courts fondus, compression MP3 128 kbit/s.

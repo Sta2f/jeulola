@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type CSSProperties } from 'react';
 import { BookOpen, ChevronLeft, ChevronRight, Info, Moon, Music2, Pause, Play, RotateCcw, Sparkles } from 'lucide-react';
 import { storyAsset, storyLibrary, type Story } from './storyLibrary';
 import { useStoryNarration } from './useStoryNarration';
@@ -32,7 +32,11 @@ function StoryReader({ story, onBack }: { story: Story; onBack: () => void }) {
   useEffect(() => {
     // Preload just the following illustration; avoid decoding a whole library.
     const next = story.pages[narration.page + 1];
-    if (next) { const image = new Image(); image.src = storyAsset(story, `${next.image}.webp`); void image.decode().catch(() => undefined); }
+    if (next) {
+      for (const file of [next.backdrop ?? story.backdrop, ...(!next.integratedArtwork ? [`${next.image}.webp`] : [])]) {
+        const image = new Image(); image.src = storyAsset(story, file); void image.decode().catch(() => undefined);
+      }
+    }
   }, [narration.page, story]);
   useEffect(() => { if (finished) stopAudio(); }, [finished, stopAudio]);
   useEffect(() => { if (narration.status === 'paused' || narration.status === 'error') stopAudio(); }, [narration.status, stopAudio]);
@@ -40,12 +44,12 @@ function StoryReader({ story, onBack }: { story: Story; onBack: () => void }) {
     if (animating || narration.status === 'ended') { narration.pause(); stopAudio(); }
     else { if (music) startAudio(); narration.play(); }
   };
-  return <main className="story-reader" data-playing={animating}>
+  return <main className="story-reader" data-playing={animating} style={{ '--story-backdrop': `url("${storyAsset(story, current.backdrop ?? story.backdrop)}")` } as CSSProperties}>
     <header className="story-header"><button onClick={() => { narration.pause(); stopAudio(); onBack(); }}><ChevronLeft />Histoires</button><h1>{story.title}</h1><div className="story-sound-options"><button onClick={() => { setEffects(!effects); narration.setEffectsEnabled(!effects); }} aria-pressed={effects} aria-label={effects ? 'Couper les bruitages' : 'Activer les bruitages'}><Sparkles /></button><button onClick={() => { setMusic(!music); if (music) stopAudio(); else if (animating) startAudio(); }} aria-pressed={music} aria-label={music ? 'Couper la berceuse' : 'Activer la berceuse'}><Music2 /></button></div></header>
     <article className="story-spread" aria-label={`Page ${narration.page + 1} sur ${story.pages.length}`}>
-      <figure className="story-illustration" data-art={current.image}>
+      <figure className="story-illustration" data-art={current.image} role={current.integratedArtwork ? 'img' : undefined} aria-label={current.integratedArtwork ? current.alt : undefined}>
         {/* oxlint-disable-next-line next/no-img-element -- Optimized local WebP in a Vite app. */}
-        <img src={storyAsset(story, `${current.image}.webp`)} alt={current.alt} />
+        {!current.integratedArtwork && <img src={storyAsset(story, `${current.image}.webp`)} alt={current.alt} />}
         <div className="story-stardust" aria-hidden="true">{Array.from({ length: 6 }, (_, i) => <i key={i} style={{ left: `${12 + i * 15}%`, top: `${12 + (i % 3) * 12}%`, animationDelay: `${-i * 1.3}s` }}>✦</i>)}</div>
       </figure>
       <div className="story-reading-page">

@@ -31,7 +31,7 @@ const FILE_MUSIC: Partial<Record<MusicTheme, { src: string; volume: number }>> =
   home: { src: '/assets/audio/miniature-wonderland.mp3', volume: .09 },
   letters: { src: '/assets/audio/word-hunt-time.mp3', volume: .06 },
   math: { src: '/assets/audio/focus-flow.mp3', volume: .06 },
-  story: { src: '/assets/stories/eclair-dodo/lullaby.mp3', volume: .075 },
+  story: { src: '/assets/stories/eclair-dodo/stars-in-the-lullaby.mp3', volume: .075 },
 };
 // Reuse the element unlocked by the entry tap. Safari grants autoplay per element.
 let musicElement: HTMLAudioElement | null = null;

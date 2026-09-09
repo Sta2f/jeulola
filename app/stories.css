@@ -24,8 +24,13 @@
 }
 .audio-retry { min-height:40px;border:1px solid #d7c1e1;border-radius:12px;padding:5px 10px;background:#fff;color:#674273;font-size:12px; }
 
-/* One uninterrupted ivory page, including the app controls. No panels or gutter. */
+/* One continuous bedroom, fading into light paper behind the words. */
 #root>.stories-library,#root>.story-reader { display:flex;flex-direction:column;height:100%;min-height:0;overflow:hidden;padding:10px 20px;color:#513e51;background:#fbf4e8; }
+#root>.story-reader { position:relative;isolation:isolate; }
+.story-reader::before {
+ content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+ background:linear-gradient(180deg,#fbf4e899,#fbf4e800 10%),linear-gradient(0deg,#fbf4e8 0%,#fbf4e800 15%),linear-gradient(90deg,#fbf4e800 45%,#fbf4e888 66%,#fbf4e833 100%),var(--story-backdrop) left center / cover no-repeat;
+}
 #root:has(>.story-reader,>.stories-library)>.app-toolbar { background:#fbf4e8;border-top:0; }
 .story-header { display:flex;align-items:center;justify-content:space-between;gap:12px;flex:0 0 48px;width:100%;min-width:0; }
 .story-header h1 { font:500 clamp(17px,2vw,24px)/1.2 Georgia,serif;text-align:center;margin:0; }
@@ -43,8 +48,7 @@
 .story-spread { position:relative;flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch;gap:clamp(12px,3vw,52px);width:min(100%,1540px);margin:10px auto 14px;background:transparent; }
 .story-illustration { position:relative;display:flex;align-items:center;justify-content:center;min-height:0;min-width:0;width:100%;height:100%;margin:0;background:transparent; }
 .story-illustration>img { display:block;width:100%;height:100%;max-height:100%;object-fit:contain;object-position:center; }
-/* White-paper artwork blends into the same ivory; no mask, moving filter or backdrop. */
-.story-illustration[data-art=cuddle-paper]>img { mix-blend-mode:multiply; }
+/* The cuddle scene is baked into its backdrop: no paper rectangle or see-through faces. */
 .story-stardust { position:absolute;inset:8%;pointer-events:none; }.story-stardust i { position:absolute;color:#b9914c;opacity:.5;font-style:normal;font-size:13px; }
 .story-reading-page { min-width:0;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:22px;padding:clamp(12px,2vw,32px);background:transparent;color:#483856; }
 .story-chapter { display:flex;align-items:center;justify-content:space-between;gap:12px; }.story-chapter h2 { margin:0;font:500 clamp(18px,2.2vw,28px)/1.2 Georgia,serif;color:#876b86; }
@@ -81,6 +85,7 @@
 .trace-actions { display:flex;gap:5px; }.trace-actions button { min-height:44px;min-width:44px;padding:8px; }.trace-actions button svg { width:18px;height:18px; }
 .letters-card-write>.letters-next { flex:0 0 auto;align-self:center;min-height:44px;margin:0;font-size:13px; }
 @media(max-width:850px) and (orientation:portrait) {
+ .story-reader::before { background:linear-gradient(180deg,#fbf4e8bb 0%,#fbf4e800 13%,#fbf4e800 39%,#fbf4e8e6 53%,#fbf4e8 60%),var(--story-backdrop) left top / auto 58% no-repeat; }
  .story-spread { grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(130px,.8fr) minmax(0,1fr);width:min(100%,760px); }
  .story-illustration { height:100%;width:100%;max-width:100%; }
  .story-reading-page { padding:18px 24px;gap:10px; }.story-words { font-size:clamp(19px,3vw,25px);line-height:1.6; }
@@ -100,6 +105,7 @@
  .story-shelf { gap:12px; }.story-books { width:min(100%,680px); }.story-book>img { aspect-ratio:3/2; }.story-shelf-heading h1 { margin:6px 0;font-size:28px; }.story-shelf-heading p { margin:5px 0; }.story-book-copy { padding:18px;gap:10px; }.story-book-copy strong { font-size:29px; }
 }
 @media(max-height:500px) and (min-width:651px) {
+ .story-reader::before { background-size:auto,auto,auto,auto 100%; }
  .story-header { flex-basis:44px; }.story-header h1 { font-size:17px; }.story-controls { flex-basis:44px; }
  .story-reading-page { padding:10px 14px;gap:6px; }.story-words { font-size:16px;line-height:1.4; }.story-reading-hint { font-size:10px; }.story-chapter { display:none; }
  .story-shelf { padding:0;gap:10px; }.story-shelf-heading>span,.story-shelf-heading p,.story-shelf-note { display:none; }.story-shelf-heading h1 { font-size:22px; }.story-books { width:min(100%,560px); }.story-book-copy { padding:14px;gap:8px; }.story-book-copy strong { font-size:23px; }.story-book-copy>span { display:none; }
