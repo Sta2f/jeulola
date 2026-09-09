@@ -104,6 +104,21 @@ function getMusicElement() {
   audio.setAttribute('playsinline', '');
   musicElement = audio;
   audio.addEventListener('canplay', retryFileMusic);
+  // Some WebKit media backends seek to zero at a native loop boundary but pause.
+  // Recover only that boundary, never a deliberate pause, mute or navigation.
+  let loopBoundary = false;
+  const markLoopBoundary = () => {
+    if (Number.isFinite(audio.duration) && audio.currentTime >= audio.duration - 1.5) loopBoundary = true;
+    else if (audio.currentTime > .25) loopBoundary = false;
+  };
+  audio.addEventListener('timeupdate', markLoopBoundary);
+  audio.addEventListener('seeking', markLoopBoundary);
+  audio.addEventListener('emptied', () => { loopBoundary = false; });
+  audio.addEventListener('seeked', () => {
+    if (!loopBoundary || audio.currentTime > .25) return;
+    loopBoundary = false;
+    if (audio.loop && audio.paused && level() > 0) retryFileMusic();
+  });
   audio.addEventListener('error', () => { if (desiredTheme) setMusicStatus('blocked'); });
   // Retry on the trusted gesture itself, not only inside a delayed React effect.
   for (const event of ['pointerdown', 'pointerup', 'touchend', 'keydown']) document.addEventListener(event, retryFileMusic, { capture: true, passive: true });
