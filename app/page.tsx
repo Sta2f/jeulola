@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ChevronLeft, Crown, Dog, Gamepad2, Map, Palette, Rabbit, Sparkles, TrafficCone, Volume2, VolumeX } from 'lucide-react';
+import { ChevronLeft, Crown, Dog, Gamepad2, Map, Palette, Pause, Rabbit, Sparkles, TrafficCone, Volume2, VolumeX } from 'lucide-react';
 import { TrafficLightGame } from './TrafficLightGame';
 import { MazeGame } from './MazeGame';
 import { ColoringGame } from './ColoringGame';
@@ -8,8 +8,9 @@ import { BettyHideAndSeek } from './BettyHideAndSeek';
 import { LettersGame } from './LettersGame';
 import { MathGame } from './MathGame';
 import { FairyGameButton } from './FairyGameButton';
+import { HomeEnchantment } from './HomeEnchantment';
 import { type FileMusicTheme, preloadFileMusic, startFileMusic, stopAllFileMusic, useGameAudio } from './useGameAudio';
-import { readSaved } from './preferences';
+import { readSaved, saveValue } from './preferences';
 
 declare const __BUILD_ID__: string;
 
@@ -18,6 +19,14 @@ type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'ecla
 export default function Home() {
   const [screen, setScreen] = useState<GameScreen>('home');
   const [entered, setEntered] = useState(false);
+  const [motionPaused, setMotionPaused] = useState(() => readSaved<boolean>('home-motion-paused', false) === true);
+  useEffect(() => saveValue('home-motion-paused', motionPaused), [motionPaused]);
+  const [pageVisible, setPageVisible] = useState(() => !document.hidden);
+  useEffect(() => {
+    const updateVisibility = () => setPageVisible(!document.hidden);
+    document.addEventListener('visibilitychange', updateVisibility);
+    return () => document.removeEventListener('visibilitychange', updateVisibility);
+  }, []);
   const wins = ['princess', 'eclair', 'betty'].map(game => { const value = readSaved<number[]>(`wins:${game}`, []); return Array.isArray(value) ? new Set(value).size : 0; });
   const { soundOn, startAudio, stopAudio, toggleSound } = useGameAudio('home');
 
@@ -108,13 +117,18 @@ export default function Home() {
 
       <nav className="home-nav" aria-label="Navigation principale">
         <details className="home-achievements"><summary aria-label="Mes réussites" title="Mes réussites"><Crown /></summary><div><strong>Mes réussites</strong><p>✦ {wins[0]+wins[1]} / 40 labyrinthes</p><p>🐾 {wins[2]} / 50 cachettes</p></div></details>
-        <div className="home-nav-actions"><span className="game-count"><Gamepad2 /> 7 jeux</span><button className="game-sound-toggle light home-sound-toggle" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique d’accueil' : 'Activer la musique d’accueil'}>{soundOn ? <Volume2 /> : <VolumeX />}</button></div>
+        <div className="home-nav-actions">
+          <span className="game-count"><Gamepad2 /> 7 jeux</span>
+          <button className="game-sound-toggle light home-motion-toggle" onClick={() => setMotionPaused(value => !value)} aria-label={motionPaused ? 'Animer le décor' : 'Mettre les animations en pause'} title={motionPaused ? 'Animer le décor' : 'Mettre les animations en pause'}>{motionPaused ? <Sparkles /> : <Pause />}</button>
+          <button className="game-sound-toggle light home-sound-toggle" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique d’accueil' : 'Activer la musique d’accueil'}>{soundOn ? <Volume2 /> : <VolumeX />}</button>
+        </div>
       </nav>
 
-      <section className="park-hero" id="games" aria-label="Choisir un jeu">
+      <section className="park-hero" id="games" aria-label="Choisir un jeu" data-motion-paused={!entered || !pageVisible || motionPaused}>
         {/* oxlint-disable-next-line next/no-img-element -- Vite app with a project-local generated banner. */}
         <img src="/assets/lola-park-banner.webp" alt="Lola et son chat dans un parc enchanté avec un château et une grande roue" />
         <div className="park-vignette" aria-hidden="true" />
+        <HomeEnchantment />
 
         <header className="welcome-board">
           {/* oxlint-disable-next-line next/no-img-element -- Project-local generated fairy cloud. */}
