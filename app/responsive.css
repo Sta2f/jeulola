@@ -55,7 +55,6 @@
 .phase-copy { margin:14px 0; }.countdown { margin-bottom:18px; }
 .controls { flex-wrap:wrap; }.primary-control { white-space:normal; }
 .start-screen,.win-screen,.eclair-win { overflow-y:auto;max-height:100svh;padding:20px; }
-.letters-page { padding-bottom:90px; }.letters-card,.letters-trace { min-width:0;max-width:100%; }
 .park-hero { height:auto;min-height:0;overflow:hidden; }
 .welcome-board,.signpost { min-width:0;max-width:100%; }
 .wood-sign { height:auto;min-height:74px; }.wood-sign strong,.wood-sign small { white-space:normal;overflow:visible;text-overflow:clip; }
@@ -102,7 +101,6 @@
  .countdown { width:105px;height:105px; }.countdown::before { width:91px;height:91px; }.countdown strong { font-size:2.5rem; }
  .timeline { gap:8px; }.traffic-challenge label { flex-wrap:wrap; }.controls { gap:6px; }
  .primary-control { width:100%;padding:8px;font-size:.8rem; }.traffic-challenge { padding:10px; }
- .letters-header { flex-wrap:wrap; }.letters-modes { flex-wrap:wrap; }.letters-slots>span { width:32px; }
  .start-card { width:100%;padding:22px 16px; }.start-card h2 { font-size:1.8rem; }
 }
 @media(orientation:landscape) and (max-height:600px) and (min-width:651px) {
@@ -171,28 +169,6 @@
 .maze-adventure>span { padding:18px 24px 24px; }
 .maze-adventure strong { font-size:clamp(1.6rem,3vw,2.6rem);line-height:1.05; }
 .maze-adventure>img { top:4%;height:58%; }
-.letters-page { padding-top:12px;padding-bottom:24px; }
-.letters-title { margin:10px 0 12px; }
-.letters-title h1 { font-size:clamp(1.6rem,3vw,2.2rem);margin:4px 0; }
-.letters-title p { margin:4px 0;font-size:.9rem; }
-.letters-modes { margin-bottom:12px; }
-.letters-page button { min-height:42px;padding:8px 14px; }
-.letters-card { width:min(100%,820px);padding:14px 18px;border-radius:22px; }
-.letters-picture { font-size:44px;line-height:1.1;margin-top:8px; }
-.letters-card h2 { font-size:1.3rem;margin:8px 0; }
-.letters-slots,.letters-tiles,.letters-trace-picker { gap:8px;margin:12px 0; }
-.letters-slots>span,.letters-page .letters-tiles button { height:48px;min-height:48px;width:48px;font-size:26px; }
-.letters-feedback { min-height:24px;margin:10px 0 0;font-size:.9rem; }
-.letters-model { margin:8px 0;font-size:24px; }
-.letters-model span { font-size:19px; }
-.letters-choices { margin:18px 0; }
-.letters-trace { width:min(100%,440px);margin:10px auto; }
-.letters-word-list { margin:14px auto; }
-.letters-card-write .letters-picture { display:none; }
-.letters-card-write>.letters-model span { display:inline;margin-left:12px; }
-.letters-card-write>p:not(.letters-model),.letters-card-write .letters-feedback { display:none; }
-.letters-card-write .letters-trace { width:min(100%,calc(clamp(140px,100dvh - 610px,200px) * 600 / 320)); }
-.letters-card-write .letters-next { margin-left:8px; }
 .magic-canvas { width:min(100%,calc(max(200px,100dvh - 430px) * 800 / 576)); }
 @media(min-width:651px) and (max-width:1000px) and (orientation:portrait) {
  .maze-menu-content { grid-template-columns:repeat(2,minmax(0,1fr)); }
@@ -220,11 +196,6 @@
  .wood-sign small { font-size:.68rem;line-height:1.2;margin-top:3px; }
 }
 @media(max-width:650px) {
- .letters-title>span { display:none; }
- .letters-title h1 { font-size:1.6rem; }
- .letters-card { padding:12px; }
- .letters-slots>span,.letters-page .letters-tiles button { width:36px;font-size:22px; }
- .letters-modes button { min-height:42px;padding:6px; }
  .maze-menu-content { gap:12px; }
  .maze-adventure { height:300px; }
  .maze-adventure>span { padding:12px 18px; }

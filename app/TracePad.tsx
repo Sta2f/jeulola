@@ -12,14 +12,30 @@ const feedback = {
 };
 const voice = { start: 'again', good: 'good', almost: 'almost', again: 'again', outside: 'outside' };
 
-export function TracePad({ letter }: { letter: string }) {
+type TracePadProps = { letter: string; onComplete?: () => void; resetKey?: string | number };
+
+export function TracePad(props: TracePadProps) {
+  const audio = useRecordedAudio();
+  return <TracePadCanvas key={`${props.resetKey ?? ''}:${props.letter}`} {...props} {...audio} />;
+}
+
+function TracePadCanvas({ letter, onComplete, playRecording, stopRecording }: TracePadProps & ReturnType<typeof useRecordedAudio>) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const drawing = useRef<{ id: number; x: number; y: number } | null>(null);
   const assess = useRef<ReturnType<typeof createTraceAssessment> | null>(null);
   const [result, setResult] = useState<TraceResult>(EMPTY_TRACE);
-  const { playRecording, stopRecording } = useRecordedAudio();
   const spoken = useRef('start');
-  useEffect(() => { assess.current = createTraceAssessment(letter); }, [letter]);
+  const completed = useRef(false);
+  const locked = Boolean(onComplete) && result.verdict === 'good';
+  useEffect(() => {
+    const element = canvas.current;
+    assess.current = createTraceAssessment(letter);
+    return () => {
+      const active = drawing.current;
+      drawing.current = null;
+      if (active && element?.hasPointerCapture(active.id)) element.releasePointerCapture(active.id);
+    };
+  }, [letter]);
   const point = (event: PointerEvent<HTMLCanvasElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
     return { x: (event.clientX - rect.left) * TRACE_WIDTH / rect.width, y: (event.clientY - rect.top) * TRACE_HEIGHT / rect.height };
@@ -32,9 +48,10 @@ export function TracePad({ letter }: { letter: string }) {
     ctx.beginPath(); ctx.moveTo(previous.x, previous.y); ctx.lineTo(x, y); ctx.stroke();
     previous.x = x; previous.y = y;
   };
-  const finish = () => {
-    if (!drawing.current) return;
+  const finish = (event: PointerEvent<HTMLCanvasElement>) => {
+    if (drawing.current?.id !== event.pointerId) return;
     drawing.current = null;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
     if (!canvas.current || !assess.current) return;
     const next = assess.current(canvas.current);
     setResult(next);
@@ -42,12 +59,16 @@ export function TracePad({ letter }: { letter: string }) {
       spoken.current = next.verdict;
       void playRecording(`/assets/stories/eclair-dodo/trace-${voice[next.verdict]}.mp3`);
     }
+    if (next.verdict === 'good' && onComplete && !completed.current) {
+      completed.current = true;
+      onComplete();
+    }
   };
   return <div className="trace-training" data-verdict={result.verdict}>
     <div className="trace-drawing-slot"><div className="letters-trace">
       <svg className="letters-trace-model" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><text x="300" y="245" textAnchor="middle" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="240" fill="#c5afd7">{letter}</text></svg>
       <canvas ref={canvas} width={TRACE_WIDTH} height={TRACE_HEIGHT} aria-label={`Zone de tracé de la lettre ${letter}`} onPointerDown={event => {
-        if (drawing.current || !event.isPrimary) return;
+        if (drawing.current || (onComplete && completed.current) || !event.isPrimary) return;
         event.preventDefault(); stopRecording();
         event.currentTarget.setPointerCapture(event.pointerId);
         const p = point(event); drawing.current = { id: event.pointerId, ...p }; segment(p.x + .1, p.y);
@@ -56,8 +77,12 @@ export function TracePad({ letter }: { letter: string }) {
     <div className="trace-guidance">
       <div className="trace-score"><strong>{result.percent} %</strong><progress aria-label="Réussite du tracé — objectif 80 %" max={100} value={result.percent} /></div>
       <output className="trace-feedback"><strong>{feedback[result.verdict][0]}</strong><span>{feedback[result.verdict][1]}</span></output>
-      <div className="trace-actions"><button aria-label="Écouter le conseil de tracé" onClick={() => void playRecording(`/assets/stories/eclair-dodo/trace-${voice[result.verdict]}.mp3`)}><Volume2 /></button><button className="letters-clear" aria-label="Effacer" onClick={() => {
-        stopRecording(); drawing.current = null; canvas.current?.getContext('2d')?.clearRect(0, 0, TRACE_WIDTH, TRACE_HEIGHT); setResult(EMPTY_TRACE); spoken.current = 'start';
+      <div className="trace-actions"><button aria-label="Écouter le conseil de tracé" onClick={() => void playRecording(`/assets/stories/eclair-dodo/trace-${voice[result.verdict]}.mp3`)}><Volume2 /></button><button className="letters-clear" aria-label="Effacer" disabled={locked} onClick={() => {
+        if (onComplete && completed.current) return;
+        const active = drawing.current;
+        drawing.current = null;
+        if (active && canvas.current?.hasPointerCapture(active.id)) canvas.current.releasePointerCapture(active.id);
+        stopRecording(); canvas.current?.getContext('2d')?.clearRect(0, 0, TRACE_WIDTH, TRACE_HEIGHT); setResult(EMPTY_TRACE); spoken.current = 'start';
       }}><Eraser /><span>Effacer</span></button></div>
     </div>
   </div>;

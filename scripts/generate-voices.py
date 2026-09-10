@@ -1,6 +1,7 @@
 """Build static neural French clips with complete sentence intonation, not word stitching."""
 import asyncio
 import json
+import re
 import subprocess
 from pathlib import Path
 import edge_tts
@@ -9,7 +10,9 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'public/assets/audio/voices'
 OUT.mkdir(parents=True, exist_ok=True)
 (ROOT / '.media').mkdir(exist_ok=True)
-WORDS = ['lune', 'vélo', 'rose', 'pomme', 'lama', 'robot', 'pirate', 'tomate', 'banane', 'tortue', 'salade', 'ananas']
+WORDS = re.findall(r"text:\s*'([^']+)'", (ROOT / 'app/letterWords.ts').read_text(encoding='utf-8'))
+if not WORDS:
+    raise ValueError('No words found in app/letterWords.ts')
 entries = [(f'word-{i}', f'{word.capitalize()} !') for i, word in enumerate(WORDS)]
 entries += [('bravo', 'Bravo Lola, tu as trouvé !'), ('math-bravo', 'Bravo Lola, une étoile pour toi !')]
 for a in range(1, 21):
@@ -20,8 +23,6 @@ for a in range(1, 21):
 
 semaphore = asyncio.Semaphore(3)
 async def batch(index, items):
-    if all((OUT / f'{key}.mp3').exists() for key, _ in items):
-        return
     async with semaphore:
         source = ROOT / f'.media/voice-batch-{index}.mp3'
         boundaries = []
@@ -40,7 +41,9 @@ async def batch(index, items):
         print(f'Batch {index}: {len(items)} clips ready', flush=True)
 
 async def main():
-    await asyncio.gather(*(batch(i//35, entries[i:i+35]) for i in range(0,len(entries),35)))
+    # Adding words must never rewrite existing word indexes or math recordings.
+    missing = [(key, text) for key, text in entries if not (OUT / f'{key}.mp3').is_file() or (OUT / f'{key}.mp3').stat().st_size == 0]
+    await asyncio.gather(*(batch(i//35, missing[i:i+35]) for i in range(0,len(missing),35)))
     print(f'COMPLETE: {len(entries)} neural voice clips', flush=True)
 
 asyncio.run(main())

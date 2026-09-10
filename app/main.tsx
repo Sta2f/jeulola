@@ -6,13 +6,13 @@ import { ResponsiveTouch } from './ResponsiveTouch';
 import './globals.css';
 import './polish.css';
 import './game-comfort.css';
-import './letters.css';
 import './math.css';
 import './responsive.css';
 import './audit-fixes.css';
 import './play-space.css';
 import './stories.css';
 import './differences.css';
+import './letters.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

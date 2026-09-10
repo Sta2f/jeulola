@@ -10,31 +10,12 @@
 .home-progress summary { cursor:pointer;min-height:44px;display:inline-flex;align-items:center; }
 .home-progress p { margin:0 0 10px; }
 .wood-sign strong { line-height:1.2; }
-.maze-title>p,.maze-menu-header>div>p,.topbar .eyebrow,.coloring-header p,.math-title>span,.math-title>p,.letters-header>span:not(.letters-stars) { display:none; }
+.maze-title>p,.maze-menu-header>div>p,.topbar .eyebrow,.coloring-header p,.math-title>span,.math-title>p { display:none; }
 .math-header>span:nth-child(2) { display:none; }
-.letters-card-write>.letters-model { display:none; }
 .coloring-help { font-size:12px; }
-.letters-feedback:empty { display:none; }
 .betty-loading { position:absolute;inset:0;z-index:30;display:grid;place-content:center;text-align:center;border-radius:28px;background:#f5ecff;color:#634172;padding:20px; }
 .betty-loading button { min-height:44px;padding:10px 20px;border:1px solid #ac83c8;border-radius:14px;background:white; }
 .betty-scene[aria-busy=true] { visibility:hidden; }
-.letters-word-select { display:flex;align-items:center;justify-content:center;gap:10px;margin:6px auto 10px;font-size:14px; }
-.letters-word-select select { min-height:44px;border:2px solid #dac5e7;border-radius:12px;background:white;color:#513060;padding:6px 12px;font:inherit; }
-.letters-word-list,.letters-page>.letters-note { display:none; }
-.letters-title { margin:4px 0 8px; }.letters-title>span,.letters-title p { display:none; }
-.letters-title h1 { font-size:clamp(22px,3vw,30px); }
-.letters-page { padding-top:8px;padding-bottom:12px; }
-.letters-modes { margin-bottom:4px; }
-.letters-card { padding:10px 14px; }
-.letters-card h2 { font-size:18px;margin:6px 0; }
-.letters-picture { font-size:34px;margin-top:4px; }
-.letters-card-top { line-height:1.3; }
-.letters-card>p:not(.letters-model) { font-size:12px;line-height:1.3;margin:6px 0; }
-.letters-feedback { font-size:13px;line-height:1.3;margin-top:6px; }
-.letters-choices { margin:10px 0;gap:8px;flex-direction:row; }
-.letters-choices button { min-width:80px;font-size:22px; }
-.letters-card-write .letters-trace { width:min(100%,calc(clamp(130px,100dvh - 575px,300px) * 600 / 320)); }
-.letters-trace-picker { margin:6px 0;gap:6px; }
 .color-swatches button { flex-basis:44px;width:44px;height:44px;min-width:44px;min-height:44px; }
 .magic-swatch { min-height:44px; }
 .color-swatches,.magic-swatches { gap:6px;padding:3px; }
@@ -67,22 +48,9 @@
  .welcome-board h1 { font-size:1.4rem; }.welcome-board p { font-size:.45rem; }.welcome-cloud-copy>span { display:none; }
  .signpost { position:relative;grid-column:1;grid-row:2;inset:auto;transform:none;width:100%;gap:5px; }
  .signpost-top { min-height:32px;margin-bottom:5px; }.wood-sign { min-height:54px; }
- .letters-modes button { flex-direction:row;gap:5px;min-height:44px; }
- .letters-modes button svg { width:16px; }.letters-modes button>span { font-size:12px; }
- .letters-word-select { margin:6px auto; }.letters-card-top { font-size:11px; }
- .letters-help { gap:5px; }.letters-help button { font-size:12px;padding:6px 10px; }
- .letters-card-write .letters-trace { width:min(100%,375px); }
  .drawing-list button { min-width:76px;min-height:68px; }
  .drawing-list button img { width:58px;height:58px;object-fit:contain; }
  .drawing-list button>span:first-child { width:58px;height:58px; }
  .palette-board { padding:8px;gap:5px; }.color-swatches,.magic-swatches { gap:3px; }
  .magic-swatch { flex-basis:44px; }.palette-label { font-size:12px; }
-}
-@media(max-height:650px) and (min-width:651px) {
- .letters-header { min-height:44px; }.letters-title { display:none; }
- .letters-modes { margin:4px 0; }.letters-word-select { margin:4px; }
- .letters-card { padding:8px 12px; }.letters-card-write>.letters-model { display:none; }
- .letters-card-write h2 { display:none; }.letters-trace-picker { display:inline-flex;margin:4px 10px; }
- .letters-card-write .letters-trace { width:min(100%,300px);margin:5px auto; }
- .letters-page .letters-listen { min-height:40px; }.letters-feedback { min-height:18px; }
 }
