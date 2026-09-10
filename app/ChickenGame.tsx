@@ -47,8 +47,7 @@ export function ChickenGame({ onBack }: { onBack: () => void }) {
           const high = Math.max(saved, next.stars);
           saveValue('chicken:stars', high); setBest(high); effects.current('win');
         }
-      }, () => effects.current('sparkle'));
-      setLoaded(true);
+      }, () => effects.current('sparkle'), () => setLoaded(true), () => setError(true));
     }).catch(() => { if (!cancelled) setError(true); });
     return () => { cancelled = true; controller.current?.destroy(); controller.current = null; };
   }, []);
@@ -76,24 +75,30 @@ export function ChickenGame({ onBack }: { onBack: () => void }) {
   const restart = () => { clearControls(); controller.current?.restart(); playSfx('select'); };
   const ended = snapshot.status === 'won' || snapshot.status === 'timeout';
   const timer = `${String(Math.floor(snapshot.remaining / 60)).padStart(2, '0')}:${String(snapshot.remaining % 60).padStart(2, '0')}`;
-  return <main className="chicken-page">
-    <header className="chicken-header">
-      <button onClick={onBack} aria-label="Retour aux jeux"><ArrowLeft /><span>Les jeux</span></button>
-      <div><p>UNE PETITE AVENTURE À LA FERME</p><h1>Lola au poulailler</h1></div>
-      <button onClick={toggleSound} aria-label={soundOn ? 'Couper les sons' : 'Activer les sons'}>{soundOn ? <Volume2 /> : <VolumeX />}</button>
-    </header>
-    <section className="chicken-hud" aria-label="Progression du niveau">
-      <div className="chicken-level"><strong>Niveau 1</strong><span>La cour</span></div>
-      <div className="chicken-counters"><span aria-label={`${snapshot.stars} étoiles sur 3`}><Star /> {snapshot.stars}/3</span><span aria-label={`${snapshot.captured} poules sur 3`}><span aria-hidden="true">🐔</span> <b data-testid="chicken-count">{snapshot.captured}/3</b></span><span aria-label={`${snapshot.remaining} secondes restantes`}><Clock3 /> <b data-testid="chicken-timer">{timer}</b></span></div>
-      <button onClick={snapshot.status === 'paused' ? () => controller.current?.resume() : pause} disabled={snapshot.status !== 'playing' && snapshot.status !== 'paused'} aria-label={snapshot.status === 'paused' ? 'Reprendre la partie' : 'Mettre en pause'}>{snapshot.status === 'paused' ? <Play /> : <Pause />}</button>
-    </section>
+  return <main className="chicken-page" data-status={snapshot.status}>
     <section className="chicken-stage" aria-label="La cour du poulailler">
       <div className="chicken-canvas" ref={host} aria-label="Lola dans la cour, trois poules à guider vers la porte ouverte de l’enclos, à droite." data-testid="chicken-world" />
-      <div className="chicken-control-deck"><div className="chicken-tip"><strong>Approche-toi derrière une poule…</strong><span>Elle avance devant toi, jusqu’à l’enclos !</span><small>Clavier : flèches · ZQSD · WASD</small></div></div>
+      <header className="chicken-header">
+        <div className="chicken-navigation">
+          <button onClick={onBack} aria-label="Retour aux jeux"><ArrowLeft /></button>
+          <div className="chicken-title"><h1>Lola au poulailler</h1><p>Niveau 1 · La cour</p></div>
+        </div>
+        <section className="chicken-hud" aria-label="Progression du niveau">
+          <div className="chicken-counters"><span aria-label={`${snapshot.stars} étoiles sur 3`}><Star /> <b>{snapshot.stars}/3</b></span><span aria-label={`${snapshot.captured} poules sur 3`}><span className="chicken-counter-hen" aria-hidden="true">🐔</span> <b data-testid="chicken-count">{snapshot.captured}/3</b></span><span aria-label={`${snapshot.remaining} secondes restantes`}><Clock3 /> <b data-testid="chicken-timer">{timer}</b></span></div>
+        </section>
+        <div className="chicken-tools">
+          <button onClick={toggleSound} aria-label={soundOn ? 'Couper les sons' : 'Activer les sons'}>{soundOn ? <Volume2 /> : <VolumeX />}</button>
+          <button onClick={snapshot.status === 'paused' ? () => controller.current?.resume() : pause} disabled={snapshot.status !== 'playing' && snapshot.status !== 'paused'} aria-label={snapshot.status === 'paused' ? 'Reprendre la partie' : 'Mettre en pause'}>{snapshot.status === 'paused' ? <Play /> : <Pause />}</button>
+        </div>
+      </header>
+      {snapshot.status === 'playing' && snapshot.remaining > 84 && <aside className="chicken-tip" aria-label="Pour guider les poules">
+        Place-toi derrière une poule pour la faire avancer !
+      </aside>}
       <FloatingJoystick onMove={moveStick} onEnd={endStick} disabled={!loaded || snapshot.status !== 'playing'} />
       {snapshot.status !== 'playing' && <div className="chicken-overlay">
         <section className="chicken-card" aria-labelledby="chicken-card-title">
-          <span className="chicken-card-icon" aria-hidden="true">{ended ? '🌻' : '🐔'}</span>
+          {/* oxlint-disable-next-line next/no-img-element -- Local illustrated game sprite in this Vite application. */}
+          {snapshot.status === 'won' ? <img className="chicken-victory-lola" src="/assets/chicken/lola/victory.png" alt="Lola lève les bras et fête ta réussite" /> : <span className="chicken-card-icon" aria-hidden="true">{ended ? '🌻' : '🐔'}</span>}
           <p className="chicken-card-kicker">{snapshot.status === 'paused' ? 'UNE PETITE PAUSE' : ended ? 'LES POULES TE DISENT MERCI' : 'NIVEAU 1 · LA COUR'}</p>
           <h2 id="chicken-card-title">{error ? 'La cour n’a pas pu s’ouvrir' : snapshot.status === 'paused' ? 'On souffle un peu ?' : snapshot.status === 'won' ? 'Bravo, Lola !' : snapshot.status === 'timeout' ? 'Bien joué, Lola !' : 'Tout le monde à la maison !'}</h2>
           <p>{error ? 'Reviens aux jeux puis ouvre le poulailler.' : snapshot.status === 'ready' ? 'Ramène les 3 poules dans l’enclos. Place-toi derrière elles et elles avanceront devant toi !' : snapshot.status === 'paused' ? 'Les poules t’attendent. Reprends quand tu veux.' : snapshot.status === 'won' ? 'Les 3 poules sont bien rentrées. Une belle équipe !' : `Tu as ramené ${snapshot.captured} ${snapshot.captured === 1 ? 'poule' : 'poules'} sur 3. On essaie encore ensemble ?`}</p>

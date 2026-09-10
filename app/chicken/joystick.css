@@ -1,20 +1,18 @@
 .chicken-joystick-zone {
   --chicken-joystick-diameter: clamp(120px, 13vw, 140px);
-  --chicken-joystick-zone-height: var(--chicken-deck-height, 180px);
   position: absolute;
   z-index: 5;
-  /* The whole visible pad accepts contact. Clip only its artwork at the deck edge,
-     never shift the floating origin or let the thumb cover the playing field. */
-  left: 0;
-  bottom: 0;
-  width: min(46%, 360px);
-  min-width: 140px;
-  height: var(--chicken-joystick-zone-height);
-  overflow: hidden;
+  /* Only this generous lower-left area owns touch input; the scene remains visible beneath it. */
+  left: clamp(24px, 3vw, 40px);
+  bottom: clamp(24px, 4vh, 40px);
+  width: clamp(170px, 27vw, 270px);
+  min-width: 170px;
+  height: clamp(170px, 28vh, 230px);
+  overflow: visible;
   margin: 0;
   padding: 0;
   border: 0;
-  min-inline-size: 140px;
+  min-inline-size: 170px;
   touch-action: none;
   overscroll-behavior: contain;
   user-select: none;
@@ -30,30 +28,30 @@
 
 .chicken-joystick-zone[aria-disabled="true"] {
   pointer-events: none;
-  opacity: 0.3;
+  opacity: 0;
 }
 
 .chicken-joystick-base {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: calc(100% - var(--chicken-joystick-diameter) / 2 - 17px);
+  left: calc(var(--chicken-joystick-diameter) / 2);
   transform: translate(-50%, -50%);
   display: grid;
   place-items: center;
   width: var(--chicken-joystick-diameter);
   height: var(--chicken-joystick-diameter);
-  border: 3px solid rgb(135 86 61 / 56%);
+  border: 3px solid rgb(126 81 55 / 53%);
   border-radius: 50%;
-  background: radial-gradient(circle at 40% 28%, rgb(255 250 226 / 83%), rgb(255 224 209 / 58%));
+  background: radial-gradient(circle at 40% 28%, rgb(255 250 226 / 64%), rgb(255 224 209 / 38%));
   box-shadow: inset 0 0 0 5px rgb(255 255 240 / 40%), 0 4px 0 rgb(111 73 46 / 12%);
-  opacity: 0.54;
+  opacity: 0.56;
   pointer-events: none;
   transition: opacity 160ms ease;
   box-sizing: border-box;
 }
 
 .chicken-joystick-zone[data-active="true"] .chicken-joystick-base {
-  opacity: 0.94;
+  opacity: 0.91;
 }
 
 .chicken-joystick-stick {
@@ -82,8 +80,8 @@
 
 .chicken-joystick-hint {
   position: absolute;
-  bottom: 7px;
-  left: 50%;
+  bottom: -3px;
+  left: calc(var(--chicken-joystick-diameter) / 2);
   width: max-content;
   transform: translateX(-50%);
   color: #694734;
@@ -103,13 +101,16 @@
 
 @media (max-width: 600px) {
   .chicken-joystick-zone {
-    --chicken-joystick-diameter: 120px;
+    --chicken-joystick-diameter: 110px;
   }
 }
 
 @media (max-height: 500px) and (orientation: landscape) {
   .chicken-joystick-zone {
-    --chicken-joystick-diameter: 96px;
+    --chicken-joystick-diameter: 110px;
+    width: 190px;
+    height: 170px;
+    bottom: 24px;
   }
 }
 

@@ -1,0 +1,7 @@
+Use case: illustration-story. Built-in image generator, using the user-supplied Lola au poulailler reference for visual identity and painted cartoon style.
+
+Asset: one 4-column x 4-row Lola character atlas, full-body child with brown high ponytail, expressive brown eyes, pink T-shirt, blue denim overalls and yellow boots. Row1 four forward walking poses; row2 four back walking poses; row3 four right-profile walking poses mirrored in-game for left; row4 idle front, running right, surprised front, victory with raised arms. Consistent scale, elevated2.5D view, isolated sprites centered inside equal cells, generous margins, no labels or scenery. Requested output: true transparent PNG, no checkerboard.
+
+A second built-in edit requested removal of the painted checkerboard while preserving all16 sprites and their layout, with actual RGBA alpha zero outside the figures. The generator still returned RGB. The user then explicitly authorized local script cutout and individual PNG export.
+
+Final export: scripts/chicken-lola-assets.py removes connected neutral background pixels, preserves enclosed eye whites and character details, uses inspected row boundaries, and normalizes sprites to256px squares with an aligned foot baseline. Generated sources remain in output/imagegen; the public lola directory contains only final RGBA frames.

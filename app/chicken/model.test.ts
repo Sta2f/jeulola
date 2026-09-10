@@ -22,6 +22,17 @@ void test("a new level waits for play and always resets its three chickens", () 
   assert.deepEqual(world.chickens.map((hen) => hen.color), ["white", "brown", "black"]);
 });
 
+void test("Lola stops at the new pond shoreline and can walk around it", () => {
+  const world = playing();
+  world.player.x = 220;
+  world.player.y = 580;
+  advance(world, 1, { x: -1, y: 0 });
+  assert.ok(world.player.x >= 162, "water cannot be crossed from the path");
+  advance(world, 0.3, { x: 0, y: 1 });
+  advance(world, 0.6, { x: -1, y: 0 });
+  assert.ok(world.player.x < 146, "the southern path around the pond remains open");
+});
+
 void test("keyboard diagonals cannot be faster and analogue input changes speed", () => {
   const straight = playing();
   const diagonal = playing();

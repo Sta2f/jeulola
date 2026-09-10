@@ -1,0 +1,18 @@
+Use case: illustration-story.
+Asset type: production transparent PNG sprite atlas for the children's game "Lola au poulailler".
+Input image 1 is a STYLE AND CHARACTER REFERENCE ONLY. Use ONLY the three adult hens shown in its "Poules – Sprites" section: creamy-white hen, warm reddish-brown hen, charcoal-black hen. Reproduce their plump friendly body shapes, expressive eyes, red combs, orange beaks and legs, layered painted feathers, warm brown drawn outlines and softly painted cartoon-storybook shading. Do not reproduce any other element of the reference sheet.
+
+Create ONE landscape sprite sheet with a STRICT regular grid of EXACTLY 6 columns by 3 rows, 18 individually isolated chicken sprites, six different poses of each of the same three chickens. Canvas aspect ratio EXACTLY 2:1, preferably 3072x1536, otherwise 1536x768. Each invisible tile is SQUARE and the same size. Align centers of the six columns at 8.333%,25%,41.667%,58.333%,75%,91.667% of canvas width; centers of the three rows at 16.667%,50%,83.333% of canvas height. NOTHING outside these eighteen tiles.
+Row 1: the CREAMY WHITE chicken in all six poses.
+Row 2: the REDDISH-BROWN chicken in all six poses.
+Row 3: the CHARCOAL BLACK chicken in all six poses.
+All chickens face SCREEN RIGHT in readable three-quarter side profile, except the seated pose can turn slightly toward camera while still oriented right.
+Columns left to right, identical animation meaning in every row:
+1. IDLE: normal upright side-profile stance, beak right, both feet on ground.
+2. PECKING: bends neck and lowers beak toward ground, rump up, visibly different silhouette.
+3. WALK LEFT FOOT: walking pose, left foot steps forward, right foot back, small natural wing movement.
+4. WALK RIGHT FOOT: opposite walking pose, right foot forward, left foot back, visibly different leg placement from column 3.
+5. PANICKED RUN: funny energetic running pose, both wings clearly raised/spread, beak open, one leg extended, friendly surprised expression. No detached symbols.
+6. HAPPY CAPTURED: content relaxed sitting chicken, wings folded, eyes softly happy. No nest, no box, no hearts, no other props.
+
+Production alignment constraints: same body scale and character proportions across all six frames of each hen. Every whole sprite including comb, wing tips, tail and feet MUST fit within its own tile with at least 12% empty margin left and right and above. Baseline of feet/body on the same 88%-90% height inside each square tile. No clipping, overlapping, off-grid placement, extra chickens, shared backgrounds or grid lines. Each sprite occupies roughly 70%-76% of its tile width at most. Actual clean alpha transparency around all sprites. COMPLETELY TRANSPARENT BACKGROUND: no white, no colored background, no baked checkerboard, no shadow rectangle, no scenery, no cast ground shadow. Transparent PNG RGBA. Crisp large readable illustrated chicken artwork, not geometric icons, not emoji, not vectors. NO letters, labels, numbers, titles, watermark or text anywhere.

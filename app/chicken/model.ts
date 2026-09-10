@@ -14,6 +14,11 @@ export const OBSTACLES: Rectangle[] = [
   { x: 570, y: 100, width: 50, height: 45 },
   { x: 50, y: 70, width: 70, height: 65 },
   { x: 110, y: 450, width: 80, height: 55 },
+  { x: 12, y: 546, width: 134, height: 67 }, // Pond shoreline, not its tall reeds.
+  { x: 307, y: 106, width: 22, height: 22 }, // Scarecrow post.
+  { x: 639, y: 113, width: 67, height: 30 }, // Crates and bucket.
+  { x: 708, y: 110, width: 107, height: 49 }, // Coop ramp.
+  { x: 860, y: 201, width: 72, height: 18 }, // Feeder inside the pen.
 ];
 
 export type Player = Vec2 & { vx: number; vy: number; facing: Facing };
