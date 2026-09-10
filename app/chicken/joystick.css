@@ -1,0 +1,121 @@
+.chicken-joystick-zone {
+  --chicken-joystick-diameter: clamp(120px, 13vw, 140px);
+  --chicken-joystick-zone-height: var(--chicken-deck-height, 180px);
+  position: absolute;
+  z-index: 5;
+  /* The whole visible pad accepts contact. Clip only its artwork at the deck edge,
+     never shift the floating origin or let the thumb cover the playing field. */
+  left: 0;
+  bottom: 0;
+  width: min(46%, 360px);
+  min-width: 140px;
+  height: var(--chicken-joystick-zone-height);
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 140px;
+  touch-action: none;
+  overscroll-behavior: contain;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: grab;
+  font: inherit;
+}
+
+.chicken-joystick-zone[data-active="true"] {
+  cursor: grabbing;
+}
+
+.chicken-joystick-zone[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.chicken-joystick-base {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: var(--chicken-joystick-diameter);
+  height: var(--chicken-joystick-diameter);
+  border: 3px solid rgb(135 86 61 / 56%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 28%, rgb(255 250 226 / 83%), rgb(255 224 209 / 58%));
+  box-shadow: inset 0 0 0 5px rgb(255 255 240 / 40%), 0 4px 0 rgb(111 73 46 / 12%);
+  opacity: 0.54;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+  box-sizing: border-box;
+}
+
+.chicken-joystick-zone[data-active="true"] .chicken-joystick-base {
+  opacity: 0.94;
+}
+
+.chicken-joystick-stick {
+  width: 43%;
+  height: 43%;
+  border: 3px solid #a86e64;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, #ffe5ed 0%, #f4b7c9 62%, #e99bb8 100%);
+  box-shadow: inset 0 3px 0 rgb(255 255 255 / 65%), 0 4px 0 rgb(132 81 62 / 15%), 0 6px 13px rgb(105 61 43 / 12%);
+  box-sizing: border-box;
+  will-change: transform;
+}
+
+.chicken-joystick-mark {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgb(141 97 69 / 42%);
+}
+
+.chicken-joystick-mark-up { top: 12%; }
+.chicken-joystick-mark-right { right: 12%; }
+.chicken-joystick-mark-down { bottom: 12%; }
+.chicken-joystick-mark-left { left: 12%; }
+
+.chicken-joystick-hint {
+  position: absolute;
+  bottom: 7px;
+  left: 50%;
+  width: max-content;
+  transform: translateX(-50%);
+  color: #694734;
+  font-size: clamp(10px, 1.2vw, 12px);
+  line-height: 1.25;
+  font-weight: 800;
+  text-align: center;
+  text-shadow: 0 1px 3px #fff8e7, 0 0 7px #fff8e7;
+  opacity: 0.8;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+.chicken-joystick-zone[data-active="true"] .chicken-joystick-hint {
+  opacity: 0;
+}
+
+@media (max-width: 600px) {
+  .chicken-joystick-zone {
+    --chicken-joystick-diameter: 120px;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .chicken-joystick-zone {
+    --chicken-joystick-diameter: 96px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chicken-joystick-base,
+  .chicken-joystick-hint {
+    transition: none;
+  }
+}

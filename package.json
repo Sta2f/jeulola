@@ -8,6 +8,7 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "oxlint app components/ui/button.tsx lib/utils.ts",
+    "test:chicken": "node --experimental-strip-types --test app/chicken/model.test.ts",
     "format": "oxfmt"
   },
   "dependencies": {
@@ -15,6 +16,7 @@
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "lucide-react": "1.31.0",
+    "phaser": "3.90.0",
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "tailwind-merge": "3.6.0",

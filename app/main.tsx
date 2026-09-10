@@ -13,6 +13,8 @@ import './play-space.css';
 import './stories.css';
 import './differences.css';
 import './letters.css';
+import './chicken.css';
+import './chicken/joystick.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
