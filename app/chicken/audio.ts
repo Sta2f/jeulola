@@ -1,12 +1,20 @@
 export type FarmSound = 'step' | 'cluck' | 'flap' | 'capture' | 'win' | 'select';
 export type FarmAudioAssets = Partial<Record<FarmSound | 'ambience', string | readonly string[]>>;
 
-const LEVEL: Record<FarmSound, number> = { step: .2, cluck: .46, flap: .3, capture: .55, win: .65, select: .3 };
+const LEVEL: Record<FarmSound, number> = { step: .32, cluck: .46, flap: .4, capture: .55, win: .65, select: .3 };
 const COOLDOWN: Record<FarmSound, number> = { step: 175, cluck: 900, flap: 500, capture: 90, win: 1200, select: 100 };
 const GAME_SOUNDS = new Set<FarmSound>(['step', 'cluck', 'flap']);
 
-/** Recorded audio only. Missing catalogue assets are deliberately left silent. */
-export function createFarmAudio(assets: FarmAudioAssets = {}) {
+// Locally hosted recordings; source attribution is available in the game credits.
+const FARM_ASSETS: FarmAudioAssets = {
+  ambience: '/assets/chicken/audio/farm-ambience.mp3',
+  step: [1, 2, 3, 4].map(id => `/assets/chicken/audio/step-${id}.mp3`),
+  cluck: [1, 2, 3].map(id => `/assets/chicken/audio/cluck-${id}.mp3`),
+  flap: '/assets/chicken/audio/wings.mp3',
+};
+
+/** Recorded ambience and movement effects, unlocked by a trusted game gesture. */
+export function createFarmAudio(assets: FarmAudioAssets = FARM_ASSETS) {
   let context: AudioContext | null = null;
   let master: GainNode | null = null;
   let ambience: AudioBufferSourceNode | null = null;
@@ -98,7 +106,9 @@ export function createFarmAudio(assets: FarmAudioAssets = {}) {
       master.connect(context.destination);
     }
     unlocked = true;
-    if (context.state === 'suspended') void context.resume().then(syncAmbience).catch(() => undefined);
+    // iOS can report "interrupted" after a call or an app switch. Resume on
+    // every trusted gesture, also covering a visibility suspend still pending.
+    if (context.state !== 'closed') void context.resume().then(syncAmbience).catch(() => undefined);
     void load();
     syncAmbience();
   }

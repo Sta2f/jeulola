@@ -44,6 +44,8 @@
 .chicken-page .chicken-primary { margin:9px auto;min-width:185px;min-height:53px;padding:9px 20px;border-color:#638539;border-radius:13px;background:linear-gradient(#b5d877,#87b44f);color:#304d1b;font-size:19px;text-shadow:0 1px #d9eea9;box-shadow:inset 0 2px #d8ec9d,0 4px 0 #577c32,0 6px 10px #69572e25; }
 .chicken-page .chicken-secondary { display:flex;margin:6px auto;min-height:40px;background:transparent;border:0;box-shadow:none;font-size:12px;color:#8c683d; }
 .chicken-card > small { display:block;margin-top:10px;font-size:10px;color:#9a7d51; }
+.chicken-audio-credits { display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:6px 12px;color:#775532;font-size:11px;text-underline-offset:3px; }
+.chicken-audio-credits:focus-visible { outline:3px solid #7c3e69;outline-offset:2px;border-radius:7px; }
 .chicken-result-stars { display:flex;justify-content:center;gap:10px;margin:16px 0; }
 .chicken-result-stars svg { width:43px;height:43px;color:#c3aa80;fill:#dbc89f; }
 .chicken-result-stars .earned { color:#bd8124;fill:#ffd252;filter:drop-shadow(0 2px #fff8d4); }

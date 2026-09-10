@@ -141,6 +141,7 @@ export function ChickenGame({ onBack }: { onBack: () => void }) {
           {nextLevel && <button className="chicken-secondary" onClick={() => restart()}><RotateCcw />Rejouer</button>}
           {(ended || snapshot.status === 'paused') && <button className="chicken-secondary" onClick={() => selectLevel(snapshot.level)}>Choisir un niveau</button>}
           <small><span className="chicken-level-record">{progress.stars[level.id - 1] > 0 ? `Mon meilleur résultat : ${progress.stars[level.id - 1]}/3 étoiles` : 'Chaque poule rentrée est une petite victoire !'}</span><span className="chicken-total-stars">{completed}/10 niveaux réussis · {totalStars}/30 étoiles</span></small>
+          <a className="chicken-audio-credits" href="/assets/chicken/audio/credits.html" target="_blank" rel="noopener noreferrer">Crédits des sons</a>
         </section>
       </div>}
     </section>

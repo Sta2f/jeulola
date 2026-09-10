@@ -45,10 +45,16 @@ combinent les poses, le mouvement, les plumes, la poussière et les ombres ; feu
 papillons et eau bougent discrètement. Les images ne constituent jamais un niveau
 unique aplati. Les œufs restent hors de cette version.
 
-Les sons de sélection, capture et victoire existants sont conservés. Le moteur
-d’ambiance attend les fichiers Artlist demandés : son manifeste reste vide tant
-que le connecteur Artlist n’est pas accessible. Aucun enregistrement de remplacement
-n’est distribué avec le jeu.
+Les sons de sélection, capture et victoire sont accompagnés d’enregistrements
+récupérés sur YouTube : ambiance de ferme en boucle, trois caquètements, battements
+d’ailes et quatre variantes de pas dans l’herbe. Les neuf MP3 sont servis localement
+depuis `public/assets/chicken/audio` (environ 770 Ko), sans lecteur YouTube ni compte
+externe pendant la partie. Les sources, licences et adaptations sont indiquées dans
+`public/assets/chicken/audio/CREDITS.md` et dans la page « Crédits des sons » du jeu.
+Le clic de démarrage active Web Audio ; pause, onglet masqué, son coupé et sortie
+arrêtent les enregistrements. Le volume et la préférence de son restent partagés
+avec les autres jeux. Les effets sont espacés pour garder les douze poules agréables
+à écouter ; la boucle de 40 secondes utilise un fondu croisé de deux secondes.
 
 Les prompts sont conservés avec les assets et les scripts de détourage dans
 `scripts/chicken-*-assets.py`. Les scripts utilisent Pillow/NumPy (SciPy pour les
