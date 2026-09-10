@@ -1,8 +1,31 @@
 # Lola au poulailler — crédits des sons
 
-Enregistrements récupérés sur YouTube le 10 septembre 2026 et adaptés pour le jeu.
+Les bruits de ferme ont été récupérés sur YouTube le 10 septembre 2026 et adaptés pour le jeu.
+Les deux effets de capture et de victoire proviennent de fichiers Artlist fournis par le propriétaire du jeu.
 Les auteurs ne parrainent pas ce projet. Les sons restent disponibles sous leurs
 licences respectives. La page `credits.html` présente ces attributions aux joueurs.
+
+## Capture d’une poule
+
+- Fichier : `capture-ni-sound.mp3`.
+- Œuvre : **Game Win Short Chime Sweep**.
+- Auteur : **Ni Sound**.
+- Collection : **Matching Game**.
+- Provenance : fichier WAV fourni par le propriétaire du jeu depuis **Artlist** pour cette intégration.
+- Droits : conditions **Artlist** applicables au fichier fourni ; aucune licence Creative Commons n’est attribuée à cet enregistrement.
+- Adaptations : enregistrement intégral de 3,5 s, ajustement uniforme du volume,
+  stéréo conservée, conversion en MP3 44,1 kHz à 192 kbit/s. Aucune découpe ; fin naturelle conservée.
+
+## Victoire du niveau
+
+- Fichier : `win-tomas-herudek.mp3`.
+- Œuvre : **You Win Horn**.
+- Auteur : **Tomas Herudek**.
+- Collection : **Cinematic Logos**.
+- Provenance : fichier WAV fourni par le propriétaire du jeu depuis **Artlist** pour cette intégration.
+- Droits : conditions **Artlist** applicables au fichier fourni ; aucune licence Creative Commons n’est attribuée à cet enregistrement.
+- Adaptations : enregistrement intégral de 1,54 s, ajustement uniforme du volume,
+  mono conservé, conversion en MP3 44,1 kHz à 160 kbit/s. Aucune découpe ; fin naturelle conservée.
 
 ## Ambiance de ferme
 
@@ -48,5 +71,6 @@ licences respectives. La page `credits.html` présente ces attributions aux joue
 - Adaptations : quatre extraits de 0,42 s commençant à 5,68, 9,48, 14,56 et 20,48 s ;
   égalisation, normalisation des crêtes, fondus de 25 ms, conversion en MP3 mono.
 
-Les petits sons de sélection, réussite et victoire sont les sons déjà présents dans
-Les aventures de Lola. Les fichiers ci-dessus sont des enregistrements, pas des sons Artlist.
+Les petits sons de sélection sont les sons déjà présents dans Les aventures de Lola.
+Les sons de capture et de victoire sont les deux enregistrements Artlist fournis pour ce jeu ;
+les neuf autres MP3 conservent les sources et licences précisées dans leurs sections.

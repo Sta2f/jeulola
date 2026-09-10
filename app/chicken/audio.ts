@@ -2,7 +2,7 @@ export type FarmSound = 'step' | 'cluck' | 'flap' | 'capture' | 'win' | 'select'
 export type FarmAudioAssets = Partial<Record<FarmSound | 'ambience', string | readonly string[]>>;
 
 const LEVEL: Record<FarmSound, number> = { step: .32, cluck: .46, flap: .4, capture: .55, win: .65, select: .3 };
-const COOLDOWN: Record<FarmSound, number> = { step: 175, cluck: 900, flap: 500, capture: 90, win: 1200, select: 100 };
+const COOLDOWN: Record<FarmSound, number> = { step: 175, cluck: 900, flap: 500, capture: 0, win: 1200, select: 100 };
 const GAME_SOUNDS = new Set<FarmSound>(['step', 'cluck', 'flap']);
 
 // Locally hosted recordings; source attribution is available in the game credits.
@@ -11,6 +11,8 @@ const FARM_ASSETS: FarmAudioAssets = {
   step: [1, 2, 3, 4].map(id => `/assets/chicken/audio/step-${id}.mp3`),
   cluck: [1, 2, 3].map(id => `/assets/chicken/audio/cluck-${id}.mp3`),
   flap: '/assets/chicken/audio/wings.mp3',
+  capture: '/assets/chicken/audio/capture-ni-sound.mp3',
+  win: '/assets/chicken/audio/win-tomas-herudek.mp3',
 };
 
 /** Recorded ambience and movement effects, unlocked by a trusted game gesture. */
@@ -115,6 +117,8 @@ export function createFarmAudio(assets: FarmAudioAssets = FARM_ASSETS) {
 
   function setPlaying(value: boolean) {
     if (destroyed) return;
+    // Starting the next round also ends any celebration from the result screen.
+    if (value && !playing) stopAll();
     playing = value;
     if (!value) {
       stopAll();

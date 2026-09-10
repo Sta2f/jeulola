@@ -28,8 +28,6 @@ export function ChickenGame({ onBack }: { onBack: () => void }) {
   const [error, setError] = useState(false);
   const { soundOn, playSfx, toggleSound } = useGameAudio('traffic');
   const settings = useAudioSettings();
-  const effects = useRef(playSfx);
-  useEffect(() => { effects.current = playSfx; }, [playSfx]);
   useEffect(() => { audio.current?.setVolume(settings.enabled, settings.volume); }, [settings]);
   const sendMovement = useCallback(() => {
     let x = 0, y = 0;
@@ -46,6 +44,7 @@ export function ChickenGame({ onBack }: { onBack: () => void }) {
 
   useEffect(() => {
     let cancelled = false;
+    let captured = 0;
     const farmAudio = createFarmAudio(); audio.current = farmAudio;
     const savedAudio = getAudioSettings(); farmAudio.setVolume(savedAudio.enabled, savedAudio.volume);
     void import('./chicken/createGame').then(({ createChickenGame }) => {
@@ -54,14 +53,18 @@ export function ChickenGame({ onBack }: { onBack: () => void }) {
         const previous = status.current;
         status.current = next.status; setSnapshot(next);
         farmAudio.setPlaying(next.status === 'playing');
+        // Process rewards after stopping gameplay audio, so the final hen's
+        // chime and the victory horn can finish on the result screen.
+        for (let count = captured; count < next.captured; count++) farmAudio.play('capture');
+        captured = next.captured;
         if (next.status !== 'playing') { keys.current.clear(); stick.current = { x: 0, y: 0 }; }
         if (next.status === 'won' && previous !== 'won') {
           const saved = recordLevelResult(readProgress(), next.level, next.stars);
           saveValue('chicken:progress', saved);
           if (next.level === 1) saveValue('chicken:stars', saved.stars[0]);
-          setProgress(saved); effects.current('win');
+          setProgress(saved); farmAudio.play('win');
         }
-      }, () => effects.current('sparkle'), () => setLoaded(true), () => setError(true), initialLevel.current, sound => farmAudio.play(sound));
+      }, () => {}, () => setLoaded(true), () => setError(true), initialLevel.current, sound => farmAudio.play(sound));
     }).catch(() => { if (!cancelled) setError(true); });
     return () => { cancelled = true; farmAudio.destroy(); audio.current = null; controller.current?.destroy(); controller.current = null; };
   }, []);

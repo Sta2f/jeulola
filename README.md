@@ -45,10 +45,14 @@ combinent les poses, le mouvement, les plumes, la poussière et les ombres ; feu
 papillons et eau bougent discrètement. Les images ne constituent jamais un niveau
 unique aplati. Les œufs restent hors de cette version.
 
-Les sons de sélection, capture et victoire sont accompagnés d’enregistrements
-récupérés sur YouTube : ambiance de ferme en boucle, trois caquètements, battements
-d’ailes et quatre variantes de pas dans l’herbe. Les neuf MP3 sont servis localement
-depuis `public/assets/chicken/audio` (environ 770 Ko), sans lecteur YouTube ni compte
+Chaque poule capturée déclenche **Game Win Short Chime Sweep** de **Ni Sound**
+(Matching Game), et la victoire du niveau déclenche **You Win Horn** de **Tomas Herudek**
+(Cinematic Logos). Ces deux sons Artlist ont été fournis par le propriétaire du jeu ;
+les enregistrements complets et leurs fins naturelles sont conservés.
+Ils accompagnent les enregistrements récupérés sur YouTube : ambiance de ferme en boucle,
+trois caquètements, battements d’ailes et quatre variantes de pas dans l’herbe.
+Les onze MP3 sont servis localement
+depuis `public/assets/chicken/audio` (environ 890 Ko), sans lecteur YouTube ni compte
 externe pendant la partie. Les sources, licences et adaptations sont indiquées dans
 `public/assets/chicken/audio/CREDITS.md` et dans la page « Crédits des sons » du jeu.
 Le clic de démarrage active Web Audio ; pause, onglet masqué, son coupé et sortie
