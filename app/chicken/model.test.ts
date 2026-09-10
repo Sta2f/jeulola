@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { createWorld, startWorld, stepWorld, PEN, OBSTACLES } from "./model.ts";
 import type { WorldState, Vec2 } from "./model.ts";
+import { LEVELS, getLevel } from "./levels.ts";
 
 const still = { x: 0, y: 0 };
 function advance(world: WorldState, seconds: number, input: Vec2 = still) {
@@ -211,4 +212,118 @@ void test("the simulation is deterministic with the same controls", () => {
   advance(first, 3, { x: 0.4, y: -0.2 });
   advance(second, 3, { x: 0.4, y: -0.2 });
   assert.deepEqual(first, second);
+});
+
+void test("ten levels add one hen each, increase speed gently and keep every spawn clear", () => {
+  assert.equal(LEVELS.length, 10);
+  for (const [index, level] of LEVELS.entries()) {
+    const world = createWorld(level.id);
+    assert.equal(world.level, level);
+    assert.equal(world.chickens.length, index + 3);
+    assert.equal(level.timeLimit, 90 + index * 5);
+    assert.equal(level.speedMultiplier, 1 + index * 0.05);
+    for (const hen of world.chickens) {
+      assert.ok(hen.x > 35 + 13 && hen.x < PEN.x - 18);
+      assert.ok(hen.y > 100 + 13 && hen.y < 630 - 13);
+      assert.ok(Math.hypot(hen.x - world.player.x, hen.y - world.player.y) > 29);
+      for (const obstacle of OBSTACLES) {
+        assert.ok(hen.x <= obstacle.x - 13 || hen.x >= obstacle.x + obstacle.width + 13
+          || hen.y <= obstacle.y - 13 || hen.y >= obstacle.y + obstacle.height + 13,
+        `level ${level.id}, hen ${hen.id}: clear of scenery`);
+      }
+      for (const other of world.chickens.slice(hen.id + 1)) {
+        assert.ok(Math.hypot(hen.x - other.x, hen.y - other.y) > 26);
+      }
+    }
+  }
+});
+
+void test("invalid or stale level numbers select an existing level", () => {
+  for (const value of [-40, 0, Number.NaN, Infinity, -Infinity]) {
+    assert.equal(createWorld(value).level.id, 1);
+  }
+  assert.equal(getLevel(2.9).id, 2);
+  assert.equal(createWorld(100).level.id, 10);
+});
+
+void test("later hens flee faster while even the quickest panicked hen remains slower than Lola", () => {
+  let previousSpeed = 0;
+  for (const level of LEVELS) {
+    const world = startWorld(createWorld(level.id));
+    const hen = world.chickens[1];
+    hen.x = 500;
+    hen.y = 350;
+    world.player.x = 460;
+    world.player.y = 350;
+    stepWorld(world, { x: 0, y: 1 }, 1 / 60);
+    assert.equal(hen.state, "panic");
+    const speed = Math.hypot(hen.vx, hen.vy);
+    assert.ok(speed > previousSpeed);
+    assert.ok(speed < Math.hypot(world.player.vx, world.player.vy));
+    previousSpeed = speed;
+  }
+});
+
+void test("all twelve captured hens have distinct resting places inside the pen", () => {
+  const places = new Set<string>();
+  for (let id = 0; id < 12; id += 1) {
+    const world = startWorld(createWorld(10));
+    const hen = world.chickens[id];
+    hen.x = 725;
+    hen.y = 320;
+    world.player.x = 640;
+    world.player.y = 320;
+    advance(world, 1, { x: 0.55, y: 0 });
+    assert.equal(hen.state, "captured", `hen ${id} enters the gate`);
+    world.player.x = 300;
+    world.player.y = 630;
+    advance(world, 4);
+    assert.ok(hen.x > PEN.x + 18 && hen.x < PEN.x + PEN.width - 18);
+    assert.ok(hen.y > 232 && hen.y < PEN.y + PEN.height - 18);
+    places.add(`${Math.round(hen.x)},${Math.round(hen.y)}`);
+  }
+  assert.equal(places.size, 12);
+});
+
+void test("every level can be herded from its own spawns through the real gate", () => {
+  for (const level of LEVELS) {
+    const world = startWorld(createWorld(level.id));
+    for (const hen of world.chickens) {
+      for (let frame = 0; frame < 1800 && hen.state !== "captured" && world.status === "playing"; frame += 1) {
+        const toGate = { x: 805 - hen.x, y: 320 - hen.y };
+        const magnitude = Math.hypot(toGate.x, toGate.y);
+        world.player.x = hen.x - toGate.x / magnitude * 82;
+        world.player.y = hen.y - toGate.y / magnitude * 82;
+        stepWorld(world, still, 1 / 60);
+      }
+      assert.equal(hen.state, "captured", `level ${level.id}, hen ${hen.id} reaches the entrance`);
+    }
+    assert.equal(world.status, "won");
+    assert.equal(world.captured, level.chickenCount);
+    assert.ok(world.elapsed < level.timeLimit);
+  }
+});
+
+void test("each level uses its own deadline and proportional star thresholds", () => {
+  for (const level of LEVELS) {
+    const timeout = startWorld(createWorld(level.id));
+    timeout.elapsed = level.timeLimit - 0.05;
+    advance(timeout, 0.1);
+    assert.equal(timeout.status, "timeout");
+    assert.equal(timeout.elapsed, level.timeLimit);
+    for (const [fraction, stars] of [[0.2, 3], [0.7, 2], [0.9, 1]]) {
+      const world = startWorld(createWorld(level.id));
+      world.elapsed = level.timeLimit * fraction;
+      world.captured = world.chickens.length - 1;
+      world.chickens.slice(1).forEach((hen) => { hen.state = "captured"; });
+      const hen = world.chickens[0];
+      hen.x = PEN.x + 16;
+      hen.y = 320;
+      world.player.x = 690;
+      world.player.y = 320;
+      advance(world, 0.1);
+      assert.equal(world.status, "won");
+      assert.equal(world.stars, stars, `level ${level.id}, ${fraction} elapsed`);
+    }
+  }
 });

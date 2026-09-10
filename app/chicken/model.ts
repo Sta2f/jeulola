@@ -1,3 +1,6 @@
+import { getLevel } from "./levels.ts";
+import type { LevelConfig } from "./levels.ts";
+
 /** The level uses world coordinates so keyboard and touch share the same physics. */
 export type Vec2 = { x: number; y: number };
 export type Facing = "up" | "down" | "left" | "right";
@@ -34,6 +37,7 @@ export type Chicken = Player & {
   lastFlee: Vec2;
 };
 export type WorldState = {
+  level: LevelConfig;
   player: Player;
   chickens: Chicken[];
   elapsed: number;
@@ -45,7 +49,6 @@ export type WorldState = {
 const PLAYER_RADIUS = 16;
 const CHICKEN_RADIUS = 13;
 const PLAYER_SPEED = 188;
-const TIME_LIMIT = 90;
 const BOUNDS = { left: 35, right: 965, top: 100, bottom: 630 };
 const GATE_CENTER = (PEN.gateTop + PEN.gateBottom) / 2;
 const CAPTURE_X = PEN.x + CHICKEN_RADIUS + 4;
@@ -102,14 +105,20 @@ function chicken(id: number, color: Chicken["color"], x: number, y: number): Chi
   };
 }
 
-export function createWorld(): WorldState {
+const SPAWNS: readonly Vec2[] = [
+  { x: 440, y: 260 }, { x: 615, y: 415 }, { x: 455, y: 535 },
+  { x: 315, y: 235 }, { x: 535, y: 340 }, { x: 650, y: 235 },
+  { x: 280, y: 535 }, { x: 615, y: 560 }, { x: 405, y: 145 },
+  { x: 690, y: 490 }, { x: 145, y: 330 }, { x: 435, y: 425 },
+];
+const COLORS: readonly Chicken["color"][] = ["white", "brown", "black"];
+
+export function createWorld(levelNumber = 1): WorldState {
+  const level = getLevel(levelNumber);
   return {
+    level,
     player: { x: 315, y: 390, vx: 0, vy: 0, facing: "down" },
-    chickens: [
-      chicken(0, "white", 440, 260),
-      chicken(1, "brown", 615, 415),
-      chicken(2, "black", 455, 535),
-    ],
+    chickens: SPAWNS.slice(0, level.chickenCount).map(({ x, y }, id) => chicken(id, COLORS[id % COLORS.length], x, y)),
     elapsed: 0, captured: 0, status: "ready", stars: 0,
   };
 }
@@ -189,7 +198,10 @@ function capture(world: WorldState, hen: Chicken) {
 function tickChicken(world: WorldState, hen: Chicken, dt: number) {
   if (hen.state === "captured") {
     // Walk into a distinct, visible resting place after passing the real entrance.
-    const resting = { x: 845 + (hen.id % 2) * 48, y: 220 + hen.id * 65 };
+    // Twelve resting places stay below the feeder and inside every pen wall.
+    const resting = world.level.id === 1
+      ? { x: 845 + (hen.id % 2) * 48, y: 220 + hen.id * 65 }
+      : { x: 817 + (hen.id % 3) * 55, y: 246 + Math.floor(hen.id / 3) * 45 };
     const remaining = { x: resting.x - hen.x, y: resting.y - hen.y };
     const distance = length(remaining);
     const direction = unit(remaining);
@@ -231,9 +243,10 @@ function tickChicken(world: WorldState, hen: Chicken, dt: number) {
       x: Math.cos(hen.wanderClock * 0.64 + hen.phase) + homeOffset.x * 0.06,
       y: Math.sin(hen.wanderClock * 0.71 + hen.phase) * 0.65 + homeOffset.y * 0.06,
     });
-    speed = wandering ? 14 + hen.id * 2 : 0;
+    speed = wandering ? 14 + (hen.id % 3) * 2 : 0;
   }
 
+  speed *= world.level.speedMultiplier;
   hen.vx = direction.x * speed;
   hen.vy = direction.y * speed;
   const previousX = hen.x;
@@ -276,18 +289,19 @@ export function stepWorld(world: WorldState, input: Vec2, dtSeconds: number): Wo
   if (!Number.isFinite(dtSeconds) || dtSeconds <= 0) return world;
 
   // A background-tab resume must not consume the level or propel Lola across it.
-  let remaining = Math.min(dtSeconds, 0.25, TIME_LIMIT - world.elapsed);
+  const timeLimit = world.level.timeLimit;
+  let remaining = Math.min(dtSeconds, 0.25, timeLimit - world.elapsed);
   while (remaining > 0.000001 && world.status === "playing") {
     const dt = Math.min(remaining, 1 / 60);
     move(world.player, { x: world.player.vx * dt, y: world.player.vy * dt }, PLAYER_RADIUS);
-    world.elapsed = Math.min(TIME_LIMIT, world.elapsed + dt);
+    world.elapsed = Math.min(timeLimit, world.elapsed + dt);
     for (const hen of world.chickens) tickChicken(world, hen, dt);
     if (world.captured === world.chickens.length) {
       world.status = "won";
-      world.stars = world.elapsed <= 50 ? 3 : world.elapsed <= 75 ? 2 : 1;
+      world.stars = world.elapsed <= timeLimit * 50 / 90 ? 3 : world.elapsed <= timeLimit * 75 / 90 ? 2 : 1;
       stopActors(world);
-    } else if (world.elapsed >= TIME_LIMIT - 0.000001) {
-      world.elapsed = TIME_LIMIT;
+    } else if (world.elapsed >= timeLimit - 0.000001) {
+      world.elapsed = timeLimit;
       world.status = "timeout";
       stopActors(world);
     }

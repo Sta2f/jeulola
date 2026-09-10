@@ -3,20 +3,21 @@ import Phaser from 'phaser';
 import { createWorld, startWorld, stepWorld, WORLD, PEN, type Vec2, type WorldState } from './model';
 import { createFarmTextures, preloadFarmAssets, drawFarm } from './art';
 
-export type FarmSnapshot = { status: WorldState['status']; captured: number; remaining: number; stars: number };
+export type FarmSnapshot = { status: WorldState['status']; captured: number; remaining: number; stars: number; level: number; total: number };
+export type FarmSound = 'step' | 'cluck' | 'flap';
 export type FarmController = ReturnType<typeof createChickenGame>;
 const LOLA_SIZE = 146;
 const HEN_SIZE = 114;
 const POSES = ['idle', 'peck', 'walk-0', 'walk-1', 'panic', 'captured'];
 
 /** World coordinates and physics remain fixed; only the illustrated camera viewport resizes. */
-export function createChickenGame(parent: HTMLDivElement, onChange: (snapshot: FarmSnapshot) => void, onCapture: () => void, onReady: () => void = () => {}, onError: () => void = () => {}) {
-  let world = createWorld();
+export function createChickenGame(parent: HTMLDivElement, onChange: (snapshot: FarmSnapshot) => void, onCapture: () => void, onReady: () => void = () => {}, onError: () => void = () => {}, initialLevel = 1, onSound: (sound: FarmSound) => void = () => {}) {
+  let world = createWorld(initialLevel);
   let input: Vec2 = { x: 0, y: 0 };
   let lastSnapshot = '';
   let sceneReady = false;
   const publish = () => {
-    const snapshot = { status: world.status, captured: world.captured, remaining: Math.max(0, Math.ceil(90 - world.elapsed)), stars: world.stars };
+    const snapshot = { status: world.status, captured: world.captured, remaining: Math.max(0, Math.ceil(world.level.timeLimit - world.elapsed)), stars: world.stars, level: world.level.id, total: world.chickens.length };
     const serialized = JSON.stringify(snapshot);
     if (serialized !== lastSnapshot) { lastSnapshot = serialized; onChange(snapshot); }
   };
@@ -33,6 +34,9 @@ export function createChickenGame(parent: HTMLDivElement, onChange: (snapshot: F
     private focus = new Phaser.Math.Vector2();
     private clock = 0;
     private lastDust = 0;
+    private lastStep = 0;
+    private lastCluck = 0;
+    private lastFlap = 0;
     private reactionUntil = 0;
     private cameraReset = true;
     private failed = false;
@@ -51,9 +55,7 @@ export function createChickenGame(parent: HTMLDivElement, onChange: (snapshot: F
       this.ambient = drawFarm(this);
       this.lolaShadow = this.add.image(0, 0, 'shadow').setDisplaySize(68, 23);
       this.lola = this.add.image(0, 0, 'lola-idle-down').setOrigin(.5, .96).setDisplaySize(LOLA_SIZE, LOLA_SIZE);
-      this.hens = world.chickens.map(chicken => this.add.image(chicken.x, chicken.y, `hen-${chicken.color}-idle`).setOrigin(.5, .945).setDisplaySize(HEN_SIZE, HEN_SIZE));
-      this.shadows = world.chickens.map(() => this.add.image(0, 0, 'shadow').setDisplaySize(68, 21));
-      this.panic = world.chickens.map(() => this.add.text(0, 0, '!', { fontFamily: 'Georgia, serif', fontSize: '25px', fontStyle: 'bold', color: '#b65335', stroke: '#fff5da', strokeThickness: 5 }).setOrigin(.5));
+      this.syncHens();
       const plate = this.add.graphics().fillStyle(0xffedc6, .88).lineStyle(2, 0xab743d, .85).fillRoundedRect(-51, -20, 102, 40, 13).strokeRoundedRect(-51, -20, 102, 40, 13);
       const label = this.add.text(-7, 0, 'Enclos', { fontFamily: 'Trebuchet MS, sans-serif', fontSize: '14px', color: '#654327', fontStyle: 'bold' }).setOrigin(.5);
       this.guideArrow = this.add.text(34, 0, '➜', { fontSize: '23px', color: '#5b7437' }).setOrigin(.5);
@@ -61,6 +63,18 @@ export function createChickenGame(parent: HTMLDivElement, onChange: (snapshot: F
       this.scale.on('resize', this.fitCamera, this);
       this.events.once('shutdown', () => this.scale.off('resize', this.fitCamera, this));
       this.fitCamera(); sceneReady = true; this.renderWorld(0); publish(); onReady();
+    }
+    syncHens() {
+      this.hens.forEach(hen => hen.destroy()); this.shadows.forEach(shadow => shadow.destroy()); this.panic.forEach(label => label.destroy());
+      this.hens = world.chickens.map(chicken => this.add.image(chicken.x, chicken.y, `hen-${chicken.color}-idle`).setOrigin(.5, .945).setDisplaySize(HEN_SIZE, HEN_SIZE));
+      this.shadows = world.chickens.map(() => this.add.image(0, 0, 'shadow').setDisplaySize(68, 21));
+      this.panic = world.chickens.map(() => this.add.text(0, 0, '!', { fontFamily: 'Georgia, serif', fontSize: '25px', fontStyle: 'bold', color: '#b65335', stroke: '#fff5da', strokeThickness: 5 }).setOrigin(.5));
+    }
+    resetLevel() {
+      this.tweens.getTweens().forEach(tween => tween.targets.forEach(target => { if (target instanceof Phaser.GameObjects.GameObject) target.destroy(); }));
+      this.tweens.killAll(); this.syncHens();
+      this.clock = 0; this.lastDust = 0; this.lastStep = 0; this.lastCluck = 0; this.lastFlap = 0; this.reactionUntil = 0;
+      this.cameraReset = true; this.renderWorld(0);
     }
     fitCamera = () => {
       const w = this.scale.width, h = this.scale.height;
@@ -108,8 +122,9 @@ export function createChickenGame(parent: HTMLDivElement, onChange: (snapshot: F
         if (panic && Math.floor(this.clock / 160) % 3 === 0) henPose = 'panic';
         if (chicken.state === 'captured') henPose = 'captured';
         const hop = running ? Math.abs(Math.sin(this.clock / (panic ? 85 : 150) + i)) * (panic ? 5 : 2) : 0;
-        this.hens[i].setTexture(`hen-${chicken.color}-${henPose}`).setPosition(chicken.x, chicken.y - hop).setDepth(chicken.y).setFlipX(chicken.facing === 'left').setAngle(running ? Math.sin(this.clock / 95 + i) * 2.5 : 0);
-        this.shadows[i].setPosition(chicken.x, chicken.y - 2).setDepth(chicken.y - 1);
+        const size = chicken.state === 'captured' && world.chickens.length > 5 ? 78 : HEN_SIZE;
+        this.hens[i].setTexture(`hen-${chicken.color}-${henPose}`).setDisplaySize(size, size).setPosition(chicken.x, chicken.y - hop).setDepth(chicken.y).setFlipX(chicken.facing === 'left').setAngle(running ? Math.sin(this.clock / 95 + i) * 2.5 : 0);
+        this.shadows[i].setDisplaySize(size * .6, size * .18).setPosition(chicken.x, chicken.y - 2).setDepth(chicken.y - 1);
         this.panic[i].setPosition(chicken.x + 31, chicken.y - 103 - hop).setDepth(chicken.y + 1).setVisible(playing && chicken.state === 'panic');
       });
       this.focus.set(world.player.x + (this.scale.width > 650 ? 75 : -35), world.player.y - 25);
@@ -127,6 +142,7 @@ export function createChickenGame(parent: HTMLDivElement, onChange: (snapshot: F
       this.guideArrow.setRotation(Math.atan2(320 - world.player.y, PEN.x - world.player.x));
       parent.dataset.playerX = world.player.x.toFixed(2); parent.dataset.playerY = world.player.y.toFixed(2);
       parent.dataset.status = world.status;
+      parent.dataset.level = String(world.level.id);
       parent.dataset.camera = JSON.stringify({ x: camera.scrollX, y: camera.scrollY, zoom: camera.zoom, width: camera.width, height: camera.height });
       parent.dataset.chickens = JSON.stringify(world.chickens.map(({ x, y, state }) => ({ x, y, state })));
     }
@@ -139,6 +155,12 @@ export function createChickenGame(parent: HTMLDivElement, onChange: (snapshot: F
       const before = world.chickens.map(chicken => chicken.state);
       stepWorld(world, input, delta / 1000);
       world.chickens.forEach((chicken, i) => { if (chicken.state === 'captured' && before[i] !== 'captured') { this.burst(chicken.x, chicken.y); onCapture(); } });
+      if (world.status === 'playing') {
+        if (Math.hypot(world.player.vx, world.player.vy) > 30 && this.clock - this.lastStep > 330) { this.lastStep = this.clock; onSound('step'); }
+        const near = world.chickens.filter(hen => hen.state !== 'captured' && Math.hypot(hen.x - world.player.x, hen.y - world.player.y) < 240);
+        if (near.length && this.clock - this.lastCluck > 2200) { this.lastCluck = this.clock; onSound('cluck'); }
+        if (near.some(hen => hen.state === 'panic') && this.clock - this.lastFlap > 1600) { this.lastFlap = this.clock; onSound('flap'); }
+      }
       if (world.status === 'playing' && this.clock - this.lastDust > 170) {
         this.lastDust = this.clock;
         if (Math.hypot(world.player.vx, world.player.vy) > 30) this.puff(world.player.x, world.player.y);
@@ -158,7 +180,8 @@ export function createChickenGame(parent: HTMLDivElement, onChange: (snapshot: F
     start() { if (!sceneReady) return; clearInput(); startWorld(world); publish(); },
     pause() { clearInput(); if (world.status === 'playing') world.status = 'paused'; publish(); },
     resume() { clearInput(); if (world.status === 'paused') world.status = 'playing'; publish(); },
-    restart() { clearInput(); world = createWorld(); startWorld(world); publish(); },
+    selectLevel(level: number) { if (!sceneReady) return; clearInput(); world = createWorld(level); (game.scene.getScenes(true)[0] as FarmScene).resetLevel(); publish(); },
+    restart(level = world.level.id) { if (!sceneReady) return; clearInput(); world = createWorld(level); startWorld(world); (game.scene.getScenes(true)[0] as FarmScene).resetLevel(); publish(); },
     destroy() { resize.disconnect(); clearInput(); game.destroy(true); },
   };
 }
