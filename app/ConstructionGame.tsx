@@ -70,11 +70,24 @@ function initialCollection(): Collection {
         validWorld(s.world),
     ) &&
     value.worlds.some((s) => s.id === value.active)
-  )
-    return value;
+  ) {
+    // The previous release saved its demonstration garden on the first visit.
+    // Replace only that untouched example, never a child's edited creation.
+    const originalGarden = JSON.stringify(starterWorld());
+    return {
+      ...value,
+      worlds: value.worlds.map((savedWorld) =>
+        savedWorld.id === 'first' &&
+        savedWorld.name === 'Le jardin de Lola' &&
+        JSON.stringify(savedWorld.world) === originalGarden
+          ? { id: 'first', name: 'Mon premier monde', world: emptyWorld() }
+          : savedWorld,
+      ),
+    };
+  }
   return {
     active: 'first',
-    worlds: [{ id: 'first', name: 'Le jardin de Lola', world: starterWorld() }],
+    worlds: [{ id: 'first', name: 'Mon premier monde', world: emptyWorld() }],
   };
 }
 function Modal({
