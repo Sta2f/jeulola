@@ -8,6 +8,9 @@ import {
 } from 'react';
 import {
   ArrowLeft,
+  ArrowRight,
+  ArrowUp,
+  ArrowDown,
   Check,
   Eraser,
   Hand,
@@ -520,6 +523,39 @@ export default function ConstructionGame({ onBack }: { onBack: () => void }) {
               <span aria-hidden="true">+</span>
             </button>
           </div>
+          <div
+            className="construction-pan"
+            aria-label="Déplacer la vue du plateau"
+          >
+            <button
+              aria-label="Déplacer le plateau vers le haut"
+              title="Vers le haut"
+              onClick={() => scene.current?.pan(0, 1)}
+            >
+              <ArrowUp />
+            </button>
+            <button
+              aria-label="Déplacer le plateau vers la gauche"
+              title="Vers la gauche"
+              onClick={() => scene.current?.pan(-1, 0)}
+            >
+              <ArrowLeft />
+            </button>
+            <button
+              aria-label="Déplacer le plateau vers le bas"
+              title="Vers le bas"
+              onClick={() => scene.current?.pan(0, -1)}
+            >
+              <ArrowDown />
+            </button>
+            <button
+              aria-label="Déplacer le plateau vers la droite"
+              title="Vers la droite"
+              onClick={() => scene.current?.pan(1, 0)}
+            >
+              <ArrowRight />
+            </button>
+          </div>
           {stage === 'build' && (
             <div
               className="construction-tools"
@@ -857,4 +893,3 @@ export default function ConstructionGame({ onBack }: { onBack: () => void }) {
     </main>
   );
 }
-

@@ -136,9 +136,9 @@ export function createConstructionScene(
   const previewMaterials: T.Material[] = [];
   const markerGeometry = new T.BoxGeometry(0.97, 0.04, 0.97),
     green = new T.MeshBasicMaterial({
-      color: '#a9dbaf',
+      color: '#9dcddd',
       transparent: true,
-      opacity: 0.52,
+      opacity: 0.28,
       depthWrite: false,
     }),
     red = new T.MeshBasicMaterial({
@@ -147,6 +147,17 @@ export function createConstructionScene(
       opacity: 0.45,
       depthWrite: false,
     });
+  const destination = new T.MeshBasicMaterial({
+    color: '#f1ac43',
+    transparent: true,
+    opacity: 0.8,
+    depthWrite: false,
+  });
+  const destinationEdge = new T.MeshBasicMaterial({
+    color: '#a95219',
+    depthTest: false,
+  });
+  const edgeGeometry = new T.BoxGeometry(1, 0.035, 0.035);
   const marks = new T.Group();
   scene.add(marks);
   const controls = new OrbitControls(camera, canvas);
@@ -409,6 +420,7 @@ export function createConstructionScene(
     if (mode === 'build') {
       for (let dz = -1; dz <= 1; dz++)
         for (let dx = -1; dx <= 1; dx++) {
+          if (dx >= 0 && dx < w && dz >= 0 && dz < d) continue;
           const neighbor = candidate(
             world,
             selected,
@@ -428,7 +440,7 @@ export function createConstructionScene(
         }
       for (let z = 0; z < d; z++)
         for (let x = 0; x < w; x++) {
-          const m = new T.Mesh(markerGeometry, p ? green : red);
+          const m = new T.Mesh(markerGeometry, p ? destination : red);
           const top = topAt(world, target.x + x, target.z + z);
           m.position.set(
             target.x + x - (SIZE - 1) / 2,
@@ -439,6 +451,23 @@ export function createConstructionScene(
             target.z + z - (SIZE - 1) / 2,
           );
           marks.add(m);
+          if (p) {
+            for (const side of [-1, 1]) {
+              const horizontal = new T.Mesh(edgeGeometry, destinationEdge);
+              horizontal.position
+                .copy(m.position)
+                .add(new T.Vector3(0, 0.025, side * 0.49));
+              horizontal.renderOrder = 2;
+              marks.add(horizontal);
+              const vertical = new T.Mesh(edgeGeometry, destinationEdge);
+              vertical.rotation.y = Math.PI / 2;
+              vertical.position
+                .copy(m.position)
+                .add(new T.Vector3(side * 0.49, 0.025, 0));
+              vertical.renderOrder = 2;
+              marks.add(vertical);
+            }
+          }
         }
       if (p && previewModel) {
         previewGroup.visible = true;
@@ -664,6 +693,22 @@ export function createConstructionScene(
       camera.updateProjectionMatrix();
       requestRender();
     },
+    pan(horizontal: number, vertical: number) {
+      // Move the visible board in the arrow's screen direction, at any rotation.
+      camera.updateMatrixWorld();
+      const right = new T.Vector3().setFromMatrixColumn(camera.matrixWorld, 0);
+      const up = new T.Vector3().setFromMatrixColumn(camera.matrixWorld, 1);
+      const offset = right
+        .multiplyScalar((-horizontal * 0.85) / camera.zoom)
+        .add(up.multiplyScalar((-vertical * 0.85) / camera.zoom));
+      const proposed = controls.target.clone().add(offset);
+      if (proposed.distanceTo(new T.Vector3(0, 0.3, 0)) > 8) return;
+      controls.target.copy(proposed);
+      camera.position.add(offset);
+      controls.update();
+      clearPreview();
+      requestRender();
+    },
     resetView() {
       camera.position.set(15, 18, 21);
       camera.zoom = 1;
@@ -708,6 +753,9 @@ export function createConstructionScene(
       markerGeometry.dispose();
       green.dispose();
       red.dispose();
+      destination.dispose();
+      destinationEdge.dispose();
+      edgeGeometry.dispose();
       floor.geometry.dispose();
       floor.material.dispose();
       renderer.dispose();

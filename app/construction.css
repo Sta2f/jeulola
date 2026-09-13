@@ -1112,3 +1112,90 @@
     min-height: 44px;
   }
 }
+.construction-pan {
+  position: absolute;
+  left: 12px;
+  bottom: 90px;
+  display: grid;
+  grid-template-columns: repeat(3, 44px);
+  grid-template-rows: repeat(2, 44px);
+  gap: 4px;
+}
+@media (max-width: 650px) and (max-height: 650px) and (orientation: portrait) {
+  .construction-play {
+    min-height: 0;
+  }
+  .construction-game:not(.drawer-closed) .construction-drawer {
+    height: 174px;
+  }
+  .construction-pieces > button img {
+    width: 48px;
+    height: 48px;
+  }
+}
+@media (max-width: 360px) {
+  .stage-build .construction-tools {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 3px;
+  }
+  .stage-build .construction-tools button {
+    min-width: 0;
+    padding: 4px 1px;
+    font-size: 9px;
+    flex-direction: column;
+    gap: 1px;
+    min-height: 40px;
+  }
+}
+.construction-game .construction-pan button {
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 8px;
+  border-radius: 12px;
+  background: #fff9edf5;
+  border-color: #d9c7ad;
+}
+.construction-pan button:first-child {
+  grid-column: 2;
+}
+.construction-pan button:nth-child(2) {
+  grid-column: 1;
+  grid-row: 2;
+}
+.construction-pan button:nth-child(3) {
+  grid-column: 2;
+  grid-row: 2;
+}
+.construction-pan button:nth-child(4) {
+  grid-column: 3;
+  grid-row: 2;
+}
+.construction-zoom {
+  top: 50px;
+  bottom: auto;
+  flex-direction: row;
+}
+@media (max-width: 650px) and (orientation: portrait) {
+  .construction-pan {
+    left: 4px;
+    bottom: 52px;
+    gap: 3px;
+  }
+  .construction-zoom {
+    top: 27px;
+    bottom: auto;
+  }
+}
+@media (max-height: 600px) and (orientation: landscape) {
+  .construction-pan {
+    left: 4px;
+    bottom: 43px;
+    gap: 3px;
+  }
+  .construction-zoom {
+    top: 22px;
+    bottom: auto;
+  }
+}
