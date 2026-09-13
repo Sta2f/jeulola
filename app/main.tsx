@@ -15,6 +15,7 @@ import './differences.css';
 import './letters.css';
 import './chicken.css';
 import './chicken/joystick.css';
+import './construction.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

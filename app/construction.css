@@ -1,0 +1,1053 @@
+.construction-game {
+  --ink: #435358;
+  --mint: #c1ddcb;
+  --cream: #fff9ed;
+  position: relative;
+  height: 100dvh;
+  min-height: 440px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse at 5% 35%, #f9eed6 0, transparent 45%),
+    linear-gradient(175deg, #e6e1f0 0%, #f7eddd 35%, #f3e4cc 100%);
+  font-family: 'Trebuchet MS', sans-serif;
+  padding: 12px 16px 52px;
+  box-sizing: border-box;
+}
+.construction-game * {
+  box-sizing: border-box;
+}
+.construction-game button,
+.construction-modal button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 44px;
+  border: 1px solid #e5d8c3;
+  border-radius: 15px;
+  background: #fff9ed;
+  color: #435358;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow:
+    0 3px 0 #d7c8b63b,
+    inset 0 2px 0 #ffffffb3;
+  padding: 9px 13px;
+  transition:
+    transform 0.16s,
+    background 0.16s;
+}
+.construction-game button:active,
+.construction-modal button:active {
+  transform: translateY(2px);
+}
+.construction-game button:disabled,
+.construction-modal button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.construction-game button:focus-visible,
+.construction-modal button:focus-visible {
+  outline: 3px solid #52866f;
+  outline-offset: 3px;
+}
+.construction-game svg,
+.construction-modal svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.construction-game button[aria-pressed='true'] {
+  background: #b9dac8;
+  border-color: #8bb59e;
+  box-shadow:
+    inset 0 0 0 2px #fff7,
+    0 3px 0 #a1bdaa55;
+}
+.construction-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex: none;
+  min-height: 52px;
+}
+.construction-top h1 {
+  font-size: clamp(17px, 1.8vw, 29px);
+  letter-spacing: -1px;
+  margin: 0;
+  color: #3c6563;
+  text-shadow: 0 2px 0 #fffc;
+}
+.construction-top h1 span {
+  color: #af84ad;
+}
+.construction-top > div {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.construction-save {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #548775;
+}
+.construction-save svg {
+  width: 15px;
+}
+.construction-workshop {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 78fr) minmax(0, 22fr);
+  gap: 12px;
+  padding-top: 10px;
+}
+.construction-play {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.construction-caption {
+  position: absolute;
+  top: 8px;
+  left: 15px;
+  right: 15px;
+  text-align: center;
+  pointer-events: none;
+  z-index: 1;
+}
+.construction-caption > span {
+  font-size: 12px;
+  letter-spacing: 0.07em;
+  color: #8c8378;
+}
+.construction-caption p {
+  font-size: clamp(12px, 1.05vw, 16px);
+  margin: 6px 0;
+  color: #786388;
+  text-shadow: 0 1px 0 #fff;
+}
+.construction-canvas {
+  position: absolute;
+  inset: 0 0 54px;
+  min-width: 0;
+  min-height: 0;
+}
+.construction-canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  outline-offset: -4px;
+}
+.construction-zoom {
+  position: absolute;
+  left: 4px;
+  bottom: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.construction-zoom button {
+  width: 40px;
+  min-height: 40px;
+  padding: 8px;
+  border-radius: 50%;
+  background: #fff9edef;
+}
+.construction-tools {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.construction-tools button {
+  padding: 12px 16px;
+  min-height: 48px;
+  font-size: 14px;
+  border-radius: 18px;
+}
+.construction-game .mint,
+.construction-modal .mint {
+  background: #c4dfce;
+}
+.construction-game .rose,
+.construction-modal .rose {
+  background: #edc4c4;
+}
+.construction-game .peach {
+  background: #eed3bc;
+}
+.construction-game .lilac {
+  background: #d7c7e7;
+}
+.construction-tools button[aria-pressed='true'] {
+  outline: 2px solid #829f8c;
+  outline-offset: 2px;
+}
+.construction-drawer {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: #fff9edf2;
+  border: 2px solid #fffdf3;
+  border-radius: 25px;
+  box-shadow:
+    0 8px 20px #94795218,
+    inset 0 -3px 0 #e4d6bf50;
+  padding: 16px 12px 10px;
+  z-index: 2;
+}
+.construction-drawer > header {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 4px 13px;
+}
+.construction-drawer h2 {
+  font-size: 27px;
+  letter-spacing: -1px;
+  color: #494360;
+  margin: 0;
+}
+.construction-drawer > header > span {
+  font-size: 11px;
+  color: #9c907e;
+  flex-basis: 100%;
+}
+.construction-game .drawer-toggle {
+  display: none;
+}
+.construction-categories {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+  flex: none;
+  margin-bottom: 12px;
+}
+.construction-categories button {
+  min-width: 0;
+  font-size: clamp(10px, 0.85vw, 13px);
+  padding: 7px 2px;
+  min-height: 38px;
+  border-radius: 12px;
+  box-shadow: none;
+  background: #f2eadf;
+  border: 0;
+}
+.construction-pieces {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  overflow: auto;
+  min-height: 0;
+  align-content: start;
+  padding: 2px 3px 6px;
+  scrollbar-width: thin;
+  scrollbar-color: #d4c5af transparent;
+  overscroll-behavior: contain;
+}
+.construction-pieces > button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 2px 2px 8px;
+  min-width: 0;
+  min-height: 108px;
+  background: linear-gradient(#fffdf7, #f7eddb);
+  border: 1px solid #e9ddc9;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.construction-pieces > button img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  pointer-events: none;
+}
+.construction-pieces > button > span {
+  padding: 0 1px;
+  overflow-wrap: anywhere;
+}
+.construction-pieces > button > small {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  font-size: 9px;
+  background: #fff9eccc;
+  color: #877e70;
+  border-radius: 4px;
+  padding: 2px;
+}
+.construction-pieces > button[aria-pressed='true'] {
+  background: #edf3dc;
+  border-color: #9fb988;
+  box-shadow: inset 0 0 0 1px #a8c394;
+}
+.construction-selection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  border-top: 1px solid #e8dcc8;
+  padding: 9px 3px 0;
+  margin-top: 6px;
+  font-size: 12px;
+}
+.construction-selection > span > small {
+  display: block;
+  color: #a19381;
+  font-size: 10px;
+  margin-top: 3px;
+}
+.construction-selection button {
+  min-height: 37px;
+  padding: 6px 9px;
+}
+.construction-selection button small {
+  font-size: 10px;
+}
+.construction-drawer-tip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 10px;
+  color: #9a8b77;
+  margin: 8px 0 0;
+}
+.construction-drawer-tip svg {
+  width: 14px;
+  height: 14px;
+}
+.construction-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 12px;
+  flex: none;
+}
+.construction-footer > span {
+  font-size: 11px;
+  color: #a68f77;
+  letter-spacing: 0.04em;
+}
+.construction-footer nav {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: #fffbef90;
+  border: 1px solid #e6d5bc;
+  border-radius: 19px;
+}
+.construction-footer nav button {
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+  font-size: 13px;
+  padding: 8px 16px;
+  min-height: 40px;
+}
+.stage-visit .construction-workshop,
+.stage-live .construction-workshop {
+  grid-template-columns: minmax(0, 1fr);
+}
+.construction-ghost {
+  position: fixed;
+  width: 100px;
+  height: 100px;
+  transform: translate(-50%, -75%);
+  z-index: 101;
+  pointer-events: none;
+  filter: drop-shadow(0 9px 5px #6a644e44);
+}
+.construction-ghost img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.construction-error,
+.construction-loading {
+  position: absolute;
+  inset: 22% 15%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-radius: 24px;
+  background: #fff8eae8;
+  z-index: 3;
+  padding: 25px;
+  text-align: center;
+}
+.construction-error h2 {
+  font-size: 22px;
+}
+.construction-error p {
+  width: 100%;
+}
+.construction-loading span {
+  display: block;
+  width: 35px;
+  height: 35px;
+  background: #c2d6a4;
+  border-radius: 9px;
+}
+.construction-loading span:nth-child(2) {
+  background: #acd3dd;
+}
+.construction-loading span:nth-child(3) {
+  background: #d1badc;
+}
+.construction-loading p {
+  width: 100%;
+}
+.construction-modal {
+  position: fixed;
+  margin: auto;
+  width: min(700px, calc(100vw - 30px));
+  max-height: 85dvh;
+  border: 2px solid #fff7e5;
+  border-radius: 27px;
+  background: #fff9ed;
+  color: #435358;
+  padding: 27px;
+  box-shadow: 0 20px 90px #66544144;
+  font-family: 'Trebuchet MS', sans-serif;
+  overflow: auto;
+}
+.construction-modal::backdrop {
+  background: #5f5b6670;
+  backdrop-filter: blur(5px);
+}
+.construction-modal h2 {
+  font-size: 26px;
+  margin: 4px 45px 20px 0;
+}
+.construction-modal .construction-close {
+  position: absolute;
+  right: 13px;
+  top: 13px;
+  padding: 8px;
+  border-radius: 50%;
+  width: 40px;
+}
+.construction-storage-note {
+  font-size: 13px;
+  color: #8d8374;
+}
+.construction-world-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 18px 0;
+}
+.construction-world-list article {
+  border: 1px solid #e2d5c1;
+  border-radius: 17px;
+  overflow: hidden;
+}
+.construction-world-list article > button {
+  display: flex;
+  flex-direction: column;
+  border: 0;
+  box-shadow: none;
+  padding: 5px;
+  width: 100%;
+  min-height: 160px;
+}
+.construction-world-list article > button img {
+  width: 100%;
+  aspect-ratio: 1.5;
+  object-fit: contain;
+  background: #f3e5d0;
+  border-radius: 12px;
+}
+.construction-world-list article > button > svg {
+  width: 80px;
+  height: 80px;
+  padding: 15px;
+  color: #a0b58a;
+}
+.construction-world-list article small {
+  font-size: 11px;
+  color: #948772;
+}
+.construction-world-list article > div {
+  display: flex;
+  justify-content: flex-end;
+  gap: 3px;
+  padding: 4px;
+}
+.construction-world-list article > div button {
+  min-height: 35px;
+  padding: 6px;
+  border: 0;
+  box-shadow: none;
+}
+.construction-name {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 20px 0;
+}
+.construction-name input {
+  font: inherit;
+  border: 1px solid #d9cbb6;
+  padding: 13px;
+  border-radius: 12px;
+  background: #fffdf6;
+  color: #435358;
+}
+.construction-new-choices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.construction-new-choices button {
+  display: flex;
+  flex-direction: column;
+  min-height: 150px;
+}
+.construction-new-choices button svg {
+  width: 35px;
+  height: 35px;
+  color: #93ad8f;
+}
+.construction-new-choices small {
+  font-size: 11px;
+  color: #968574;
+  font-weight: 400;
+}
+.construction-delete {
+  margin-top: 16px;
+  padding: 14px;
+  background: #f3dfd8;
+  border-radius: 15px;
+}
+.construction-delete button {
+  margin: 4px;
+}
+/* Keep every game reachable in the existing illustrated home. */
+.games-home .fairy-game-construction {
+  position: absolute;
+  right: calc(100% + 12px);
+  top: calc(34% + 4px);
+  width: calc((100% - 8px) /2);
+  height: calc((100% - 16px) /3);
+}
+@media (max-width: 1100px) {
+  .construction-game {
+    padding: 8px 10px 49px;
+  }
+  .construction-drawer {
+    padding: 12px 7px 8px;
+    border-radius: 20px;
+  }
+  .construction-drawer h2 {
+    font-size: 23px;
+  }
+  .construction-pieces {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px;
+  }
+  .construction-categories {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .construction-pieces > button {
+    min-height: 105px;
+  }
+  .construction-tools {
+    gap: 5px;
+  }
+  .construction-tools button {
+    font-size: 12px;
+    padding: 10px 11px;
+  }
+  .construction-top h1 {
+    font-size: 20px;
+  }
+  .construction-save {
+    font-size: 10px;
+  }
+  .construction-footer > span {
+    display: none;
+  }
+  .construction-footer {
+    justify-content: center;
+  }
+}
+@media (max-width: 650px) and (orientation: portrait) {
+  .construction-game {
+    min-height: 500px;
+    padding: 6px 7px 47px;
+  }
+  .construction-top {
+    gap: 5px;
+    min-height: 43px;
+  }
+  .construction-top h1 {
+    font-size: 15px;
+    letter-spacing: -0.5px;
+    max-width: 150px;
+    text-align: center;
+  }
+  .construction-top button {
+    padding: 8px;
+    min-height: 39px;
+  }
+  .construction-top button span,
+  .construction-save {
+    display: none;
+  }
+  .construction-top > div {
+    gap: 3px;
+  }
+  .construction-workshop {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding-top: 4px;
+  }
+  .construction-play {
+    flex: 1;
+    min-height: 220px;
+  }
+  .construction-caption {
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+  .construction-caption > span {
+    display: none;
+  }
+  .construction-caption p {
+    font-size: 11px;
+    margin: 2px 0;
+  }
+  .construction-canvas {
+    inset: 0 0 44px;
+  }
+  .construction-tools {
+    bottom: 2px;
+    gap: 4px;
+    flex-wrap: nowrap;
+  }
+  .construction-tools button {
+    font-size: 10px;
+    min-height: 38px;
+    padding: 8px 6px;
+    gap: 3px;
+    border-radius: 11px;
+  }
+  .construction-tools svg {
+    width: 15px;
+    height: 15px;
+  }
+  .construction-zoom {
+    left: 0;
+    bottom: 50px;
+    gap: 3px;
+  }
+  .construction-zoom button {
+    width: 29px;
+    min-height: 29px;
+    height: 29px;
+    padding: 5px;
+  }
+  .construction-zoom svg {
+    width: 16px;
+    height: 16px;
+  }
+  .construction-drawer {
+    height: 190px;
+    flex: none;
+    border-radius: 17px;
+    padding: 7px 9px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 25px 30px minmax(0, 1fr);
+    gap: 3px;
+  }
+  .construction-drawer > header {
+    margin: 0;
+    align-items: center;
+    gap: 8px;
+  }
+  .construction-drawer h2 {
+    font-size: 17px;
+  }
+  .construction-drawer > header > span {
+    flex-basis: auto;
+    font-size: 9px;
+  }
+  .construction-game .drawer-toggle {
+    display: inline-flex;
+    margin-left: auto;
+    order: 3;
+    min-height: 25px;
+    width: 32px;
+    padding: 2px;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .construction-categories {
+    display: flex;
+    gap: 3px;
+    margin: 0;
+    overflow-x: auto;
+  }
+  .construction-categories button {
+    flex: 1;
+    min-height: 28px;
+    padding: 5px;
+    font-size: 9px;
+    border-radius: 8px;
+  }
+  .construction-pieces {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2px;
+    gap: 5px;
+  }
+  .construction-pieces > button {
+    flex: 0 0 75px;
+    min-height: 0;
+    font-size: 10px;
+    padding-bottom: 3px;
+  }
+  .construction-pieces > button img {
+    height: 60px;
+    width: 60px;
+  }
+  .construction-drawer-tip {
+    display: none;
+  }
+  .construction-selection {
+    position: absolute;
+    right: 7px;
+    bottom: 243px;
+    background: #fff9edeb;
+    border-radius: 12px;
+    padding: 3px 6px;
+    margin: 0;
+    border: 0;
+    max-width: 140px;
+    font-size: 10px;
+  }
+  .construction-selection button {
+    min-height: 30px;
+    padding: 4px;
+  }
+  .construction-selection svg {
+    width: 15px;
+    height: 15px;
+  }
+  .construction-selection > span > small {
+    font-size: 9px;
+  }
+  .construction-footer {
+    padding-top: 5px;
+  }
+  .construction-footer nav {
+    padding: 3px;
+    border-radius: 14px;
+  }
+  .construction-footer nav button {
+    font-size: 11px;
+    padding: 6px 10px;
+    min-height: 34px;
+  }
+  .construction-footer svg {
+    width: 16px;
+    height: 16px;
+  }
+  .drawer-closed .construction-drawer {
+    height: 40px;
+    grid-template-rows: 25px;
+  }
+  .drawer-closed .construction-categories,
+  .drawer-closed .construction-pieces,
+  .drawer-closed .construction-selection {
+    display: none;
+  }
+  .drawer-closed .drawer-toggle {
+    transform: rotate(180deg);
+  }
+  .construction-world-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .construction-new-choices {
+    grid-template-columns: 1fr;
+  }
+  .construction-new-choices button {
+    min-height: 85px;
+  }
+  .games-home .fairy-game-construction {
+    position: relative;
+    inset: auto;
+    grid-column: 2;
+    grid-row: 5;
+    width: 100%;
+    height: 100%;
+  }
+  .games-home .fairy-game-chicken {
+    grid-column: 1;
+    grid-row: 5;
+    max-width: none;
+  }
+}
+@media (max-height: 600px) and (orientation: landscape) {
+  .construction-game {
+    min-height: 320px;
+    padding-bottom: 43px;
+  }
+  .construction-top {
+    min-height: 36px;
+  }
+  .construction-top h1 {
+    font-size: 18px;
+  }
+  .construction-top button {
+    min-height: 33px;
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  .construction-workshop {
+    padding-top: 3px;
+    gap: 6px;
+  }
+  .construction-caption > span {
+    display: none;
+  }
+  .construction-caption p {
+    font-size: 10px;
+  }
+  .construction-canvas {
+    inset: 0 0 36px;
+  }
+  .construction-tools {
+    bottom: 0;
+    gap: 4px;
+  }
+  .construction-tools button {
+    min-height: 33px;
+    padding: 6px 9px;
+    font-size: 10px;
+    border-radius: 11px;
+  }
+  .construction-tools svg {
+    width: 15px;
+    height: 15px;
+  }
+  .construction-zoom {
+    bottom: 45px;
+    gap: 3px;
+  }
+  .construction-zoom button {
+    min-height: 28px;
+    width: 28px;
+    padding: 4px;
+  }
+  .construction-zoom svg {
+    width: 15px;
+    height: 15px;
+  }
+  .construction-drawer {
+    padding: 6px;
+  }
+  .construction-drawer h2 {
+    font-size: 18px;
+  }
+  .construction-drawer > header {
+    margin-bottom: 4px;
+  }
+  .construction-drawer > header > span,
+  .construction-drawer-tip {
+    display: none;
+  }
+  .construction-categories {
+    gap: 3px;
+    margin-bottom: 4px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .construction-categories button {
+    font-size: 8px;
+    min-height: 26px;
+    padding: 4px 0;
+  }
+  .construction-pieces > button {
+    min-height: 90px;
+    font-size: 9px;
+  }
+  .construction-selection {
+    font-size: 10px;
+    padding-top: 4px;
+  }
+  .construction-selection button {
+    min-height: 28px;
+    padding: 4px;
+  }
+  .construction-footer {
+    padding-top: 4px;
+  }
+  .construction-footer nav {
+    padding: 2px;
+  }
+  .construction-footer nav button {
+    min-height: 29px;
+    padding: 5px 12px;
+    font-size: 10px;
+  }
+  .construction-footer nav svg {
+    width: 15px;
+    height: 15px;
+  }
+  .games-home .fairy-game-construction {
+    inset: auto auto calc(100% + 4px) 0;
+    width: calc((100% - 8px) /3);
+    height: min(72px, calc((100% - 4px) /2));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .construction-game button,
+  .construction-modal button {
+    transition: none;
+  }
+}
+.construction-page-buttons {
+  display: flex;
+  gap: 3px;
+  margin-left: auto;
+}
+.construction-page-buttons button {
+  width: 28px;
+  min-height: 28px;
+  padding: 3px;
+  border: 0;
+  box-shadow: none;
+  background: #f2eadf;
+}
+.construction-page-buttons svg {
+  width: 16px;
+  height: 16px;
+}
+@media (max-width: 650px) and (orientation: portrait) {
+  .construction-drawer > header > span {
+    display: none;
+  }
+  .construction-game .drawer-toggle {
+    margin-left: 0;
+  }
+  .drawer-closed .construction-page-buttons {
+    display: none;
+  }
+}
+#root > main.construction-game {
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  padding-bottom: 8px;
+}
+@media (max-width: 650px) and (orientation: portrait) {
+  .construction-drawer {
+    height: 210px;
+    grid-template-rows: 25px 28px minmax(0, 1fr) 28px;
+  }
+  .construction-selection {
+    position: static;
+    grid-row: 4;
+    padding: 0 3px;
+    max-width: none;
+    background: transparent;
+    min-height: 26px;
+  }
+  .construction-selection > span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .construction-selection > span > small {
+    margin: 0;
+  }
+  .construction-selection button {
+    min-height: 26px;
+    padding: 3px 8px;
+  }
+  .drawer-closed .construction-drawer {
+    height: 40px;
+    grid-template-rows: 25px;
+  }
+}
+#root .construction-pieces > button {
+  touch-action: none;
+}
+/* Ten clouds share the grid; none can cover another game's touch target. */
+.games-home .fairy-menu {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(5, minmax(0, 1fr));
+  height: min(100%, 570px);
+}
+.games-home .fairy-menu > .fairy-game {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  grid-column: auto;
+  grid-row: auto;
+}
+@media (min-width: 1101px) and (min-height: 601px) {
+  .games-home .fairy-menu {
+    width: calc(150% + 12px);
+    max-width: 720px;
+    justify-self: end;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+    height: min(100%, 550px);
+  }
+  .games-home .fairy-menu > .fairy-game-construction {
+    grid-column: 2;
+  }
+}
+@media (max-height: 600px) and (min-width: 651px) {
+  .games-home .fairy-menu {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+    height: min(100%, 290px);
+  }
+  .games-home .fairy-menu > .fairy-game-construction {
+    grid-column: 2;
+  }
+}
+.construction-canvas canvas {
+  transform: translateZ(0);
+}

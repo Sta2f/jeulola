@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { ChevronLeft, Crown, Dog, Gamepad2, Map, Moon, Palette, Pause, Rabbit, Search, Sparkles, TrafficCone, Volume2, VolumeX } from 'lucide-react';
 import { TrafficLightGame } from './TrafficLightGame';
 import { MazeGame } from './MazeGame';
@@ -16,8 +16,9 @@ import { type FileMusicTheme, preloadFileMusic, startFileMusic, stopAllFileMusic
 import { readSaved, saveValue } from './preferences';
 
 declare const __BUILD_ID__: string;
+const ConstructionGame = lazy(() => import('./ConstructionGame'));
 
-type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'eclair-maze' | 'betty-hide' | 'letters' | 'math' | 'stories' | 'differences' | 'chicken';
+type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'eclair-maze' | 'betty-hide' | 'letters' | 'math' | 'stories' | 'differences' | 'chicken' | 'construction';
 
 export default function Home() {
   const [screen, setScreen] = useState<GameScreen>('home');
@@ -46,7 +47,7 @@ export default function Home() {
     window.history.replaceState({ lolaScreen: 'home' }, '', '#home');
     const back = (event: PopStateEvent) => {
       const next = event.state?.lolaScreen as GameScreen;
-      const valid: GameScreen[] = ['home', 'traffic', 'maze-menu', 'maze', 'coloring', 'eclair-maze', 'betty-hide', 'letters', 'math', 'stories', 'differences', 'chicken'];
+      const valid: GameScreen[] = ['home', 'traffic', 'maze-menu', 'maze', 'coloring', 'eclair-maze', 'betty-hide', 'letters', 'math', 'stories', 'differences', 'chicken', 'construction'];
       stopAudio();
       stopAllFileMusic();
       setScreen(valid.includes(next) ? next : 'home');
@@ -109,6 +110,7 @@ export default function Home() {
   if (screen === 'math') return <MathGame onBack={() => goTo('home')} />;
   if (screen === 'stories') return <Stories onBack={() => goTo('home')} />;
   if (screen === 'differences') return <DifferencesGame onBack={() => goTo('home')} />;
+  if (screen === 'construction') return <Suspense fallback={<main className="construction-game"><p>Les petits blocs arrivent…</p><button onClick={() => goTo('home')}>Les jeux</button></main>}><ConstructionGame onBack={() => goTo('home')} /></Suspense>;
 
   return (
     <main className="games-home" onPointerDownCapture={startAudio}>
@@ -124,7 +126,7 @@ export default function Home() {
       <nav className="home-nav" aria-label="Navigation principale">
         <details className="home-achievements"><summary aria-label="Mes réussites" title="Mes réussites"><Crown /></summary><div><strong>Mes réussites</strong><p>✦ {wins[0]+wins[1]} / 40 labyrinthes</p><p>🐾 {wins[2]} / 50 cachettes</p></div></details>
         <div className="home-nav-actions">
-          <span className="game-count"><Gamepad2 /> 9 jeux</span>
+          <span className="game-count"><Gamepad2 /> 10 jeux</span>
           <button className="game-sound-toggle light home-motion-toggle" onClick={() => setMotionPaused(value => !value)} aria-label={motionPaused ? 'Animer le décor' : 'Mettre les animations en pause'} title={motionPaused ? 'Animer le décor' : 'Mettre les animations en pause'}>{motionPaused ? <Sparkles /> : <Pause />}</button>
           <button className="game-sound-toggle light home-sound-toggle" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique d’accueil' : 'Activer la musique d’accueil'}>{soundOn ? <Volume2 /> : <VolumeX />}</button>
         </div>
@@ -156,6 +158,7 @@ export default function Home() {
           <FairyGameButton className="fairy-game-stories" tone="lilac" icon={<Moon />} onClick={() => goTo('stories')}>Histoires</FairyGameButton>
           <FairyGameButton className="fairy-game-differences" tone="sky" icon={<Search />} onClick={() => goTo('differences', 'differences')}>Les 7 différences</FairyGameButton>
           <FairyGameButton className="fairy-game-chicken" tone="honey" icon="🐔" onClick={() => goTo('chicken')}>Lola au poulailler</FairyGameButton>
+          <FairyGameButton className="fairy-game-construction" tone="mint" icon={<Gamepad2 />} onClick={() => goTo('construction')}>Le petit monde de Lola</FairyGameButton>
         </nav>
       </section>
 
