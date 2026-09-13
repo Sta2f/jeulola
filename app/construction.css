@@ -1051,3 +1051,64 @@
 .construction-canvas canvas {
   transform: translateZ(0);
 }
+.construction-zoom-buttons {
+  position: absolute;
+  right: 12px;
+  bottom: 90px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid #decfb7;
+  border-radius: 18px;
+  background: #fff9edf2;
+  box-shadow: 0 3px 10px #94795214;
+}
+.construction-zoom-buttons > span {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 0 6px;
+  color: #736b60;
+}
+.construction-game .construction-zoom-buttons button {
+  width: 46px;
+  height: 46px;
+  min-height: 46px;
+  padding: 0;
+  border-radius: 12px;
+  background: #c4dfce;
+  border-color: #a9c9b5;
+  font-size: 29px;
+  font-weight: 700;
+  line-height: 1;
+}
+@media (max-width: 650px) and (orientation: portrait) {
+  .construction-zoom-buttons {
+    right: 4px;
+    bottom: 52px;
+    padding: 4px;
+    gap: 4px;
+  }
+  .construction-zoom-buttons > span {
+    font-size: 11px;
+    padding: 0 4px;
+  }
+  .construction-game .construction-zoom-buttons button {
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+  }
+}
+@media (max-height: 600px) and (orientation: landscape) {
+  .construction-zoom-buttons {
+    right: 5px;
+    bottom: 43px;
+    padding: 4px;
+    gap: 4px;
+  }
+  .construction-game .construction-zoom-buttons button {
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+  }
+}

@@ -17,7 +17,6 @@ import {
   Undo2,
   Redo2,
   Plus,
-  Minus,
   Sprout,
   X,
   Trash2,
@@ -495,19 +494,30 @@ export default function ConstructionGame({ onBack }: { onBack: () => void }) {
               <RotateCw />
             </button>
             <button
-              aria-label="Dézoomer"
-              onClick={() => scene.current?.zoom(-1)}
-            >
-              <Minus />
-            </button>
-            <button aria-label="Zoomer" onClick={() => scene.current?.zoom(1)}>
-              <Plus />
-            </button>
-            <button
               aria-label="Vue de départ"
               onClick={() => scene.current?.resetView()}
             >
               <Maximize />
+            </button>
+          </div>
+          <div
+            className="construction-zoom-buttons"
+            aria-label="Zoom du plateau"
+          >
+            <span>Zoom</span>
+            <button
+              aria-label="Dézoomer"
+              title="Réduire le plateau"
+              onClick={() => scene.current?.zoom(-1)}
+            >
+              <span aria-hidden="true">−</span>
+            </button>
+            <button
+              aria-label="Zoomer"
+              title="Agrandir le plateau"
+              onClick={() => scene.current?.zoom(1)}
+            >
+              <span aria-hidden="true">+</span>
             </button>
           </div>
           {stage === 'build' && (
@@ -847,3 +857,4 @@ export default function ConstructionGame({ onBack }: { onBack: () => void }) {
     </main>
   );
 }
+
