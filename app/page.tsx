@@ -6,6 +6,7 @@ import { ColoringGame } from './ColoringGame';
 import { EclairMazeGame } from './EclairMazeGame';
 import { BettyHideAndSeek } from './BettyHideAndSeek';
 import { LettersGame } from './LettersGame';
+import { ReadingGame } from './ReadingGame';
 import { ChickenGame } from './ChickenGame';
 import { MathGame } from './MathGame';
 import { FairyGameButton } from './FairyGameButton';
@@ -18,7 +19,7 @@ import { readSaved, saveValue } from './preferences';
 declare const __BUILD_ID__: string;
 const ConstructionGame = lazy(() => import('./ConstructionGame'));
 
-type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'eclair-maze' | 'betty-hide' | 'letters' | 'math' | 'stories' | 'differences' | 'chicken' | 'construction';
+type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'eclair-maze' | 'betty-hide' | 'letters' | 'reading' | 'math' | 'stories' | 'differences' | 'chicken' | 'construction';
 
 export default function Home() {
   const [screen, setScreen] = useState<GameScreen>('home');
@@ -47,7 +48,7 @@ export default function Home() {
     window.history.replaceState({ lolaScreen: 'home' }, '', '#home');
     const back = (event: PopStateEvent) => {
       const next = event.state?.lolaScreen as GameScreen;
-      const valid: GameScreen[] = ['home', 'traffic', 'maze-menu', 'maze', 'coloring', 'eclair-maze', 'betty-hide', 'letters', 'math', 'stories', 'differences', 'chicken', 'construction'];
+      const valid: GameScreen[] = ['home', 'traffic', 'maze-menu', 'maze', 'coloring', 'eclair-maze', 'betty-hide', 'letters', 'reading', 'math', 'stories', 'differences', 'chicken', 'construction'];
       stopAudio();
       stopAllFileMusic();
       setScreen(valid.includes(next) ? next : 'home');
@@ -106,6 +107,7 @@ export default function Home() {
   if (screen === 'eclair-maze') return <EclairMazeGame onBack={() => goTo('maze-menu')} />;
   if (screen === 'betty-hide') return <BettyHideAndSeek onBack={() => goTo('home')} />;
   if (screen === 'letters') return <LettersGame onBack={() => goTo('home')} />;
+  if (screen === 'reading') return <ReadingGame onBack={() => goTo('home')} />;
   if (screen === 'chicken') return <ChickenGame onBack={() => goTo('home')} />;
   if (screen === 'math') return <MathGame onBack={() => goTo('home')} />;
   if (screen === 'stories') return <Stories onBack={() => goTo('home')} />;
@@ -126,7 +128,7 @@ export default function Home() {
       <nav className="home-nav" aria-label="Navigation principale">
         <details className="home-achievements"><summary aria-label="Mes réussites" title="Mes réussites"><Crown /></summary><div><strong>Mes réussites</strong><p>✦ {wins[0]+wins[1]} / 40 labyrinthes</p><p>🐾 {wins[2]} / 50 cachettes</p></div></details>
         <div className="home-nav-actions">
-          <span className="game-count"><Gamepad2 /> 10 jeux</span>
+          <span className="game-count"><Gamepad2 /> 11 jeux</span>
           <button className="game-sound-toggle light home-motion-toggle" onClick={() => setMotionPaused(value => !value)} aria-label={motionPaused ? 'Animer le décor' : 'Mettre les animations en pause'} title={motionPaused ? 'Animer le décor' : 'Mettre les animations en pause'}>{motionPaused ? <Sparkles /> : <Pause />}</button>
           <button className="game-sound-toggle light home-sound-toggle" onClick={toggleSound} aria-label={soundOn ? 'Couper la musique d’accueil' : 'Activer la musique d’accueil'}>{soundOn ? <Volume2 /> : <VolumeX />}</button>
         </div>
@@ -151,6 +153,7 @@ export default function Home() {
         <nav className="fairy-menu" aria-label="Les jeux de Lola">
           <FairyGameButton tone="honey" icon="123" onClick={() => goTo('math', 'math')}>Les calculs enchantés</FairyGameButton>
           <FairyGameButton tone="lilac" icon="ABC" onClick={() => goTo('letters', 'letters')}>La magie des lettres</FairyGameButton>
+          <FairyGameButton className="fairy-game-reading" tone="mint" icon="Aa" onClick={() => goTo('reading')}>Le jardin des mots</FairyGameButton>
           <FairyGameButton tone="rose" icon={<TrafficCone />} onClick={() => goTo('traffic')}>Le feu rouge</FairyGameButton>
           <FairyGameButton tone="honey" icon={<Map />} onClick={() => goTo('maze-menu')}>Les labyrinthes</FairyGameButton>
           <FairyGameButton tone="sky" icon={<Palette />} onClick={() => goTo('coloring', 'coloring')}>Les coloriages</FairyGameButton>

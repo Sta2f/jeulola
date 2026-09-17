@@ -16,6 +16,7 @@ import './letters.css';
 import './chicken.css';
 import './chicken/joystick.css';
 import './construction.css';
+import './reading.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { BookOpen, ChevronLeft, ChevronRight, Info, Moon, Music2, Pause, Play, RotateCcw, Sparkles } from 'lucide-react';
 import { storyAsset, storyLibrary, type Story } from './storyLibrary';
 import { useStoryNarration } from './useStoryNarration';
@@ -26,9 +26,20 @@ function StoryReader({ story, onBack }: { story: Story; onBack: () => void }) {
   const { startAudio, stopAudio } = useGameAudio('story');
   const [music, setMusic] = useState(true);
   const [effects, setEffects] = useState(true);
+  const readingPage = useRef<HTMLDivElement>(null);
   const current = story.pages[narration.page];
   const finished = narration.status === 'ended' && narration.page === story.pages.length - 1;
   const animating = narration.status === 'playing';
+  useEffect(() => { if (readingPage.current) readingPage.current.scrollTop = 0; }, [narration.page]);
+  useEffect(() => {
+    const panel = readingPage.current;
+    const spoken = panel?.querySelector('.is-spoken');
+    if (!panel || !spoken) return;
+    const bounds = panel.getBoundingClientRect();
+    const word = spoken.getBoundingClientRect();
+    if (word.bottom > bounds.bottom - 12) panel.scrollTop += word.bottom - bounds.bottom + 32;
+    else if (word.top < bounds.top + 12) panel.scrollTop -= bounds.top - word.top + 12;
+  }, [narration.activeWord]);
   useEffect(() => {
     // Preload just the following illustration; avoid decoding a whole library.
     const next = story.pages[narration.page + 1];
@@ -44,7 +55,7 @@ function StoryReader({ story, onBack }: { story: Story; onBack: () => void }) {
     if (animating || narration.status === 'ended') { narration.pause(); stopAudio(); }
     else { if (music) startAudio(); narration.play(); }
   };
-  return <main className="story-reader" data-playing={animating} style={{ '--story-backdrop': `url("${storyAsset(story, current.backdrop ?? story.backdrop)}")` } as CSSProperties}>
+  return <main className="story-reader" data-story={story.id} data-playing={animating} style={{ '--story-backdrop': `url("${storyAsset(story, current.backdrop ?? story.backdrop)}")` } as CSSProperties}>
     <header className="story-header"><button onClick={() => { narration.pause(); stopAudio(); onBack(); }}><ChevronLeft />Histoires</button><h1>{story.title}</h1><div className="story-sound-options"><button onClick={() => { setEffects(!effects); narration.setEffectsEnabled(!effects); }} aria-pressed={effects} aria-label={effects ? 'Couper les bruitages' : 'Activer les bruitages'}><Sparkles /></button><button onClick={() => { setMusic(!music); if (music) stopAudio(); else if (animating) startAudio(); }} aria-pressed={music} aria-label={music ? 'Couper la berceuse' : 'Activer la berceuse'}><Music2 /></button></div></header>
     <article className="story-spread" aria-label={`Page ${narration.page + 1} sur ${story.pages.length}`}>
       <figure className="story-illustration" data-art={current.image} role={current.integratedArtwork ? 'img' : undefined} aria-label={current.integratedArtwork ? current.alt : undefined}>
@@ -52,10 +63,10 @@ function StoryReader({ story, onBack }: { story: Story; onBack: () => void }) {
         {!current.integratedArtwork && <img src={storyAsset(story, `${current.image}.webp`)} alt={current.alt} />}
         <div className="story-stardust" aria-hidden="true">{Array.from({ length: 6 }, (_, i) => <i key={i} style={{ left: `${12 + i * 15}%`, top: `${12 + (i % 3) * 12}%`, animationDelay: `${-i * 1.3}s` }}>✦</i>)}</div>
       </figure>
-      <div className="story-reading-page">
+      <div className="story-reading-page" ref={readingPage}>
         <div className="story-chapter"><h2>{current.title}</h2><div className="story-page-number">{String(narration.page + 1).padStart(2, '0')} <span>/ {story.pages.length}</span></div></div>
         <p className="story-words" aria-label={current.text}>{narration.tokens.length ? narration.tokens.map((token, i) => token.start === undefined ? token.text : <span key={i} aria-hidden="true" className={i === narration.activeWord ? 'is-spoken' : ''}>{token.text}</span>) : current.text}</p>
-        <output className="story-reading-hint">{narration.error || (finished ? 'Bonne nuit, Lola… L’histoire et la berceuse sont terminées.' : 'Les mots dorés suivent la voix.')}</output>
+        <output className="story-reading-hint">{narration.error || (finished ? story.finishedText ?? 'Bonne nuit, Lola… L’histoire et la berceuse sont terminées.' : 'Les mots dorés suivent la voix.')}</output>
       </div>
     </article>
     <footer className="story-controls">

@@ -1,8 +1,12 @@
 import eclair from './stories/eclair-dodo.json';
+import park from './stories/lola-parc-fees.json';
 
-export type Story = typeof eclair;
+export type Story = Omit<typeof eclair, 'pages'> & {
+  finishedText?: string;
+  pages: { title: string; image: string; alt: string; text: string; backdrop?: string; integratedArtwork?: boolean }[];
+};
 // Add another story here to make it appear in the library, without a new route.
-export const storyLibrary: Story[] = [eclair];
+export const storyLibrary: Story[] = [eclair, park];
 export const storyAsset = (story: Story, file: string) => `/assets/stories/${story.id}/${file}`;
 
 export type WordTiming = { word: string; start: number; end: number };

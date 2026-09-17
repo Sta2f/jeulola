@@ -12,7 +12,7 @@ export function preloadRecording(src: string) {
 }
 
 /** Local, prepared audio: same French voice on Safari and PC, with real iOS gain. */
-export function useRecordedAudio() {
+export function useRecordedAudio(onError?: (message: string) => void) {
   const settings = useAudioSettings();
   const context = useRef<AudioContext | null>(null);
   const gain = useRef<GainNode | null>(null);
@@ -36,7 +36,7 @@ export function useRecordedAudio() {
       fallback.current ??= new Audio();
       fallback.current.src = src;
       fallback.current.volume = getAudioSettings().volume * .65;
-      void fallback.current.play().catch(() => undefined);
+      void fallback.current.play().catch(() => onError?.('La voix est indisponible. Réessaie ou utilise le modèle.'));
       return;
     }
     context.current ??= new Context();
@@ -57,8 +57,9 @@ export function useRecordedAudio() {
       node.start();
     } catch {
       // A missing recording must not block the game or restart robotic browser speech.
+      if (generation.current === token) onError?.('La voix est indisponible. Réessaie ou utilise le modèle.');
     }
-  }, [stop]);
+  }, [stop, onError]);
   useEffect(() => {
     if (gain.current && context.current) gain.current.gain.setTargetAtTime(settings.enabled ? settings.volume * .65 : 0, context.current.currentTime, .015);
     if (fallback.current) fallback.current.volume = settings.enabled ? settings.volume * .65 : 0;

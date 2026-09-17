@@ -64,12 +64,19 @@ def lullaby():
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', str(source), '-c:a', 'libmp3lame', '-b:a', '96k', str(OUT / 'lullaby.mp3')], check=True)
 
 async def main():
+    global STORY, OUT, WORK
     parser = argparse.ArgumentParser()
+    parser.add_argument('--story', default='eclair-dodo')
     parser.add_argument('--voice', default='fr-FR-VivienneMultilingualNeural')
     parser.add_argument('--prefix', default='voice-v2-page')
     parser.add_argument('--rate', default='-8%')
     parser.add_argument('--narration-only', action='store_true')
     args = parser.parse_args()
+    STORY = json.loads((ROOT / 'app/stories' / f'{args.story}.json').read_text(encoding='utf-8'))
+    OUT = ROOT / 'public/assets/stories' / args.story
+    WORK = ROOT / '.media/story-audio' / args.story
+    OUT.mkdir(parents=True, exist_ok=True)
+    WORK.mkdir(parents=True, exist_ok=True)
     for i, page in enumerate(STORY['pages']):
         await record(f'{args.prefix}-{i + 1}', page['text'], rate=args.rate, pitch='+0Hz', speaker=args.voice)
     if args.narration_only:
