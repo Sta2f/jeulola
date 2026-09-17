@@ -16,7 +16,7 @@ La liste et les voix sont enregistrées sous `lola:reading-words:v1` dans le nav
 
 ## Nouvelle histoire
 
-**Lola et Éclair au parc des fées** : dix pages, environ quatre minutes, trois nouvelles illustrations originales. Lola et Éclair retrouvent la graine de lumière des fées et font pousser leur fleur-lanterne. Les quatre mots appris reviennent dans le récit. Ce livre est destiné à être écouté ou lu avec un adulte ; son vocabulaire dépasse les quatre mots du jeu.
+**Lola et Éclair au parc des fées** : dix pages, environ trois minutes (169,5 secondes de narration et neuf transitions), trois nouvelles illustrations originales. Lola et Éclair retrouvent la graine de lumière des fées et font pousser leur fleur-lanterne. Les quatre mots appris reviennent dans le récit. Ce livre est destiné à être écouté ou lu avec un adulte ; son vocabulaire dépasse les quatre mots du jeu.
 
 Source : `app/stories/lola-parc-fees.json`. Visuels et narration : `public/assets/stories/lola-parc-fees/`. Voix Vivienne, débit -8 %, repères mot à mot réels. Génération : `python scripts/generate-story-audio.py --story lola-parc-fees --prefix voice-v1-page --narration-only`.
 
