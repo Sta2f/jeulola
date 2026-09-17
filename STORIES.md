@@ -1,5 +1,7 @@
 # Histoires de Lola
 
+Réexport correctif du 17 septembre 2026 : le livre du parc utilise désormais **DeniseNeural**, voix française dédiée non multilingue, après signalement de passages à l’accent anglais avec Vivienne. Dix nouveaux fichiers `voice-fr-v2-page-N.mp3/json`, débit −8 %, hauteur naturelle, durée totale environ quatre minutes. Le premier livre conserve sa voix. Les anciens fichiers du parc restent archivés mais ne sont plus référencés par le lecteur.
+
 Deuxième livre ajouté le 17 septembre 2026 : **Lola et Éclair au parc des fées**, dix pages, environ trois minutes, trois illustrations et narration Vivienne avec repères mot à mot. Voir `READING.md`. Sur les écrans étroits, le panneau de texte défile et suit le mot narré ; les boutons de navigation restent accessibles. Le générateur accepte `--story <id>` pour préparer un livre sans modifier le premier.
 
 L’onglet **Histoires** est une bibliothèque, indépendante des jeux. Première histoire originale : **Éclair et le dernier bisou**, six pages, environ deux minutes. Un décor de chambre étoilée se fond progressivement dans un papier ivoire (#fbf4e8) plus clair derrière les mots : aucun cadre, pli central ou séparation. Le dégradé est horizontal sur grand écran, vertical en portrait. Le décor est fixe.

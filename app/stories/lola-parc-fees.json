@@ -5,8 +5,10 @@
   "cover": "cover.webp",
   "coverAlt": "Lola et Éclair rencontrent trois petites fées dans un parc fleuri",
   "category": "Promenade enchantée",
-  "duration": "3 min",
-  "narrationPrefix": "voice-v1-page",
+  "duration": "4 min",
+  "narrationPrefix": "voice-fr-v2-page",
+  "narrationVoice": "fr-FR-DeniseNeural",
+  "narrationRate": "-8%",
   "backdrop": "meeting.webp",
   "finishedText": "À bientôt, petites fées ! Tu peux réécouter l’histoire ou choisir un autre livre.",
   "pages": [

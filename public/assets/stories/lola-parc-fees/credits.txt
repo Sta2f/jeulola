@@ -2,7 +2,8 @@ Lola et Éclair au parc des fées — septembre 2026
 
 Histoire originale en dix pages, créée pour Lola.
 Trois illustrations originales générées avec imagegen, à partir de l'identité visuelle du premier livre de Lola. Conversion WebP avec FFmpeg.
-Voix française synthétique : fr-FR-VivienneMultilingualNeural, service Edge TTS, débit -8 %, hauteur naturelle. Normalisation -20 LUFS. Repères WordBoundary réels conservés, sans suppression du silence initial.
+Voix française synthétique : fr-FR-DeniseNeural (voix française dédiée, non multilingue), service Edge TTS, débit -8 %, hauteur naturelle. Normalisation -20 LUFS. Repères WordBoundary réels conservés, sans suppression du silence initial.
+Réexport du 17 septembre 2026 : dix pages voice-fr-v2-page, après signalement d'accents anglais sur l'ancienne voix multilingue. Les fichiers précédents sont conservés mais ne sont plus chargés.
 Seul le texte fictif de cette histoire a été envoyé au service vocal pendant sa préparation.
 Musique de fond : Stars in the Lullaby, morceau fourni par Julien, version web déjà utilisée pour le premier livre. Aucun nouveau bruitage.
 Les fichiers audio sont servis avec le livre ; aucune synthèse vocale à distance pendant la lecture.

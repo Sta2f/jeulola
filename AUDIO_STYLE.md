@@ -1,5 +1,7 @@
 # Ambiance sonore de Lola
 
+Correction du 17 septembre 2026 : Julien signale des passages à l’accent anglais dans **Lola et Éclair au parc des fées**. Ce livre utilise désormais **fr-FR-DeniseNeural**, une voix française dédiée non multilingue, débit −8 %, hauteur naturelle, fichiers `voice-fr-v2-page-N`. La consigne Vivienne ci-dessous reste celle du premier livre ; ne pas la réappliquer automatiquement à cette nouvelle histoire. La voix, le débit et le préfixe sont définis dans le JSON du livre.
+
 Direction demandée par Julien : douce, féerique, expressive, inspirée d’un dessin animé. Pas de voix robotique du navigateur. Musique discrète sous les voix, pas de sons qui continuent après avoir quitté un jeu.
 
 Références fournies le 9 septembre 2026 (originaux conservés dans Downloads) :
