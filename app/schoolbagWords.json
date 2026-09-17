@@ -1,0 +1,15 @@
+{
+  "voice": "fr-FR-DeniseNeural",
+  "rate": "-8%",
+  "audioVersion": "v1",
+  "intro": "Lola, on prépare ton cartable ! Fais-le glisser devant la porte. Ensuite, écoute ma voix. Range d’abord l’image demandée, puis le mot qui va avec. Tu peux faire glisser les cartes, ou toucher une carte puis le cartable. À toi !",
+  "door": "Mets ton cartable devant la porte.",
+  "retry": "Essaie encore.",
+  "finished": "Bravo Lola ! Ton cartable est prêt !",
+  "words": [
+    { "id": "plumier", "text": "plumier", "picture": "plumier.webp", "imagePrompt": "Mets l’image du plumier dans le cartable.", "wordPrompt": "Maintenant, mets le mot plumier dans le cartable." },
+    { "id": "image", "text": "image", "picture": "image.webp", "imagePrompt": "Mets l’image encadrée dans le cartable.", "wordPrompt": "Maintenant, mets le mot image dans le cartable." },
+    { "id": "ecole", "text": "école", "picture": "ecole.webp", "imagePrompt": "Mets l’image de l’école dans le cartable.", "wordPrompt": "Maintenant, mets le mot école dans le cartable." },
+    { "id": "cartable", "text": "cartable", "picture": "bag.webp", "imagePrompt": "Mets l’image du cartable dans le cartable.", "wordPrompt": "Maintenant, mets le mot cartable dans le cartable." }
+  ]
+}

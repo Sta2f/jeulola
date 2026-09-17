@@ -1,66 +1,3 @@
-/* Reading keeps the existing soft storybook art, with quiet, legible word cards. */
-#root > .reading-game, #root > .reading-manager { height:100%;min-height:0;overflow:auto;background:#faf5eb;color:#4c4354;padding:12px 24px;font-family:'Trebuchet MS',Arial,sans-serif; }
-.reading-game *, .reading-manager * { box-sizing:border-box; }
-.reading-game button,.reading-manager button,.reading-file { display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 16px;border:1px solid #dfd8cd;border-radius:14px;background:#fffdf8;color:#51465a;font:inherit;cursor:pointer; }
-.reading-game button:disabled,.reading-manager button:disabled { opacity:.45;cursor:default; }
-.reading-game button:focus-visible,.reading-manager button:focus-visible,.reading-manager input:focus-visible,.reading-file:focus-within { outline:3px solid #7c5d9b;outline-offset:3px; }
-.reading-game svg,.reading-manager svg { width:21px;height:21px;flex-shrink:0; }
-.reading-header { display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:50px; }
-.reading-header>span { font-size:11px;letter-spacing:.18em;color:#716178; }
-.reading-header button { border:0;background:transparent; }
-.reading-layout { min-height:calc(100% - 55px);display:grid;grid-template-columns:1fr 1fr;max-width:1440px;margin:auto; }
-.reading-scene { position:relative;min-height:580px;background:url('/assets/stories/lola-parc-fees/meeting.webp') 5% bottom/auto 67% no-repeat; }
-.reading-scene::after { content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,#faf5eb 0%,#faf5eb 12%,transparent 35%),linear-gradient(0deg,#faf5eb,transparent 13%); }
-.reading-scene-copy { position:relative;z-index:1;padding:30px 32px; }
-.reading-scene-copy>span,.reading-eyebrow { color:#7e657c;font-size:11px;letter-spacing:.14em;font-weight:700; }
-.reading-scene-copy h1 { margin:14px 0;font:400 clamp(30px,3.2vw,47px)/1.12 Georgia,serif;color:#594562; }
-.reading-scene-copy p { margin:0;font-size:13px;color:#736270; }
-.reading-garden { position:absolute;bottom:16px;left:24px;right:24px;z-index:1;display:flex;gap:12px;justify-content:center; }
-.reading-garden svg { width:36px;height:36px;stroke:#aa9c89;fill:#eee7da;transition:fill .3s,stroke .3s; }
-.reading-garden svg.is-grown { fill:#f6b5c9;stroke:#8e5475; }
-.reading-garden svg.is-grown:nth-child(2n) { fill:#edd584;stroke:#927c40; }
-.reading-play { align-self:center;display:flex;flex-direction:column;align-items:stretch;gap:18px;padding:36px clamp(20px,4vw,64px);min-width:0; }
-.reading-play h2 { margin:0;font:400 clamp(28px,3vw,42px)/1.13 Georgia,serif;color:#584362; }
-.reading-play>p { margin:0;line-height:1.6; }
-.reading-game .reading-primary,.reading-manager .reading-primary { background:#75618a;color:white;border-color:#75618a;font-weight:700; }
-.reading-primary:active { transform:translateY(1px); }
-.reading-small { font-size:12px;line-height:1.6;color:#716476; }
-.reading-modes { display:grid;grid-template-columns:1fr 1fr;gap:10px; }
-.reading-modes button { flex-direction:column;min-height:88px;font-size:20px; }
-.reading-modes button span { font-size:13px; }
-.reading-modes button[aria-pressed=true] { border:2px solid #8a729c;background:#efe6f3; }
-.reading-check { display:flex;gap:10px;align-items:center;font-size:13px;min-height:44px; }
-.reading-game input[type=checkbox],.reading-manager input[type=checkbox] { width:22px;height:22px;accent-color:#796189;flex-shrink:0; }
-.reading-round-top { display:flex;justify-content:space-between;align-items:center; }
-.reading-round-top button { padding:8px;border:0;background:transparent; }
-.reading-model { text-align:center;background:#f0e8f1;border-radius:20px;padding:24px 14px;font-size:clamp(28px,4vw,46px);overflow-wrap:anywhere; }
-.reading-model.is-cursive { font-family:'Segoe Script','Snell Roundhand','Brush Script MT',cursive;font-weight:400; }
-.reading-game .reading-listen { background:#eee7f2;min-height:100px;font-size:19px;border:0; }
-.reading-listen svg { width:30px;height:30px; }
-.reading-choices { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
-.reading-choices button { min-height:76px;font-size:clamp(22px,2.2vw,32px);overflow-wrap:anywhere;min-width:0; }
-.reading-choices button.is-correct { background:#e0eedb;border:2px solid #6b885e;opacity:1;color:#365332; }
-.reading-feedback { min-height:26px;font-size:14px; }
-.reading-help { display:flex;gap:10px;flex-wrap:wrap; }
-.reading-notice { padding:10px 12px;background:#f1e9d8;border-radius:10px;font-size:13px;line-height:1.5; }
-.reading-game .reading-celebration { width:70px;height:70px;fill:#f3c8d9;stroke:#9870a0; }
-.reading-manager-content { width:min(100%,800px);margin:22px auto 36px; }
-.reading-manager h1 { font:400 clamp(28px,4vw,42px)/1.2 Georgia,serif;margin:14px 0; }
-.reading-manager p { line-height:1.6; }
-.reading-manager form { margin:24px 0 12px; }
-.reading-manager form>label { display:block;margin-bottom:8px;font-weight:700;font-size:14px; }
-.reading-manager form>div { display:flex;gap:10px; }
-.reading-manager input[type=text],.reading-manager input:not([type]) { min-width:0;width:100%;border:1px solid #c9bfce;border-radius:12px;padding:12px;font:inherit;background:white;color:#4c4354; }
-.reading-word-list { display:flex;flex-direction:column;gap:8px;margin:20px 0; }
-.reading-word-row { display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border-bottom:1px solid #e5dbdf; }
-.reading-word-row>label { display:flex;align-items:center;gap:14px;min-width:0;cursor:pointer; }
-.reading-word-row label span { font-size:23px;overflow-wrap:anywhere; }
-.reading-word-row small { display:block;font-size:11px;color:#796b7e;margin-top:3px; }
-.reading-word-row>div { display:flex;gap:5px;flex-shrink:0; }
-.reading-word-row button { padding:10px; }
-.reading-backup { display:flex;gap:12px;flex-wrap:wrap;margin-top:24px; }
-.reading-file { position:relative; }
-.reading-file input { position:absolute;inset:0;opacity:0;cursor:pointer;width:100%; }
 /* Eleven home cards, all in the grid, with room for the new reading game. */
 .games-home .fairy-menu { grid-template-rows:repeat(6,minmax(58px,1fr));height:min(100%,610px); }
 .games-home .fairy-menu>.fairy-game-construction { grid-column:auto; }
@@ -77,38 +14,6 @@
 @media(max-width:850px) and (orientation:portrait) {
  .story-reader[data-story=lola-parc-fees]::before { background:linear-gradient(180deg,#fbf4e8aa 0%,#fbf4e800 13%,#fbf4e800 34%,#fbf4e8ee 48%,#fbf4e8 56%),var(--story-backdrop) left top / auto 58% no-repeat; }
 }
-.reading-manager .reading-notice { display:block; }
-@media(max-width:380px) {
- .story-reader[data-story=lola-parc-fees]::before { background:linear-gradient(180deg,#fbf4e8aa 0%,#fbf4e800 13%,#fbf4e800 28%,#fbf4e8 43%),var(--story-backdrop) left top / auto 50% no-repeat; }
- .story-controls { display:grid;grid-template-columns:44px minmax(0,1fr) 44px 36px;gap:5px; }
- .story-reader .story-play { min-width:0;padding:8px; }
- .story-credits { position:static;min-width:36px; }
-}
-@media(max-width:850px) {
- .reading-layout { grid-template-columns:minmax(0,.8fr) minmax(0,1fr); }
- .reading-scene-copy { padding:28px 12px; }.reading-scene-copy h1 { font-size:31px; }
- .reading-play { padding:24px 16px;gap:16px; }
-}
-@media(max-width:650px) {
- #root>.reading-game,#root>.reading-manager { padding:6px 12px; }
- .reading-header>span { display:none; }.reading-header button { padding:8px;font-size:13px; }
- .reading-layout { display:flex;flex-direction:column; }
- .reading-scene { min-height:150px;height:150px;background-size:auto 280px;background-position:left 58%;border-radius:20px; }
- .reading-scene::after { background:linear-gradient(90deg,transparent 12%,#faf5ebdd 66%); }
- .reading-scene-copy { display:none; }
- .reading-garden { left:auto;right:4px;bottom:44px;width:46%;display:grid;grid-template-columns:repeat(3,1fr);gap:7px; }
- .reading-garden svg { width:28px;height:28px; }
- .reading-play { padding:18px 8px 24px;gap:14px; }.reading-play h2 { font-size:29px; }
- .reading-play>h2 br { display:none; }.reading-play>p { font-size:14px; }
- .reading-modes button { min-height:74px; }.reading-model { padding:18px 12px;font-size:36px; }
- .reading-choices button { min-height:65px;font-size:25px; }.reading-choices { gap:9px; }
- .reading-manager-content { margin-top:10px; }.reading-word-row { padding:10px 0;gap:6px; }
- .reading-word-row label { gap:8px; }.reading-word-row label span { font-size:21px; }.reading-word-row button { padding:9px; }
- .games-home .park-hero { overflow:auto;grid-template-rows:minmax(115px,25%) minmax(365px,1fr); }
- .games-home .park-hero>img { height:25%; }.games-home .fairy-menu { align-self:start; }
-}
-@media(max-height:600px) and (min-width:651px) {
- .reading-scene { min-height:460px; }.reading-play { padding:20px;gap:12px; }.reading-play h2 { font-size:28px; }.reading-scene-copy h1 { font-size:32px; }
- .reading-model { padding:14px;font-size:32px; }.reading-choices button { min-height:60px;font-size:26px; }
-}
-@media(prefers-reduced-motion:reduce) { .reading-garden svg { transition:none; } }
+
+@media(max-width:380px) { .story-reader[data-story=lola-parc-fees]::before { background:linear-gradient(180deg,#fbf4e8aa 0%,#fbf4e800 13%,#fbf4e800 28%,#fbf4e8 43%),var(--story-backdrop) left top / auto 50% no-repeat; } .story-controls { display:grid;grid-template-columns:44px minmax(0,1fr) 44px 36px;gap:5px; } .story-reader .story-play { min-width:0;padding:8px; } .story-credits { position:static;min-width:36px; } }
+@media(max-width:650px) { .games-home .park-hero { overflow:auto;grid-template-rows:minmax(115px,25%) minmax(365px,1fr); } .games-home .park-hero>img { height:25%; } .games-home .fairy-menu { align-self:start; } }

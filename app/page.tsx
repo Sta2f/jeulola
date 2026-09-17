@@ -153,7 +153,7 @@ export default function Home() {
         <nav className="fairy-menu" aria-label="Les jeux de Lola">
           <FairyGameButton tone="honey" icon="123" onClick={() => goTo('math', 'math')}>Les calculs enchantés</FairyGameButton>
           <FairyGameButton tone="lilac" icon="ABC" onClick={() => goTo('letters', 'letters')}>La magie des lettres</FairyGameButton>
-          <FairyGameButton className="fairy-game-reading" tone="mint" icon="Aa" onClick={() => goTo('reading')}>Le jardin des mots</FairyGameButton>
+          <FairyGameButton className="fairy-game-reading" tone="mint" icon="Aa" onClick={() => goTo('reading')}>Le cartable magique</FairyGameButton>
           <FairyGameButton tone="rose" icon={<TrafficCone />} onClick={() => goTo('traffic')}>Le feu rouge</FairyGameButton>
           <FairyGameButton tone="honey" icon={<Map />} onClick={() => goTo('maze-menu')}>Les labyrinthes</FairyGameButton>
           <FairyGameButton tone="sky" icon={<Palette />} onClick={() => goTo('coloring', 'coloring')}>Les coloriages</FairyGameButton>

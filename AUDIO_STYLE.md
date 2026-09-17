@@ -1,5 +1,7 @@
 # Ambiance sonore de Lola
 
+Le cartable magique utilise également DeniseNeural, débit −8 %, hauteur naturelle : explication initiale, consignes de chaque image et mot, nouvel essai et fin. Les textes sont dans `app/schoolbagWords.json`, les clips statiques dans `public/assets/schoolbag/audio/`, le générateur dans `scripts/generate-schoolbag-audio.py`.
+
 Correction du 17 septembre 2026 : Julien signale des passages à l’accent anglais dans **Lola et Éclair au parc des fées**. Ce livre utilise désormais **fr-FR-DeniseNeural**, une voix française dédiée non multilingue, débit −8 %, hauteur naturelle, fichiers `voice-fr-v2-page-N`. La consigne Vivienne ci-dessous reste celle du premier livre ; ne pas la réappliquer automatiquement à cette nouvelle histoire. La voix, le débit et le préfixe sont définis dans le JSON du livre.
 
 Direction demandée par Julien : douce, féerique, expressive, inspirée d’un dessin animé. Pas de voix robotique du navigateur. Musique discrète sous les voix, pas de sons qui continuent après avoir quitté un jeu.
