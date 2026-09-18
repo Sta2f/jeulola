@@ -165,8 +165,13 @@ export default function ConstructionGame({ onBack }: { onBack: () => void }) {
       y: number;
       pointer: number;
       moved: boolean;
+      intent: 'pending' | 'scroll' | 'drag';
+      horizontal: boolean;
+      scroll: number;
+      list: HTMLDivElement;
     } | null>(null),
     actionRef = useRef<(target: Target, source?: string) => void>(() => {});
+  const suppressPieceClick = useRef(0);
   function sound() {
     const settings = getAudioSettings();
     if (!settings.enabled || settings.volume === 0) return;
@@ -302,8 +307,18 @@ export default function ConstructionGame({ onBack }: { onBack: () => void }) {
     const move = (e: PointerEvent) => {
       const d = drag.current;
       if (!d || d.pointer !== e.pointerId) return;
-      if (Math.hypot(e.clientX - d.x, e.clientY - d.y) > 8) d.moved = true;
-      if (d.moved) {
+      const dx = e.clientX - d.x,
+        dy = e.clientY - d.y;
+      if (Math.hypot(dx, dy) > 8) d.moved = true;
+      if (d.moved && d.intent === 'pending') {
+        const along = d.horizontal ? Math.abs(dx) : Math.abs(dy);
+        const across = d.horizontal ? Math.abs(dy) : Math.abs(dx);
+        d.intent = along > across ? 'scroll' : 'drag';
+      }
+      if (d.intent === 'scroll') {
+        if (d.horizontal) d.list.scrollLeft = d.scroll - dx;
+        else d.list.scrollTop = d.scroll - dy;
+      } else if (d.intent === 'drag') {
         setGhost({ id: d.id, x: e.clientX, y: e.clientY });
         scene.current?.hover(e.clientX, e.clientY);
       }
@@ -311,7 +326,8 @@ export default function ConstructionGame({ onBack }: { onBack: () => void }) {
     const up = (e: PointerEvent) => {
       const d = drag.current;
       if (!d || d.pointer !== e.pointerId) return;
-      if (d.moved) {
+      if (d.moved) suppressPieceClick.current = performance.now() + 700;
+      if (d.intent === 'drag') {
         const target = scene.current?.drop(e.clientX, e.clientY);
         if (target) actionRef.current(target);
       }
@@ -412,14 +428,11 @@ export default function ConstructionGame({ onBack }: { onBack: () => void }) {
   const piece = BY_ID[selected];
   function scrollPieces(direction: number) {
     const el = piecesList.current;
-    if (el)
-      el.scrollBy({
-        left: direction * el.clientWidth * 0.8,
-        top: direction * el.clientHeight * 0.8,
-        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches
-          ? 'instant'
-          : 'smooth',
-      });
+    if (!el) return;
+    // Immediate steps accumulate reliably even when a child taps repeatedly.
+    if (getComputedStyle(el).display === 'flex')
+      el.scrollLeft += direction * el.clientWidth * 0.8;
+    else el.scrollTop += direction * el.clientHeight * 0.8;
   }
   return (
     <main
@@ -693,6 +706,10 @@ export default function ConstructionGame({ onBack }: { onBack: () => void }) {
                   onPointerDown={(e) => {
                     if (e.button !== 0 || !e.isPrimary) return;
                     e.preventDefault();
+                    suppressPieceClick.current = 0;
+                    const list = piecesList.current!;
+                    const horizontal =
+                      getComputedStyle(list).display === 'flex';
                     setSelected(p.id);
                     setMode('build');
                     state.current.selected = p.id;
@@ -704,12 +721,17 @@ export default function ConstructionGame({ onBack }: { onBack: () => void }) {
                       y: e.clientY,
                       pointer: e.pointerId,
                       moved: false,
+                      intent: 'pending',
+                      horizontal,
+                      scroll: horizontal ? list.scrollLeft : list.scrollTop,
+                      list,
                     };
                     e.currentTarget.setPointerCapture(e.pointerId);
                   }}
                   onContextMenu={(e) => e.preventDefault()}
                   onDragStart={(e) => e.preventDefault()}
                   onClick={() => {
+                    if (performance.now() < suppressPieceClick.current) return;
                     setSelected(p.id);
                     setMode('build');
                     setMessage(`${p.name} : glisse ou touche une case.`);

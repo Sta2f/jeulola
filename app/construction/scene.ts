@@ -200,7 +200,13 @@ export function createConstructionScene(
     selected = 'grass',
     rotation = 0;
   let start:
-      | { x: number; y: number; pointer: number; source?: string }
+      | {
+          x: number;
+          y: number;
+          pointer: number;
+          source?: string;
+          anchor?: { x: number; z: number; height: number };
+        }
       | undefined,
     hover: Target | null = null,
     keyboard = { x: 7, z: 10 };
@@ -393,6 +399,20 @@ export function createConstructionScene(
       (-(y - rect.top) / rect.height) * 2 + 1,
     );
     ray.setFromCamera(pointer, camera);
+    // Keep the same grab point. Raycasting the moving piece itself made tall
+    // and multi-cell pieces jump between their faces as the finger moved.
+    if (start?.anchor) {
+      const anchor = start.anchor;
+      const ground = ray.ray.intersectPlane(
+        new T.Plane(new T.Vector3(0, 1, 0), -anchor.height),
+        new T.Vector3(),
+      );
+      if (!ground) return null;
+      return {
+        x: Math.round(ground.x + anchor.x),
+        z: Math.round(ground.z + anchor.z),
+      };
+    }
     const hit = ray.intersectObjects(content.children, true)[0];
     if (hit) {
       let node: T.Object3D | null = hit.object;
@@ -510,7 +530,9 @@ export function createConstructionScene(
       if (mode === 'move' && start?.source) {
         const moved = movePiece(world, start.source, target.x, target.z),
           base = moved?.find((b) => b.uid === start?.source);
+        m.material = base ? destination : red;
         if (base) {
+          m.position.y = base.y * 0.65 + 0.08;
           previewGroup.visible = true;
           previewGroup.position.set(
             base.x - (SIZE - 1) / 2,
@@ -549,8 +571,16 @@ export function createConstructionScene(
   }
   selection(selected, 0);
   const down = (e: PointerEvent) => {
-    if (stage !== 'build' || mode === 'rotate' || e.button !== 0) return;
+    if (
+      stage !== 'build' ||
+      mode === 'rotate' ||
+      e.button !== 0 ||
+      !e.isPrimary ||
+      start
+    )
+      return;
     const hit = pick(e.clientX, e.clientY);
+    if (mode === 'move' && !hit?.uid) return;
     start = {
       x: e.clientX,
       y: e.clientY,
@@ -561,6 +591,17 @@ export function createConstructionScene(
     if (start.source) {
       const group = supportedGroup(world, start.source),
         base = group[0];
+      const height = base.y * 0.65;
+      const ground = ray.ray.intersectPlane(
+        new T.Plane(new T.Vector3(0, 1, 0), -height),
+        new T.Vector3(),
+      );
+      if (ground)
+        start.anchor = {
+          x: base.x - ground.x,
+          z: base.z - ground.z,
+          height,
+        };
       previewGroup.clear();
       previewMaterials.splice(0).forEach((m) => m.dispose());
       for (const p of group) {
@@ -586,10 +627,13 @@ export function createConstructionScene(
           }
         });
         previewGroup.add(clone);
+        original.group.visible = false;
       }
+      preview(pick(e.clientX, e.clientY));
     }
   };
   const move = (e: PointerEvent) => {
+    if (start && start.pointer !== e.pointerId) return;
     if (stage === 'build' && mode !== 'rotate')
       preview(pick(e.clientX, e.clientY));
   };
@@ -598,17 +642,22 @@ export function createConstructionScene(
     const target = pick(e.clientX, e.clientY);
     if (
       target &&
-      (mode === 'build' || mode === 'move' ||
-        Math.hypot(e.clientX - start.x, e.clientY - start.y) < 12)
+      (mode === 'build' ||
+        (mode === 'move' &&
+          Math.hypot(e.clientX - start.x, e.clientY - start.y) > 8) ||
+        (mode === 'erase' &&
+          Math.hypot(e.clientX - start.x, e.clientY - start.y) < 12))
     )
       onDrop(target, start.source);
     start = undefined;
+    for (const item of models.values()) item.group.visible = true;
     selection(selected, rotation);
     clearPreview();
   };
   const cancel = () => {
     const moving = Boolean(start?.source);
     start = undefined;
+    for (const item of models.values()) item.group.visible = true;
     if (moving) selection(selected, rotation);
     clearPreview();
   };
@@ -676,6 +725,7 @@ export function createConstructionScene(
       requestRender();
     },
     setMode(next: BuildMode, nextStage: Stage, isPaused = false) {
+      cancel();
       mode = next;
       stage = nextStage;
       paused = isPaused;

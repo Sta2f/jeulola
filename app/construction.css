@@ -1206,3 +1206,11 @@
     bottom: auto;
   }
 }
+/* Comfortable, always reachable paging controls on touch tablets. */
+@media (pointer: coarse) and (min-width: 651px) {
+ .construction-page-buttons button { width:44px;min-height:44px;padding:8px; }
+ .construction-page-buttons svg { width:22px;height:22px;transform:rotate(90deg); }
+ .construction-drawer h2 { font-size:22px; }
+ .construction-drawer > header { margin-bottom:6px; }
+}
+.construction-pieces { -webkit-overflow-scrolling:touch; }

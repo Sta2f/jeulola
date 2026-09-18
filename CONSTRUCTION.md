@@ -48,6 +48,15 @@ Les tailles des nuages et des dessins sont mesurées avec ResizeObserver, sans
 dépendre des unités de conteneur CSS absentes de Safari 15. Les tests WebKit et
 WebGL 1 forcé ne remplacent pas la validation physique sur l'iPad sous iPadOS 15.8.7.
 
+Gestes tactiles : glisser dans l'axe de la bibliothèque la fait défiler ; glisser
+vers le plateau emporte une pièce. Les boutons précédent/suivant avancent sans
+animation pour accepter les appuis répétés. En mode Déplacer, le point de prise
+est conservé sur un plan fixe : les faces du modèle ne perturbent plus la visée.
+L'original est masqué pendant la prévisualisation et réapparaît si le geste est
+annulé ou la destination refusée. Les scripts locaux `construction-ipad-gestures-qa.mjs`
+et `construction-ipad-webkit-qa.mjs` vérifient défilement, accès aux dernières plantes,
+déplacement de cube/arbre/pièce tournée, et annulation sur trois formats.
+
 Contrôles : `npm run test:construction`, `npm run lint`, `npm run build`.
 Les scripts de QA locaux dans `output/playwright/construction-*.mjs` vérifient aussi
 les interactions, la sauvegarde, six tailles d'écran et WebKit.
