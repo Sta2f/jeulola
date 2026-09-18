@@ -40,6 +40,13 @@ Chargement différé de Three.js à l'ouverture du jeu. Géométries et matéria
 rendu à la demande en construction/visite, arrêt lorsque la page est masquée.
 WebKit utilise une surface visible 2D alimentée par le rendu WebGL pour éviter la
 disparition de sa couche de composition après redimensionnement ; la scène reste 3D.
+Three.js est fixé à r162 pour conserver WebGL 1 (retiré à partir de r163).
+Le contexte essaie WebGL 2 puis WebGL 1. Sur iPad/iPhone ou WebGL 1, le rendu
+utilise un ratio de pixels de 1, des vignettes de 96 pixels et aucune ombre portée
+pour réduire la charge GPU. La compilation cible également Safari 14 et suivants.
+Les tailles des nuages et des dessins sont mesurées avec ResizeObserver, sans
+dépendre des unités de conteneur CSS absentes de Safari 15. Les tests WebKit et
+WebGL 1 forcé ne remplacent pas la validation physique sur l'iPad sous iPadOS 15.8.7.
 
 Contrôles : `npm run test:construction`, `npm run lint`, `npm run build`.
 Les scripts de QA locaux dans `output/playwright/construction-*.mjs` vérifient aussi

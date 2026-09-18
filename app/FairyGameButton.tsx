@@ -1,4 +1,4 @@
-import { useId, type ReactNode } from 'react';
+import { useId, useLayoutEffect, useRef, type ReactNode } from 'react';
 
 /** The cloud keeps its own proportions, even in a short landscape viewport. */
 export function FairyGameButton({
@@ -15,8 +15,30 @@ export function FairyGameButton({
   className?: string;
 }) {
   const pearl = useId();
+  const button = useRef<HTMLButtonElement>(null);
+  useLayoutEffect(() => {
+    const node = button.current!;
+    const fit = () => {
+      // SVG uses "meet": fit to its actual 240×140 shape, not the grid cell.
+      const scale = Math.min(node.clientWidth / 240, node.clientHeight / 140);
+      node.style.setProperty('--cloud-content-width', `${182 * scale}px`);
+      node.style.setProperty(
+        '--cloud-label-size',
+        `${Math.min(17, 19 * scale)}px`,
+      );
+      node.style.setProperty(
+        '--cloud-icon-size',
+        `${Math.min(26, 28 * scale)}px`,
+      );
+    };
+    fit();
+    const observer = new ResizeObserver(fit);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
   return (
     <button
+      ref={button}
       type="button"
       className={`fairy-game fairy-game--${tone} ${className}`.trim()}
       onClick={onClick}

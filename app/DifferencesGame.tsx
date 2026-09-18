@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
 import { Check, ChevronLeft, ChevronRight, Lightbulb, RotateCcw, Search, X, ZoomIn } from 'lucide-react';
 import { differenceLevels, type Difference, type DifferenceLevel } from './differenceLevels';
+import { useDrawingSize } from './useDrawingSize';
 import { readSaved, saveValue } from './preferences';
 import { useAchievements } from './useAchievements';
 import { useGameAudio } from './useGameAudio';
@@ -30,6 +31,8 @@ export function DifferencesGame({ onBack }: { onBack: () => void }) {
 }
 
 function DifferenceRound({ index, onNext }: { index: number; onNext: () => void }) {
+  const comparison = useDrawingSize(true);
+  const enlarged = useDrawingSize(false);
   const level = differenceLevels[index];
   const [found, setFound] = useState(() => savedFound(level));
   const foundRef = useRef(found);
@@ -85,7 +88,7 @@ function DifferenceRound({ index, onNext }: { index: number; onNext: () => void 
   };
   return <>
     <section className="differences-summary"><div><small>LOLA, ÉCLAIR ET BETTY · {index + 1} / 10</small><h2>{level.title}</h2></div><div className="differences-progress" aria-label={`${found.length} différences trouvées sur 7`}><strong>{found.length} / 7</strong><span aria-hidden="true">{Array.from({ length: 7 }, (_, i) => <i key={i} data-found={i < found.length}>{i < found.length ? <Check /> : '·'}</i>)}</span></div></section>
-    <div className="differences-comparison">
+    <div className="differences-comparison" ref={comparison}>
       {loaded ? (['a', 'b'] as const).map(side => <section className="differences-drawing" key={side} aria-label={`Dessin ${side.toUpperCase()}`}>
         <DifferenceDrawing level={level} side={side} found={found} hint={hint} miss={miss} onSelect={select} />
         <button className="differences-zoom" aria-label={`Agrandir le dessin ${side.toUpperCase()}`} onClick={() => setZoom(side)}><ZoomIn /><span>{side.toUpperCase()}</span></button>
@@ -94,7 +97,7 @@ function DifferenceRound({ index, onNext }: { index: number; onNext: () => void 
     <footer className="differences-footer"><output aria-live="polite">{won ? 'Bravo Lola ! Les 7 différences sont trouvées !' : message}</output><div><span className="differences-wins">★ {completed.length} / 10</span><button onClick={restart} aria-label="Recommencer ce niveau"><RotateCcw /></button>{won ? <button className="differences-next" onClick={onNext}>{index === 9 ? 'Revenir au premier' : 'Niveau suivant'}<ChevronRight /></button> : <button disabled={!loaded} onClick={showHint}><Lightbulb /> Indice</button>}</div></footer>
     <dialog ref={dialog} className="differences-dialog" onCancel={() => setZoom(null)} onClose={() => setZoom(null)}>
       <header><fieldset aria-label="Comparer les dessins agrandis">{(['a', 'b'] as const).map(side => <button key={side} aria-pressed={zoom === side} onClick={() => setZoom(side)}>Dessin {side.toUpperCase()}</button>)}</fieldset><strong>{found.length} / 7</strong><button aria-label="Fermer le grand dessin" onClick={() => setZoom(null)}><X /></button></header>
-      <div className="differences-zoom-stage">{zoom && <DifferenceDrawing level={level} side={zoom} found={found} hint={hint} miss={miss} onSelect={select} />}</div>
+      <div className="differences-zoom-stage" ref={enlarged}>{zoom && <DifferenceDrawing level={level} side={zoom} found={found} hint={hint} miss={miss} onSelect={select} />}</div>
       <p aria-live="polite">{won ? 'Les 7 différences sont trouvées !' : 'Passe de A à B pour comparer, puis touche la différence.'}</p>
     </dialog>
   </>;

@@ -17,3 +17,10 @@
 
 @media(max-width:380px) { .story-reader[data-story=lola-parc-fees]::before { background:linear-gradient(180deg,#fbf4e8aa 0%,#fbf4e800 13%,#fbf4e800 28%,#fbf4e8 43%),var(--story-backdrop) left top / auto 50% no-repeat; } .story-controls { display:grid;grid-template-columns:44px minmax(0,1fr) 44px 36px;gap:5px; } .story-reader .story-play { min-width:0;padding:8px; } .story-credits { position:static;min-width:36px; } }
 @media(max-width:650px) { .games-home .park-hero { overflow:auto;grid-template-rows:minmax(115px,25%) minmax(365px,1fr); } .games-home .park-hero>img { height:25%; } .games-home .fairy-menu { align-self:start; } }
+/* Portrait iPads need full-width cloud rows instead of the narrow desktop rail. */
+@media(min-width:651px) and (max-width:1100px) and (orientation:portrait) {
+ .games-home .park-hero { grid-template-columns:minmax(0,1fr);grid-template-rows:160px minmax(0,1fr);padding:6px 24px 12px;gap:6px; }
+ .games-home .welcome-board { grid-column:1;grid-row:1;position:relative;inset:auto;width:250px; }
+ .games-home .fairy-menu { grid-column:1;grid-row:2;width:100%;max-width:600px;height:100%;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));gap:4px 16px; }
+ .games-home .enchantment-field { left:auto;right:4%;top:6%;width:12%;height:12%; }
+}

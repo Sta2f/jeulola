@@ -248,3 +248,8 @@
  .app-shell .traffic-challenge { grid-column:1 / -1;grid-row:4;margin:3px 0 0;padding:6px; }
  .traffic-challenge p,.traffic-challenge output { margin:4px 0;font-size:11px; }
 }
+/* Fit the lettering to the SVG itself on every Safari version. */
+.fairy-game .fairy-game-content { width:var(--cloud-content-width,76%);max-width:none;gap:2px;transform:translateY(0); }
+.fairy-game .fairy-game-label { font-size:var(--cloud-label-size,12px);line-height:1.12; }
+.fairy-game .fairy-game-icon { font-size:var(--cloud-label-size,12px);height:var(--cloud-icon-size,20px); }
+.fairy-game .fairy-game-icon svg { width:var(--cloud-icon-size,20px);height:var(--cloud-icon-size,20px); }

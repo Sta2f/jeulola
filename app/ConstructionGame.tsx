@@ -362,7 +362,7 @@ export default function ConstructionGame({ onBack }: { onBack: () => void }) {
   function undo() {
     if (!history.length) return;
     setFuture((f) => [world, ...f]);
-    updateWorld(history.at(-1)!);
+    updateWorld(history[history.length - 1]!);
     setHistory((h) => h.slice(0, -1));
   }
   function redo() {

@@ -29,13 +29,33 @@ export function createConstructionScene(
   onReady: (images: Record<string, string>) => void,
   onError: () => void,
 ) {
+  // r162 retains WebGL 1 for iPads that cannot create a WebGL 2 context.
+  const source = document.createElement('canvas');
+  const contextOptions = {
+    alpha: true,
+    antialias: false,
+    powerPreference: 'low-power' as const,
+  };
+  const context = (source.getContext('webgl2', contextOptions) ||
+    source.getContext('webgl', contextOptions)) as
+    | WebGLRenderingContext
+    | WebGL2RenderingContext
+    | null;
+  if (!context) throw new Error('WebGL unavailable');
+  const mobile =
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+  const light = mobile || !('texImage3D' in context);
+  const pixelRatio = light ? 1 : Math.min(devicePixelRatio, 1.5);
   const renderer = new T.WebGLRenderer({
-    antialias: true,
+    canvas: source,
+    context,
+    antialias: false,
     alpha: true,
     preserveDrawingBuffer: false,
   });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
-  renderer.shadowMap.enabled = true;
+  renderer.setPixelRatio(pixelRatio);
+  renderer.shadowMap.enabled = !light;
   renderer.shadowMap.type = T.PCFShadowMap;
   renderer.toneMapping = T.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 0.92;
@@ -76,7 +96,7 @@ export function createConstructionScene(
   // A single renderer supplies every thumbnail; these are the same meshes as the play pieces.
   const images: Record<string, string> = {};
   renderer.setPixelRatio(1);
-  renderer.setSize(144, 144, false);
+  renderer.setSize(light ? 96 : 144, light ? 96 : 144, false);
   renderer.shadowMap.enabled = false;
   for (const piece of PIECES) {
     const model = makePiece(piece);
@@ -97,8 +117,8 @@ export function createConstructionScene(
     scene.remove(model);
   }
   onReady(images);
-  renderer.shadowMap.enabled = true;
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+  renderer.shadowMap.enabled = !light;
+  renderer.setPixelRatio(pixelRatio);
   const tray = new T.Group();
   scene.add(tray);
   box(tray, '#e3c8a3', 0, -0.36, 0, SIZE + 0.75, 0.7, SIZE + 0.75, 0.25);

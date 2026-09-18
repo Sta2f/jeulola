@@ -8,12 +8,17 @@ const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 const buildId = Date.now().toString(36);
 
 export default defineConfig({
+  build: { target: ['es2020', 'safari14'] },
   plugins: [
     react(),
     {
       name: 'emit-build-version',
       generateBundle() {
-        this.emitFile({ type: 'asset', fileName: 'version.json', source: JSON.stringify({ buildId }) });
+        this.emitFile({
+          type: 'asset',
+          fileName: 'version.json',
+          source: JSON.stringify({ buildId }),
+        });
       },
     },
   ],

@@ -39,7 +39,10 @@ export function candidate(
   z: number,
   r = 0,
 ): Placed | null {
-  if (!Object.hasOwn(BY_ID, id) || ![x, z, r].every(Number.isInteger))
+  if (
+    !Object.prototype.hasOwnProperty.call(BY_ID, id) ||
+    ![x, z, r].every(Number.isInteger)
+  )
     return null;
   const proposed: Placed = { uid: 'preview', id, x, z, y: 0, r };
   const cells = footprint(proposed);
@@ -135,7 +138,7 @@ export function validWorld(value: unknown): value is World {
       typeof p.uid !== 'string' ||
       ids.has(p.uid) ||
       typeof p.id !== 'string' ||
-      !Object.hasOwn(BY_ID, p.id) ||
+      !Object.prototype.hasOwnProperty.call(BY_ID, p.id) ||
       ![p.x, p.z, p.y, p.r].every(Number.isInteger) ||
       p.r < 0 ||
       p.r > 3
