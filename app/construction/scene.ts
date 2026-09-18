@@ -598,7 +598,7 @@ export function createConstructionScene(
     const target = pick(e.clientX, e.clientY);
     if (
       target &&
-      (mode === 'move' ||
+      (mode === 'build' || mode === 'move' ||
         Math.hypot(e.clientX - start.x, e.clientY - start.y) < 12)
     )
       onDrop(target, start.source);

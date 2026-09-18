@@ -1009,6 +1009,13 @@
 }
 #root .construction-pieces > button {
   touch-action: none;
+  -webkit-touch-callout: none;
+}
+.construction-pieces > button > img,
+.construction-pieces > button > span,
+.construction-pieces > button > small {
+  pointer-events: none;
+  -webkit-touch-callout: none;
 }
 /* Ten clouds share the grid; none can cover another game's touch target. */
 .games-home .fairy-menu {

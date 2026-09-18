@@ -692,6 +692,7 @@ export default function ConstructionGame({ onBack }: { onBack: () => void }) {
                   aria-pressed={selected === p.id && mode === 'build'}
                   onPointerDown={(e) => {
                     if (e.button !== 0 || !e.isPrimary) return;
+                    e.preventDefault();
                     setSelected(p.id);
                     setMode('build');
                     state.current.selected = p.id;
@@ -706,6 +707,8 @@ export default function ConstructionGame({ onBack }: { onBack: () => void }) {
                     };
                     e.currentTarget.setPointerCapture(e.pointerId);
                   }}
+                  onContextMenu={(e) => e.preventDefault()}
+                  onDragStart={(e) => e.preventDefault()}
                   onClick={() => {
                     setSelected(p.id);
                     setMode('build');
