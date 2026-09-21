@@ -15,6 +15,13 @@
     { "id": "orange", "text": "orange", "picture": "orange.svg", "imagePrompt": "Mets la couleur orange dans le cartable.", "wordPrompt": "Maintenant, mets le mot orange dans le cartable." },
     { "id": "ciseaux", "text": "ciseaux", "picture": "ciseaux.webp", "imagePrompt": "Mets l’image des ciseaux dans le cartable.", "wordPrompt": "Maintenant, mets le mot ciseaux dans le cartable." },
     { "id": "usine", "text": "usine", "picture": "usine.webp", "imagePrompt": "Mets l’image de l’usine dans le cartable.", "wordPrompt": "Maintenant, mets le mot usine dans le cartable." },
-    { "id": "colle", "text": "colle", "picture": "colle.webp", "imagePrompt": "Mets l’image de la colle dans le cartable.", "wordPrompt": "Maintenant, mets le mot colle dans le cartable." }
+    { "id": "colle", "text": "colle", "picture": "colle.webp", "imagePrompt": "Mets l’image de la colle dans le cartable.", "wordPrompt": "Maintenant, mets le mot colle dans le cartable." },
+    { "id": "automne", "text": "automne", "picture": "automne.webp", "imagePrompt": "Mets l’image de l’automne dans le cartable.", "wordPrompt": "Maintenant, mets le mot automne dans le cartable." },
+    { "id": "renard", "text": "renard", "picture": "renard.webp", "imagePrompt": "Mets l’image du renard dans le cartable.", "wordPrompt": "Maintenant, mets le mot renard dans le cartable." },
+    { "id": "arbre", "text": "arbre", "picture": "arbre.webp", "imagePrompt": "Mets l’image de l’arbre dans le cartable.", "wordPrompt": "Maintenant, mets le mot arbre dans le cartable." },
+    { "id": "tete", "text": "tête", "picture": "tete.webp", "imagePrompt": "Mets l’image de la tête dans le cartable.", "wordPrompt": "Maintenant, mets le mot tête dans le cartable." },
+    { "id": "marron", "text": "marron", "picture": "marron.webp", "imagePrompt": "Mets l’image du marron dans le cartable.", "wordPrompt": "Maintenant, mets le mot marron dans le cartable." },
+    { "id": "foret", "text": "forêt", "picture": "foret.webp", "imagePrompt": "Mets l’image de la forêt dans le cartable.", "wordPrompt": "Maintenant, mets le mot forêt dans le cartable." },
+    { "id": "echarpe", "text": "écharpe", "picture": "echarpe.webp", "imagePrompt": "Mets l’image de l’écharpe dans le cartable.", "wordPrompt": "Maintenant, mets le mot écharpe dans le cartable." }
   ]
 }
