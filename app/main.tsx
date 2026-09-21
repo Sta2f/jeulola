@@ -18,6 +18,7 @@ import './chicken/joystick.css';
 import './construction.css';
 import './reading.css';
 import './schoolbag.css';
+import './exercises.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -1,0 +1,4084 @@
+{
+  "lessons": [
+    {
+      "title": "La rentrée des classes",
+      "icon": "🎒",
+      "activities": [
+        {
+          "id": "1-0",
+          "title": "Les mots et les images",
+          "kind": "picture",
+          "prompt": "Trouve le mot qui va avec l’image.",
+          "audio": "d2595ff5bd12a31b",
+          "items": [
+            {
+              "text": "école",
+              "picture": "ecole.webp",
+              "options": [
+                "école",
+                "cartable",
+                "image",
+                "plumier"
+              ],
+              "answer": "école",
+              "audio": "f0f772e182a4941e"
+            },
+            {
+              "text": "cartable",
+              "picture": "bag.webp",
+              "options": [
+                "cartable",
+                "école",
+                "image",
+                "plumier"
+              ],
+              "answer": "cartable",
+              "audio": "622ffabe5404fa13"
+            },
+            {
+              "text": "image",
+              "picture": "image.webp",
+              "options": [
+                "image",
+                "école",
+                "cartable",
+                "plumier"
+              ],
+              "answer": "image",
+              "audio": "6105d6cc76af4003"
+            },
+            {
+              "text": "plumier",
+              "picture": "plumier.webp",
+              "options": [
+                "plumier",
+                "école",
+                "cartable",
+                "image"
+              ],
+              "answer": "plumier",
+              "audio": "2a72902dab689810"
+            }
+          ]
+        },
+        {
+          "id": "1-1",
+          "title": "Les deux écritures",
+          "kind": "scripts",
+          "prompt": "Retrouve le même mot en écriture attachée.",
+          "audio": "3aeb96060c86484d",
+          "items": [
+            {
+              "text": "école",
+              "answer": "école",
+              "options": [
+                "école",
+                "cartable",
+                "image",
+                "plumier"
+              ],
+              "audio": "f0f772e182a4941e"
+            },
+            {
+              "text": "cartable",
+              "answer": "cartable",
+              "options": [
+                "cartable",
+                "école",
+                "image",
+                "plumier"
+              ],
+              "audio": "622ffabe5404fa13"
+            },
+            {
+              "text": "image",
+              "answer": "image",
+              "options": [
+                "image",
+                "école",
+                "cartable",
+                "plumier"
+              ],
+              "audio": "6105d6cc76af4003"
+            },
+            {
+              "text": "plumier",
+              "answer": "plumier",
+              "options": [
+                "plumier",
+                "école",
+                "cartable",
+                "image"
+              ],
+              "audio": "2a72902dab689810"
+            }
+          ]
+        },
+        {
+          "id": "1-2",
+          "title": "La lettre i",
+          "kind": "letter",
+          "prompt": "Retrouve la même lettre.",
+          "audio": "945119b664bd3942",
+          "items": [
+            {
+              "text": "i",
+              "answer": "i",
+              "options": [
+                "i",
+                "a",
+                "o",
+                "u"
+              ],
+              "audio": "ff80029818dff4c8",
+              "form": 0
+            },
+            {
+              "text": "i",
+              "answer": "i",
+              "options": [
+                "i",
+                "a",
+                "o",
+                "u"
+              ],
+              "audio": "ff80029818dff4c8",
+              "form": 1
+            },
+            {
+              "text": "i",
+              "answer": "i",
+              "options": [
+                "i",
+                "a",
+                "o",
+                "u"
+              ],
+              "audio": "ff80029818dff4c8",
+              "form": 2
+            },
+            {
+              "text": "i",
+              "answer": "i",
+              "options": [
+                "i",
+                "a",
+                "o",
+                "u"
+              ],
+              "audio": "ff80029818dff4c8",
+              "form": 3
+            }
+          ]
+        },
+        {
+          "id": "1-3",
+          "title": "Les mots avec i",
+          "kind": "find",
+          "prompt": "Trouve tous les mots avec cette lettre.",
+          "audio": "c3f95daf1627087e",
+          "items": [
+            {
+              "text": "i",
+              "options": [
+                "cerise",
+                "lit",
+                "carotte",
+                "biberon",
+                "papillon",
+                "potiron",
+                "iglou",
+                "grue"
+              ],
+              "answers": [
+                "cerise",
+                "lit",
+                "biberon",
+                "papillon",
+                "potiron",
+                "iglou"
+              ],
+              "audio": "df7f2e2e21036bc2"
+            }
+          ]
+        },
+        {
+          "id": "1-4",
+          "title": "La rentrée des classes",
+          "kind": "read",
+          "prompt": "Lis, puis écoute si tu veux.",
+          "audio": "691a8f0d3ebaf0bd",
+          "items": [
+            {
+              "text": "C’est la rentrée des classes.",
+              "audio": "3926882fe34d00d1"
+            },
+            {
+              "text": "Sacha va à l’école.",
+              "audio": "8cf669715f115c31"
+            },
+            {
+              "text": "Il a un cartable et un plumier.",
+              "audio": "3ff57db02cea4626"
+            },
+            {
+              "text": "Sur son cartable, Sacha a collé une image d’un chien.",
+              "audio": "9da72bf74b580aac"
+            }
+          ]
+        },
+        {
+          "id": "1-0-images",
+          "title": "Lis et trouve l’image",
+          "kind": "images",
+          "prompt": "Lis le mot et trouve son image.",
+          "audio": "86592b4f6d6c7f42",
+          "items": [
+            {
+              "text": "école",
+              "picture": "ecole.webp",
+              "options": [
+                "école",
+                "cartable",
+                "image",
+                "plumier"
+              ],
+              "answer": "école",
+              "audio": "f0f772e182a4941e",
+              "optionPictures": [
+                "ecole.webp",
+                "bag.webp",
+                "image.webp",
+                "plumier.webp"
+              ]
+            },
+            {
+              "text": "cartable",
+              "picture": "bag.webp",
+              "options": [
+                "cartable",
+                "école",
+                "image",
+                "plumier"
+              ],
+              "answer": "cartable",
+              "audio": "622ffabe5404fa13",
+              "optionPictures": [
+                "bag.webp",
+                "ecole.webp",
+                "image.webp",
+                "plumier.webp"
+              ]
+            },
+            {
+              "text": "image",
+              "picture": "image.webp",
+              "options": [
+                "image",
+                "école",
+                "cartable",
+                "plumier"
+              ],
+              "answer": "image",
+              "audio": "6105d6cc76af4003",
+              "optionPictures": [
+                "image.webp",
+                "ecole.webp",
+                "bag.webp",
+                "plumier.webp"
+              ]
+            },
+            {
+              "text": "plumier",
+              "picture": "plumier.webp",
+              "options": [
+                "plumier",
+                "école",
+                "cartable",
+                "image"
+              ],
+              "answer": "plumier",
+              "audio": "2a72902dab689810",
+              "optionPictures": [
+                "plumier.webp",
+                "ecole.webp",
+                "bag.webp",
+                "image.webp"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Le crayon orange",
+      "icon": "🖍️",
+      "activities": [
+        {
+          "id": "2-0",
+          "title": "Les mots et les images",
+          "kind": "picture",
+          "prompt": "Trouve le mot qui va avec l’image.",
+          "audio": "d2595ff5bd12a31b",
+          "items": [
+            {
+              "text": "crayon",
+              "picture": "crayon.webp",
+              "options": [
+                "crayon",
+                "orange",
+                "ciseaux",
+                "usine"
+              ],
+              "answer": "crayon",
+              "audio": "d8b1858e24ae6176"
+            },
+            {
+              "text": "orange",
+              "picture": "orange.svg",
+              "options": [
+                "orange",
+                "crayon",
+                "ciseaux",
+                "usine"
+              ],
+              "answer": "orange",
+              "audio": "1b4c9133da73a711"
+            },
+            {
+              "text": "ciseaux",
+              "picture": "ciseaux.webp",
+              "options": [
+                "ciseaux",
+                "crayon",
+                "orange",
+                "usine"
+              ],
+              "answer": "ciseaux",
+              "audio": "e71e95abead2e4a8"
+            },
+            {
+              "text": "usine",
+              "picture": "usine.webp",
+              "options": [
+                "usine",
+                "crayon",
+                "orange",
+                "ciseaux"
+              ],
+              "answer": "usine",
+              "audio": "e8278c764a473513"
+            },
+            {
+              "text": "colle",
+              "picture": "colle.webp",
+              "options": [
+                "colle",
+                "crayon",
+                "orange",
+                "ciseaux"
+              ],
+              "answer": "colle",
+              "audio": "d5efe2ab2b95dd70"
+            }
+          ]
+        },
+        {
+          "id": "2-1",
+          "title": "Les deux écritures",
+          "kind": "scripts",
+          "prompt": "Retrouve le même mot en écriture attachée.",
+          "audio": "3aeb96060c86484d",
+          "items": [
+            {
+              "text": "crayon",
+              "answer": "crayon",
+              "options": [
+                "crayon",
+                "orange",
+                "ciseaux",
+                "usine"
+              ],
+              "audio": "d8b1858e24ae6176"
+            },
+            {
+              "text": "orange",
+              "answer": "orange",
+              "options": [
+                "orange",
+                "crayon",
+                "ciseaux",
+                "usine"
+              ],
+              "audio": "1b4c9133da73a711"
+            },
+            {
+              "text": "ciseaux",
+              "answer": "ciseaux",
+              "options": [
+                "ciseaux",
+                "crayon",
+                "orange",
+                "usine"
+              ],
+              "audio": "e71e95abead2e4a8"
+            },
+            {
+              "text": "usine",
+              "answer": "usine",
+              "options": [
+                "usine",
+                "crayon",
+                "orange",
+                "ciseaux"
+              ],
+              "audio": "e8278c764a473513"
+            },
+            {
+              "text": "colle",
+              "answer": "colle",
+              "options": [
+                "colle",
+                "crayon",
+                "orange",
+                "ciseaux"
+              ],
+              "audio": "d5efe2ab2b95dd70"
+            }
+          ]
+        },
+        {
+          "id": "2-2",
+          "title": "La lettre o",
+          "kind": "letter",
+          "prompt": "Retrouve la même lettre.",
+          "audio": "945119b664bd3942",
+          "items": [
+            {
+              "text": "o",
+              "answer": "o",
+              "options": [
+                "o",
+                "a",
+                "i",
+                "u"
+              ],
+              "audio": "1fcf6e103866824c",
+              "form": 0
+            },
+            {
+              "text": "o",
+              "answer": "o",
+              "options": [
+                "o",
+                "a",
+                "i",
+                "u"
+              ],
+              "audio": "1fcf6e103866824c",
+              "form": 1
+            },
+            {
+              "text": "o",
+              "answer": "o",
+              "options": [
+                "o",
+                "a",
+                "i",
+                "u"
+              ],
+              "audio": "1fcf6e103866824c",
+              "form": 2
+            },
+            {
+              "text": "o",
+              "answer": "o",
+              "options": [
+                "o",
+                "a",
+                "i",
+                "u"
+              ],
+              "audio": "1fcf6e103866824c",
+              "form": 3
+            }
+          ]
+        },
+        {
+          "id": "2-3",
+          "title": "Les mots avec o",
+          "kind": "find",
+          "prompt": "Trouve tous les mots avec cette lettre.",
+          "audio": "c3f95daf1627087e",
+          "items": [
+            {
+              "text": "o",
+              "options": [
+                "cerise",
+                "lit",
+                "carotte",
+                "biberon",
+                "papillon",
+                "potiron",
+                "iglou",
+                "grue"
+              ],
+              "answers": [
+                "carotte",
+                "biberon",
+                "papillon",
+                "potiron",
+                "iglou"
+              ],
+              "audio": "6a2b548eeee792d8"
+            }
+          ]
+        },
+        {
+          "id": "2-4",
+          "title": "La lettre u",
+          "kind": "letter",
+          "prompt": "Retrouve la même lettre.",
+          "audio": "945119b664bd3942",
+          "items": [
+            {
+              "text": "u",
+              "answer": "u",
+              "options": [
+                "u",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "ac545808d0baeafa",
+              "form": 0
+            },
+            {
+              "text": "u",
+              "answer": "u",
+              "options": [
+                "u",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "ac545808d0baeafa",
+              "form": 1
+            },
+            {
+              "text": "u",
+              "answer": "u",
+              "options": [
+                "u",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "ac545808d0baeafa",
+              "form": 2
+            },
+            {
+              "text": "u",
+              "answer": "u",
+              "options": [
+                "u",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "ac545808d0baeafa",
+              "form": 3
+            }
+          ]
+        },
+        {
+          "id": "2-5",
+          "title": "Les mots avec u",
+          "kind": "find",
+          "prompt": "Trouve tous les mots avec cette lettre.",
+          "audio": "c3f95daf1627087e",
+          "items": [
+            {
+              "text": "u",
+              "options": [
+                "punaise",
+                "plumier",
+                "pull",
+                "sapin",
+                "ambulance",
+                "sorcière",
+                "fusée",
+                "orange"
+              ],
+              "answers": [
+                "punaise",
+                "plumier",
+                "pull",
+                "ambulance",
+                "fusée"
+              ],
+              "audio": "f3d30c470aa4b5a8"
+            }
+          ]
+        },
+        {
+          "id": "2-6",
+          "title": "Les mots du lexique",
+          "kind": "read",
+          "prompt": "Lis, puis écoute si tu veux.",
+          "audio": "691a8f0d3ebaf0bd",
+          "items": [
+            {
+              "text": "image",
+              "audio": "6105d6cc76af4003"
+            },
+            {
+              "text": "orange",
+              "audio": "1b4c9133da73a711"
+            },
+            {
+              "text": "usine",
+              "audio": "e8278c764a473513"
+            },
+            {
+              "text": "classe",
+              "audio": "26dcc255a65ddb63"
+            },
+            {
+              "text": "école",
+              "audio": "f0f772e182a4941e"
+            },
+            {
+              "text": "crayon",
+              "audio": "d8b1858e24ae6176"
+            },
+            {
+              "text": "cartable",
+              "audio": "622ffabe5404fa13"
+            },
+            {
+              "text": "plumier",
+              "audio": "2a72902dab689810"
+            },
+            {
+              "text": "ciseaux",
+              "audio": "e71e95abead2e4a8"
+            },
+            {
+              "text": "colle",
+              "audio": "d5efe2ab2b95dd70"
+            }
+          ]
+        },
+        {
+          "id": "2-7",
+          "title": "Le crayon orange",
+          "kind": "read",
+          "prompt": "Lis, puis écoute si tu veux.",
+          "audio": "691a8f0d3ebaf0bd",
+          "items": [
+            {
+              "text": "Un plumier, c’est très utile !",
+              "audio": "ff200def7f979d4c"
+            },
+            {
+              "text": "Il y a un crayon d’écriture et un taille-crayon.",
+              "audio": "dba7fb2cda19555e"
+            },
+            {
+              "text": "Il y a des ciseaux et un tube de colle.",
+              "audio": "ff634babb3f9b7b0"
+            },
+            {
+              "text": "Il y a aussi des crayons de couleur.",
+              "audio": "42266d665f82e1ea"
+            },
+            {
+              "text": "Zut ! J’ai perdu mon crayon orange !",
+              "audio": "e00c9c76cba9a1b5"
+            },
+            {
+              "text": "Je ne sais pas colorier mon usine !",
+              "audio": "768ec2a4c0a202f3"
+            }
+          ]
+        },
+        {
+          "id": "2-0-images",
+          "title": "Lis et trouve l’image",
+          "kind": "images",
+          "prompt": "Lis le mot et trouve son image.",
+          "audio": "86592b4f6d6c7f42",
+          "items": [
+            {
+              "text": "crayon",
+              "picture": "crayon.webp",
+              "options": [
+                "crayon",
+                "orange",
+                "ciseaux",
+                "usine"
+              ],
+              "answer": "crayon",
+              "audio": "d8b1858e24ae6176",
+              "optionPictures": [
+                "crayon.webp",
+                "orange.svg",
+                "ciseaux.webp",
+                "usine.webp"
+              ]
+            },
+            {
+              "text": "orange",
+              "picture": "orange.svg",
+              "options": [
+                "orange",
+                "crayon",
+                "ciseaux",
+                "usine"
+              ],
+              "answer": "orange",
+              "audio": "1b4c9133da73a711",
+              "optionPictures": [
+                "orange.svg",
+                "crayon.webp",
+                "ciseaux.webp",
+                "usine.webp"
+              ]
+            },
+            {
+              "text": "ciseaux",
+              "picture": "ciseaux.webp",
+              "options": [
+                "ciseaux",
+                "crayon",
+                "orange",
+                "usine"
+              ],
+              "answer": "ciseaux",
+              "audio": "e71e95abead2e4a8",
+              "optionPictures": [
+                "ciseaux.webp",
+                "crayon.webp",
+                "orange.svg",
+                "usine.webp"
+              ]
+            },
+            {
+              "text": "usine",
+              "picture": "usine.webp",
+              "options": [
+                "usine",
+                "crayon",
+                "orange",
+                "ciseaux"
+              ],
+              "answer": "usine",
+              "audio": "e8278c764a473513",
+              "optionPictures": [
+                "usine.webp",
+                "crayon.webp",
+                "orange.svg",
+                "ciseaux.webp"
+              ]
+            },
+            {
+              "text": "colle",
+              "picture": "colle.webp",
+              "options": [
+                "colle",
+                "crayon",
+                "orange",
+                "ciseaux"
+              ],
+              "answer": "colle",
+              "audio": "d5efe2ab2b95dd70",
+              "optionPictures": [
+                "colle.webp",
+                "crayon.webp",
+                "orange.svg",
+                "ciseaux.webp"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "C’est l’automne",
+      "icon": "🍂",
+      "activities": [
+        {
+          "id": "3-0",
+          "title": "Les mots et les images",
+          "kind": "picture",
+          "prompt": "Trouve le mot qui va avec l’image.",
+          "audio": "d2595ff5bd12a31b",
+          "items": [
+            {
+              "text": "automne",
+              "picture": "automne.webp",
+              "options": [
+                "automne",
+                "renard",
+                "arbre",
+                "tête"
+              ],
+              "answer": "automne",
+              "audio": "7fe8ae065f19e174"
+            },
+            {
+              "text": "renard",
+              "picture": "renard.webp",
+              "options": [
+                "renard",
+                "automne",
+                "arbre",
+                "tête"
+              ],
+              "answer": "renard",
+              "audio": "7e9de0794872a859"
+            },
+            {
+              "text": "arbre",
+              "picture": "arbre.webp",
+              "options": [
+                "arbre",
+                "automne",
+                "renard",
+                "tête"
+              ],
+              "answer": "arbre",
+              "audio": "5b81c7c3bb698fbf"
+            },
+            {
+              "text": "tête",
+              "picture": "tete.webp",
+              "options": [
+                "tête",
+                "automne",
+                "renard",
+                "arbre"
+              ],
+              "answer": "tête",
+              "audio": "71c78baeca5a894a"
+            },
+            {
+              "text": "marron",
+              "picture": "marron.webp",
+              "options": [
+                "marron",
+                "automne",
+                "renard",
+                "arbre"
+              ],
+              "answer": "marron",
+              "audio": "fb9563a52a478bd5"
+            },
+            {
+              "text": "forêt",
+              "picture": "foret.webp",
+              "options": [
+                "forêt",
+                "automne",
+                "renard",
+                "arbre"
+              ],
+              "answer": "forêt",
+              "audio": "404ef6b73be77ec4"
+            },
+            {
+              "text": "écharpe",
+              "picture": "echarpe.webp",
+              "options": [
+                "écharpe",
+                "automne",
+                "renard",
+                "arbre"
+              ],
+              "answer": "écharpe",
+              "audio": "1897ac890f94ed41"
+            }
+          ]
+        },
+        {
+          "id": "3-1",
+          "title": "Les deux écritures",
+          "kind": "scripts",
+          "prompt": "Retrouve le même mot en écriture attachée.",
+          "audio": "3aeb96060c86484d",
+          "items": [
+            {
+              "text": "automne",
+              "answer": "automne",
+              "options": [
+                "automne",
+                "renard",
+                "arbre",
+                "tête"
+              ],
+              "audio": "7fe8ae065f19e174"
+            },
+            {
+              "text": "renard",
+              "answer": "renard",
+              "options": [
+                "renard",
+                "automne",
+                "arbre",
+                "tête"
+              ],
+              "audio": "7e9de0794872a859"
+            },
+            {
+              "text": "arbre",
+              "answer": "arbre",
+              "options": [
+                "arbre",
+                "automne",
+                "renard",
+                "tête"
+              ],
+              "audio": "5b81c7c3bb698fbf"
+            },
+            {
+              "text": "tête",
+              "answer": "tête",
+              "options": [
+                "tête",
+                "automne",
+                "renard",
+                "arbre"
+              ],
+              "audio": "71c78baeca5a894a"
+            },
+            {
+              "text": "marron",
+              "answer": "marron",
+              "options": [
+                "marron",
+                "automne",
+                "renard",
+                "arbre"
+              ],
+              "audio": "fb9563a52a478bd5"
+            },
+            {
+              "text": "forêt",
+              "answer": "forêt",
+              "options": [
+                "forêt",
+                "automne",
+                "renard",
+                "arbre"
+              ],
+              "audio": "404ef6b73be77ec4"
+            },
+            {
+              "text": "écharpe",
+              "answer": "écharpe",
+              "options": [
+                "écharpe",
+                "automne",
+                "renard",
+                "arbre"
+              ],
+              "audio": "1897ac890f94ed41"
+            }
+          ]
+        },
+        {
+          "id": "3-2",
+          "title": "La lettre a",
+          "kind": "letter",
+          "prompt": "Retrouve la même lettre.",
+          "audio": "945119b664bd3942",
+          "items": [
+            {
+              "text": "a",
+              "answer": "a",
+              "options": [
+                "a",
+                "i",
+                "o",
+                "u"
+              ],
+              "audio": "11832fb68d1939d2",
+              "form": 0
+            },
+            {
+              "text": "a",
+              "answer": "a",
+              "options": [
+                "a",
+                "i",
+                "o",
+                "u"
+              ],
+              "audio": "11832fb68d1939d2",
+              "form": 1
+            },
+            {
+              "text": "a",
+              "answer": "a",
+              "options": [
+                "a",
+                "i",
+                "o",
+                "u"
+              ],
+              "audio": "11832fb68d1939d2",
+              "form": 2
+            },
+            {
+              "text": "a",
+              "answer": "a",
+              "options": [
+                "a",
+                "i",
+                "o",
+                "u"
+              ],
+              "audio": "11832fb68d1939d2",
+              "form": 3
+            }
+          ]
+        },
+        {
+          "id": "3-3",
+          "title": "Les mots avec a",
+          "kind": "find",
+          "prompt": "Trouve tous les mots avec cette lettre.",
+          "audio": "c3f95daf1627087e",
+          "items": [
+            {
+              "text": "a",
+              "options": [
+                "cadeau",
+                "maman",
+                "forêt",
+                "cartable",
+                "écharpe",
+                "école",
+                "marteau",
+                "Sacha"
+              ],
+              "answers": [
+                "cadeau",
+                "maman",
+                "cartable",
+                "écharpe",
+                "marteau",
+                "Sacha"
+              ],
+              "audio": "02ac4dc38b12a2c6"
+            }
+          ]
+        },
+        {
+          "id": "3-4",
+          "title": "La lettre e",
+          "kind": "letter",
+          "prompt": "Retrouve la même lettre.",
+          "audio": "945119b664bd3942",
+          "items": [
+            {
+              "text": "e",
+              "answer": "e",
+              "options": [
+                "e",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "33d819b2e724cbb6",
+              "form": 0
+            },
+            {
+              "text": "e",
+              "answer": "e",
+              "options": [
+                "e",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "33d819b2e724cbb6",
+              "form": 1
+            },
+            {
+              "text": "e",
+              "answer": "e",
+              "options": [
+                "e",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "33d819b2e724cbb6",
+              "form": 2
+            },
+            {
+              "text": "e",
+              "answer": "e",
+              "options": [
+                "e",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "33d819b2e724cbb6",
+              "form": 3
+            }
+          ]
+        },
+        {
+          "id": "3-5",
+          "title": "Les mots avec e",
+          "kind": "find",
+          "prompt": "Trouve tous les mots avec cette lettre.",
+          "audio": "c3f95daf1627087e",
+          "items": [
+            {
+              "text": "e",
+              "options": [
+                "fenêtre",
+                "livre",
+                "recette",
+                "casserole",
+                "potiron",
+                "colle",
+                "cheminée",
+                "lapin",
+                "lune",
+                "cerise",
+                "raisin",
+                "souris"
+              ],
+              "answers": [
+                "fenêtre",
+                "livre",
+                "recette",
+                "casserole",
+                "colle",
+                "cheminée",
+                "lune",
+                "cerise"
+              ],
+              "audio": "430be81705f58393"
+            }
+          ]
+        },
+        {
+          "id": "3-6",
+          "title": "La lettre é",
+          "kind": "letter",
+          "prompt": "Retrouve la même lettre.",
+          "audio": "945119b664bd3942",
+          "items": [
+            {
+              "text": "é",
+              "answer": "é",
+              "options": [
+                "é",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "94702ddb34c3daa4",
+              "form": 0
+            },
+            {
+              "text": "é",
+              "answer": "é",
+              "options": [
+                "é",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "94702ddb34c3daa4",
+              "form": 1
+            },
+            {
+              "text": "é",
+              "answer": "é",
+              "options": [
+                "é",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "94702ddb34c3daa4",
+              "form": 2
+            },
+            {
+              "text": "é",
+              "answer": "é",
+              "options": [
+                "é",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "94702ddb34c3daa4",
+              "form": 3
+            }
+          ]
+        },
+        {
+          "id": "3-7",
+          "title": "Les mots avec é",
+          "kind": "find",
+          "prompt": "Trouve tous les mots avec cette lettre.",
+          "audio": "c3f95daf1627087e",
+          "items": [
+            {
+              "text": "é",
+              "options": [
+                "école",
+                "forêt",
+                "écharpe",
+                "tête",
+                "cheminée",
+                "chapeau",
+                "cou",
+                "éléphant",
+                "sorcière",
+                "baleine",
+                "fée",
+                "poupée"
+              ],
+              "answers": [
+                "école",
+                "écharpe",
+                "cheminée",
+                "éléphant",
+                "fée",
+                "poupée"
+              ],
+              "audio": "24ff3d5b8a3d097f"
+            }
+          ]
+        },
+        {
+          "id": "3-8",
+          "title": "C’est l’automne",
+          "kind": "read",
+          "prompt": "Lis, puis écoute si tu veux.",
+          "audio": "691a8f0d3ebaf0bd",
+          "items": [
+            {
+              "text": "C’est l’automne.",
+              "audio": "0e93402e52e6dc75"
+            },
+            {
+              "text": "Un renard se balade dans la forêt.",
+              "audio": "19ca99d8d324cb12"
+            },
+            {
+              "text": "Il s’arrête près d’un arbre.",
+              "audio": "97760ff44adf1efa"
+            },
+            {
+              "text": "Il renifle une feuille orange.",
+              "audio": "9bc6befb777c6bbc"
+            },
+            {
+              "text": "TOC ! Un marron tombe sur la tête du renard.",
+              "audio": "3593250fd9e9ba35"
+            }
+          ]
+        },
+        {
+          "id": "3-9",
+          "title": "Les mots et les images",
+          "kind": "picture",
+          "prompt": "Trouve le mot qui va avec l’image.",
+          "audio": "d2595ff5bd12a31b",
+          "items": [
+            {
+              "text": "automne",
+              "picture": "automne.webp",
+              "options": [
+                "automne",
+                "orange",
+                "crayon",
+                "tête"
+              ],
+              "answer": "automne",
+              "audio": "7fe8ae065f19e174"
+            },
+            {
+              "text": "orange",
+              "picture": "orange.svg",
+              "options": [
+                "orange",
+                "automne",
+                "crayon",
+                "tête"
+              ],
+              "answer": "orange",
+              "audio": "1b4c9133da73a711"
+            },
+            {
+              "text": "crayon",
+              "picture": "crayon.webp",
+              "options": [
+                "crayon",
+                "automne",
+                "orange",
+                "tête"
+              ],
+              "answer": "crayon",
+              "audio": "d8b1858e24ae6176"
+            },
+            {
+              "text": "tête",
+              "picture": "tete.webp",
+              "options": [
+                "tête",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "tête",
+              "audio": "71c78baeca5a894a"
+            },
+            {
+              "text": "renard",
+              "picture": "renard.webp",
+              "options": [
+                "renard",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "renard",
+              "audio": "7e9de0794872a859"
+            },
+            {
+              "text": "usine",
+              "picture": "usine.webp",
+              "options": [
+                "usine",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "usine",
+              "audio": "e8278c764a473513"
+            },
+            {
+              "text": "marron",
+              "picture": "marron.webp",
+              "options": [
+                "marron",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "marron",
+              "audio": "fb9563a52a478bd5"
+            },
+            {
+              "text": "forêt",
+              "picture": "foret.webp",
+              "options": [
+                "forêt",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "forêt",
+              "audio": "404ef6b73be77ec4"
+            },
+            {
+              "text": "ciseaux",
+              "picture": "ciseaux.webp",
+              "options": [
+                "ciseaux",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "ciseaux",
+              "audio": "e71e95abead2e4a8"
+            },
+            {
+              "text": "colle",
+              "picture": "colle.webp",
+              "options": [
+                "colle",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "colle",
+              "audio": "d5efe2ab2b95dd70"
+            },
+            {
+              "text": "arbre",
+              "picture": "arbre.webp",
+              "options": [
+                "arbre",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "arbre",
+              "audio": "5b81c7c3bb698fbf"
+            },
+            {
+              "text": "école",
+              "picture": "ecole.webp",
+              "options": [
+                "école",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "école",
+              "audio": "f0f772e182a4941e"
+            },
+            {
+              "text": "cartable",
+              "picture": "bag.webp",
+              "options": [
+                "cartable",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "cartable",
+              "audio": "622ffabe5404fa13"
+            },
+            {
+              "text": "plumier",
+              "picture": "plumier.webp",
+              "options": [
+                "plumier",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "plumier",
+              "audio": "2a72902dab689810"
+            },
+            {
+              "text": "image",
+              "picture": "image.webp",
+              "options": [
+                "image",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "image",
+              "audio": "6105d6cc76af4003"
+            }
+          ]
+        },
+        {
+          "id": "3-10",
+          "title": "Les deux écritures",
+          "kind": "scripts",
+          "prompt": "Retrouve le même mot en écriture attachée.",
+          "audio": "3aeb96060c86484d",
+          "items": [
+            {
+              "text": "automne",
+              "answer": "automne",
+              "options": [
+                "automne",
+                "orange",
+                "crayon",
+                "tête"
+              ],
+              "audio": "7fe8ae065f19e174"
+            },
+            {
+              "text": "orange",
+              "answer": "orange",
+              "options": [
+                "orange",
+                "automne",
+                "crayon",
+                "tête"
+              ],
+              "audio": "1b4c9133da73a711"
+            },
+            {
+              "text": "crayon",
+              "answer": "crayon",
+              "options": [
+                "crayon",
+                "automne",
+                "orange",
+                "tête"
+              ],
+              "audio": "d8b1858e24ae6176"
+            },
+            {
+              "text": "tête",
+              "answer": "tête",
+              "options": [
+                "tête",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "audio": "71c78baeca5a894a"
+            },
+            {
+              "text": "renard",
+              "answer": "renard",
+              "options": [
+                "renard",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "audio": "7e9de0794872a859"
+            },
+            {
+              "text": "usine",
+              "answer": "usine",
+              "options": [
+                "usine",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "audio": "e8278c764a473513"
+            },
+            {
+              "text": "marron",
+              "answer": "marron",
+              "options": [
+                "marron",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "audio": "fb9563a52a478bd5"
+            },
+            {
+              "text": "forêt",
+              "answer": "forêt",
+              "options": [
+                "forêt",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "audio": "404ef6b73be77ec4"
+            },
+            {
+              "text": "ciseaux",
+              "answer": "ciseaux",
+              "options": [
+                "ciseaux",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "audio": "e71e95abead2e4a8"
+            },
+            {
+              "text": "colle",
+              "answer": "colle",
+              "options": [
+                "colle",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "audio": "d5efe2ab2b95dd70"
+            },
+            {
+              "text": "arbre",
+              "answer": "arbre",
+              "options": [
+                "arbre",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "audio": "5b81c7c3bb698fbf"
+            },
+            {
+              "text": "école",
+              "answer": "école",
+              "options": [
+                "école",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "audio": "f0f772e182a4941e"
+            },
+            {
+              "text": "cartable",
+              "answer": "cartable",
+              "options": [
+                "cartable",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "audio": "622ffabe5404fa13"
+            },
+            {
+              "text": "plumier",
+              "answer": "plumier",
+              "options": [
+                "plumier",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "audio": "2a72902dab689810"
+            },
+            {
+              "text": "image",
+              "answer": "image",
+              "options": [
+                "image",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "audio": "6105d6cc76af4003"
+            }
+          ]
+        },
+        {
+          "id": "3-0-images",
+          "title": "Lis et trouve l’image",
+          "kind": "images",
+          "prompt": "Lis le mot et trouve son image.",
+          "audio": "86592b4f6d6c7f42",
+          "items": [
+            {
+              "text": "automne",
+              "picture": "automne.webp",
+              "options": [
+                "automne",
+                "renard",
+                "arbre",
+                "tête"
+              ],
+              "answer": "automne",
+              "audio": "7fe8ae065f19e174",
+              "optionPictures": [
+                "automne.webp",
+                "renard.webp",
+                "arbre.webp",
+                "tete.webp"
+              ]
+            },
+            {
+              "text": "renard",
+              "picture": "renard.webp",
+              "options": [
+                "renard",
+                "automne",
+                "arbre",
+                "tête"
+              ],
+              "answer": "renard",
+              "audio": "7e9de0794872a859",
+              "optionPictures": [
+                "renard.webp",
+                "automne.webp",
+                "arbre.webp",
+                "tete.webp"
+              ]
+            },
+            {
+              "text": "arbre",
+              "picture": "arbre.webp",
+              "options": [
+                "arbre",
+                "automne",
+                "renard",
+                "tête"
+              ],
+              "answer": "arbre",
+              "audio": "5b81c7c3bb698fbf",
+              "optionPictures": [
+                "arbre.webp",
+                "automne.webp",
+                "renard.webp",
+                "tete.webp"
+              ]
+            },
+            {
+              "text": "tête",
+              "picture": "tete.webp",
+              "options": [
+                "tête",
+                "automne",
+                "renard",
+                "arbre"
+              ],
+              "answer": "tête",
+              "audio": "71c78baeca5a894a",
+              "optionPictures": [
+                "tete.webp",
+                "automne.webp",
+                "renard.webp",
+                "arbre.webp"
+              ]
+            },
+            {
+              "text": "marron",
+              "picture": "marron.webp",
+              "options": [
+                "marron",
+                "automne",
+                "renard",
+                "arbre"
+              ],
+              "answer": "marron",
+              "audio": "fb9563a52a478bd5",
+              "optionPictures": [
+                "marron.webp",
+                "automne.webp",
+                "renard.webp",
+                "arbre.webp"
+              ]
+            },
+            {
+              "text": "forêt",
+              "picture": "foret.webp",
+              "options": [
+                "forêt",
+                "automne",
+                "renard",
+                "arbre"
+              ],
+              "answer": "forêt",
+              "audio": "404ef6b73be77ec4",
+              "optionPictures": [
+                "foret.webp",
+                "automne.webp",
+                "renard.webp",
+                "arbre.webp"
+              ]
+            },
+            {
+              "text": "écharpe",
+              "picture": "echarpe.webp",
+              "options": [
+                "écharpe",
+                "automne",
+                "renard",
+                "arbre"
+              ],
+              "answer": "écharpe",
+              "audio": "1897ac890f94ed41",
+              "optionPictures": [
+                "echarpe.webp",
+                "automne.webp",
+                "renard.webp",
+                "arbre.webp"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "3-9-images",
+          "title": "Lis et trouve l’image",
+          "kind": "images",
+          "prompt": "Lis le mot et trouve son image.",
+          "audio": "86592b4f6d6c7f42",
+          "items": [
+            {
+              "text": "automne",
+              "picture": "automne.webp",
+              "options": [
+                "automne",
+                "orange",
+                "crayon",
+                "tête"
+              ],
+              "answer": "automne",
+              "audio": "7fe8ae065f19e174",
+              "optionPictures": [
+                "automne.webp",
+                "orange.svg",
+                "crayon.webp",
+                "tete.webp"
+              ]
+            },
+            {
+              "text": "orange",
+              "picture": "orange.svg",
+              "options": [
+                "orange",
+                "automne",
+                "crayon",
+                "tête"
+              ],
+              "answer": "orange",
+              "audio": "1b4c9133da73a711",
+              "optionPictures": [
+                "orange.svg",
+                "automne.webp",
+                "crayon.webp",
+                "tete.webp"
+              ]
+            },
+            {
+              "text": "crayon",
+              "picture": "crayon.webp",
+              "options": [
+                "crayon",
+                "automne",
+                "orange",
+                "tête"
+              ],
+              "answer": "crayon",
+              "audio": "d8b1858e24ae6176",
+              "optionPictures": [
+                "crayon.webp",
+                "automne.webp",
+                "orange.svg",
+                "tete.webp"
+              ]
+            },
+            {
+              "text": "tête",
+              "picture": "tete.webp",
+              "options": [
+                "tête",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "tête",
+              "audio": "71c78baeca5a894a",
+              "optionPictures": [
+                "tete.webp",
+                "automne.webp",
+                "orange.svg",
+                "crayon.webp"
+              ]
+            },
+            {
+              "text": "renard",
+              "picture": "renard.webp",
+              "options": [
+                "renard",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "renard",
+              "audio": "7e9de0794872a859",
+              "optionPictures": [
+                "renard.webp",
+                "automne.webp",
+                "orange.svg",
+                "crayon.webp"
+              ]
+            },
+            {
+              "text": "usine",
+              "picture": "usine.webp",
+              "options": [
+                "usine",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "usine",
+              "audio": "e8278c764a473513",
+              "optionPictures": [
+                "usine.webp",
+                "automne.webp",
+                "orange.svg",
+                "crayon.webp"
+              ]
+            },
+            {
+              "text": "marron",
+              "picture": "marron.webp",
+              "options": [
+                "marron",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "marron",
+              "audio": "fb9563a52a478bd5",
+              "optionPictures": [
+                "marron.webp",
+                "automne.webp",
+                "orange.svg",
+                "crayon.webp"
+              ]
+            },
+            {
+              "text": "forêt",
+              "picture": "foret.webp",
+              "options": [
+                "forêt",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "forêt",
+              "audio": "404ef6b73be77ec4",
+              "optionPictures": [
+                "foret.webp",
+                "automne.webp",
+                "orange.svg",
+                "crayon.webp"
+              ]
+            },
+            {
+              "text": "ciseaux",
+              "picture": "ciseaux.webp",
+              "options": [
+                "ciseaux",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "ciseaux",
+              "audio": "e71e95abead2e4a8",
+              "optionPictures": [
+                "ciseaux.webp",
+                "automne.webp",
+                "orange.svg",
+                "crayon.webp"
+              ]
+            },
+            {
+              "text": "colle",
+              "picture": "colle.webp",
+              "options": [
+                "colle",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "colle",
+              "audio": "d5efe2ab2b95dd70",
+              "optionPictures": [
+                "colle.webp",
+                "automne.webp",
+                "orange.svg",
+                "crayon.webp"
+              ]
+            },
+            {
+              "text": "arbre",
+              "picture": "arbre.webp",
+              "options": [
+                "arbre",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "arbre",
+              "audio": "5b81c7c3bb698fbf",
+              "optionPictures": [
+                "arbre.webp",
+                "automne.webp",
+                "orange.svg",
+                "crayon.webp"
+              ]
+            },
+            {
+              "text": "école",
+              "picture": "ecole.webp",
+              "options": [
+                "école",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "école",
+              "audio": "f0f772e182a4941e",
+              "optionPictures": [
+                "ecole.webp",
+                "automne.webp",
+                "orange.svg",
+                "crayon.webp"
+              ]
+            },
+            {
+              "text": "cartable",
+              "picture": "bag.webp",
+              "options": [
+                "cartable",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "cartable",
+              "audio": "622ffabe5404fa13",
+              "optionPictures": [
+                "bag.webp",
+                "automne.webp",
+                "orange.svg",
+                "crayon.webp"
+              ]
+            },
+            {
+              "text": "plumier",
+              "picture": "plumier.webp",
+              "options": [
+                "plumier",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "plumier",
+              "audio": "2a72902dab689810",
+              "optionPictures": [
+                "plumier.webp",
+                "automne.webp",
+                "orange.svg",
+                "crayon.webp"
+              ]
+            },
+            {
+              "text": "image",
+              "picture": "image.webp",
+              "options": [
+                "image",
+                "automne",
+                "orange",
+                "crayon"
+              ],
+              "answer": "image",
+              "audio": "6105d6cc76af4003",
+              "optionPictures": [
+                "image.webp",
+                "automne.webp",
+                "orange.svg",
+                "crayon.webp"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "La sorcière Aglaé",
+      "icon": "🪄",
+      "activities": [
+        {
+          "id": "4-0",
+          "title": "Les mots et les images",
+          "kind": "picture",
+          "prompt": "Trouve le mot qui va avec l’image.",
+          "audio": "d2595ff5bd12a31b",
+          "items": [
+            {
+              "text": "sorcière",
+              "picture": "sorciere.webp",
+              "options": [
+                "sorcière",
+                "lune",
+                "livre",
+                "magie"
+              ],
+              "answer": "sorcière",
+              "audio": "ddf613e182f8c5a3"
+            },
+            {
+              "text": "lune",
+              "picture": "lune.webp",
+              "options": [
+                "lune",
+                "sorcière",
+                "livre",
+                "magie"
+              ],
+              "answer": "lune",
+              "audio": "5c7f259c35a05f39"
+            },
+            {
+              "text": "livre",
+              "picture": "livre.webp",
+              "options": [
+                "livre",
+                "sorcière",
+                "lune",
+                "magie"
+              ],
+              "answer": "livre",
+              "audio": "c8f071fcb45fc339"
+            },
+            {
+              "text": "magie",
+              "picture": "magie.webp",
+              "options": [
+                "magie",
+                "sorcière",
+                "lune",
+                "livre"
+              ],
+              "answer": "magie",
+              "audio": "987c1f00a348db0f"
+            },
+            {
+              "text": "formule",
+              "picture": "formule.webp",
+              "options": [
+                "formule",
+                "sorcière",
+                "lune",
+                "livre"
+              ],
+              "answer": "formule",
+              "audio": "a28446cb08a87f66"
+            },
+            {
+              "text": "potiron",
+              "picture": "potiron.webp",
+              "options": [
+                "potiron",
+                "sorcière",
+                "lune",
+                "livre"
+              ],
+              "answer": "potiron",
+              "audio": "3abad6bae7e2c881"
+            }
+          ]
+        },
+        {
+          "id": "4-1",
+          "title": "Les deux écritures",
+          "kind": "scripts",
+          "prompt": "Retrouve le même mot en écriture attachée.",
+          "audio": "3aeb96060c86484d",
+          "items": [
+            {
+              "text": "sorcière",
+              "answer": "sorcière",
+              "options": [
+                "sorcière",
+                "lune",
+                "livre",
+                "magie"
+              ],
+              "audio": "ddf613e182f8c5a3"
+            },
+            {
+              "text": "lune",
+              "answer": "lune",
+              "options": [
+                "lune",
+                "sorcière",
+                "livre",
+                "magie"
+              ],
+              "audio": "5c7f259c35a05f39"
+            },
+            {
+              "text": "livre",
+              "answer": "livre",
+              "options": [
+                "livre",
+                "sorcière",
+                "lune",
+                "magie"
+              ],
+              "audio": "c8f071fcb45fc339"
+            },
+            {
+              "text": "magie",
+              "answer": "magie",
+              "options": [
+                "magie",
+                "sorcière",
+                "lune",
+                "livre"
+              ],
+              "audio": "987c1f00a348db0f"
+            },
+            {
+              "text": "formule",
+              "answer": "formule",
+              "options": [
+                "formule",
+                "sorcière",
+                "lune",
+                "livre"
+              ],
+              "audio": "a28446cb08a87f66"
+            },
+            {
+              "text": "potiron",
+              "answer": "potiron",
+              "options": [
+                "potiron",
+                "sorcière",
+                "lune",
+                "livre"
+              ],
+              "audio": "3abad6bae7e2c881"
+            }
+          ]
+        },
+        {
+          "id": "4-2",
+          "title": "La lettre è",
+          "kind": "letter",
+          "prompt": "Retrouve la même lettre.",
+          "audio": "945119b664bd3942",
+          "items": [
+            {
+              "text": "è",
+              "answer": "è",
+              "options": [
+                "è",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "95c4dc0fa25af32a",
+              "form": 0
+            },
+            {
+              "text": "è",
+              "answer": "è",
+              "options": [
+                "è",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "95c4dc0fa25af32a",
+              "form": 1
+            },
+            {
+              "text": "è",
+              "answer": "è",
+              "options": [
+                "è",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "95c4dc0fa25af32a",
+              "form": 2
+            },
+            {
+              "text": "è",
+              "answer": "è",
+              "options": [
+                "è",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "95c4dc0fa25af32a",
+              "form": 3
+            }
+          ]
+        },
+        {
+          "id": "4-3",
+          "title": "Les mots avec è",
+          "kind": "find",
+          "prompt": "Trouve tous les mots avec cette lettre.",
+          "audio": "c3f95daf1627087e",
+          "items": [
+            {
+              "text": "è",
+              "options": [
+                "zèbre",
+                "école",
+                "trèfle",
+                "lèvre"
+              ],
+              "answers": [
+                "zèbre",
+                "trèfle",
+                "lèvre"
+              ],
+              "audio": "201ad432da56d586"
+            }
+          ]
+        },
+        {
+          "id": "4-4",
+          "title": "La lettre ê",
+          "kind": "letter",
+          "prompt": "Retrouve la même lettre.",
+          "audio": "945119b664bd3942",
+          "items": [
+            {
+              "text": "ê",
+              "answer": "ê",
+              "options": [
+                "ê",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "1bcd9cc8d34c0be8",
+              "form": 0
+            },
+            {
+              "text": "ê",
+              "answer": "ê",
+              "options": [
+                "ê",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "1bcd9cc8d34c0be8",
+              "form": 1
+            },
+            {
+              "text": "ê",
+              "answer": "ê",
+              "options": [
+                "ê",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "1bcd9cc8d34c0be8",
+              "form": 2
+            },
+            {
+              "text": "ê",
+              "answer": "ê",
+              "options": [
+                "ê",
+                "a",
+                "i",
+                "o"
+              ],
+              "audio": "1bcd9cc8d34c0be8",
+              "form": 3
+            }
+          ]
+        },
+        {
+          "id": "4-5",
+          "title": "Les mots avec ê",
+          "kind": "find",
+          "prompt": "Trouve tous les mots avec cette lettre.",
+          "audio": "c3f95daf1627087e",
+          "items": [
+            {
+              "text": "ê",
+              "options": [
+                "forêt",
+                "pêche",
+                "fenêtre",
+                "crêpe"
+              ],
+              "answers": [
+                "forêt",
+                "pêche",
+                "fenêtre",
+                "crêpe"
+              ],
+              "audio": "f4d49258d2c5cfd9"
+            }
+          ]
+        },
+        {
+          "id": "4-6",
+          "title": "Les syllabes de l",
+          "kind": "read",
+          "prompt": "Lis, puis écoute si tu veux.",
+          "audio": "691a8f0d3ebaf0bd",
+          "items": [
+            {
+              "text": "l + a = la",
+              "audio": "ea89aaddcaa3d175"
+            },
+            {
+              "text": "l + i = li",
+              "audio": "352ca55e38cec3b1"
+            },
+            {
+              "text": "l + u = lu",
+              "audio": "f45817657cc0abe9"
+            },
+            {
+              "text": "l + o = lo",
+              "audio": "cc6717aaefad7f65"
+            },
+            {
+              "text": "l + e = le",
+              "audio": "5aee2aa31c19d480"
+            },
+            {
+              "text": "la",
+              "audio": "b737ca7ee563ae80"
+            },
+            {
+              "text": "li",
+              "audio": "00a9e4255a5b6306"
+            },
+            {
+              "text": "lu",
+              "audio": "80c0fcbbfa9d03d8"
+            },
+            {
+              "text": "lo",
+              "audio": "9294ab38039f60d2"
+            },
+            {
+              "text": "le",
+              "audio": "61098a4bf2a5e216"
+            },
+            {
+              "text": "lé",
+              "audio": "9337093d1debba45"
+            }
+          ]
+        },
+        {
+          "id": "4-7",
+          "title": "Écoute les syllabes : l",
+          "kind": "listen",
+          "prompt": "Écoute et trouve la syllabe.",
+          "audio": "264ebabbe4d43fa8",
+          "items": [
+            {
+              "text": "la",
+              "answer": "la",
+              "options": [
+                "la",
+                "li",
+                "lu",
+                "lo"
+              ],
+              "audio": "b737ca7ee563ae80"
+            },
+            {
+              "text": "li",
+              "answer": "li",
+              "options": [
+                "li",
+                "la",
+                "lu",
+                "lo"
+              ],
+              "audio": "00a9e4255a5b6306"
+            },
+            {
+              "text": "lu",
+              "answer": "lu",
+              "options": [
+                "lu",
+                "la",
+                "li",
+                "lo"
+              ],
+              "audio": "80c0fcbbfa9d03d8"
+            },
+            {
+              "text": "lo",
+              "answer": "lo",
+              "options": [
+                "lo",
+                "la",
+                "li",
+                "lu"
+              ],
+              "audio": "9294ab38039f60d2"
+            },
+            {
+              "text": "le",
+              "answer": "le",
+              "options": [
+                "le",
+                "la",
+                "li",
+                "lu"
+              ],
+              "audio": "61098a4bf2a5e216"
+            },
+            {
+              "text": "lé",
+              "answer": "lé",
+              "options": [
+                "lé",
+                "la",
+                "li",
+                "lu"
+              ],
+              "audio": "9337093d1debba45"
+            }
+          ]
+        },
+        {
+          "id": "4-8",
+          "title": "Les petits mots",
+          "kind": "read",
+          "prompt": "Lis, puis écoute si tu veux.",
+          "audio": "691a8f0d3ebaf0bd",
+          "items": [
+            {
+              "text": "elle",
+              "audio": "18ae79fac1952555"
+            },
+            {
+              "text": "il",
+              "audio": "a0fb903525dc10dc"
+            }
+          ]
+        },
+        {
+          "id": "4-9",
+          "title": "Les prénoms",
+          "kind": "read",
+          "prompt": "Lis, puis écoute si tu veux.",
+          "audio": "691a8f0d3ebaf0bd",
+          "items": [
+            {
+              "text": "Lola",
+              "audio": "0ffb02665035bfe5"
+            },
+            {
+              "text": "Ali",
+              "audio": "862ef3927a7c8acf"
+            },
+            {
+              "text": "Léa",
+              "audio": "8a7166f2d8906e13"
+            },
+            {
+              "text": "Lulu",
+              "audio": "2ad6be3141bdc6b0"
+            },
+            {
+              "text": "Léo",
+              "audio": "d0b6e705c11c35cd"
+            },
+            {
+              "text": "Lili",
+              "audio": "d7d0cdb05221d8b4"
+            },
+            {
+              "text": "Oli",
+              "audio": "7362967ee5afb470"
+            },
+            {
+              "text": "Ulla",
+              "audio": "a9b666df39b6c3e1"
+            }
+          ]
+        },
+        {
+          "id": "4-10",
+          "title": "Le ou la ?",
+          "kind": "article",
+          "prompt": "Choisis le ou la.",
+          "audio": "7219580ccd2e95d6",
+          "items": [
+            {
+              "text": "sorcière",
+              "answer": "la",
+              "options": [
+                "le",
+                "la"
+              ],
+              "picture": "sorciere.webp",
+              "audio": "ddf613e182f8c5a3"
+            },
+            {
+              "text": "livre",
+              "answer": "le",
+              "options": [
+                "le",
+                "la"
+              ],
+              "picture": "livre.webp",
+              "audio": "c8f071fcb45fc339"
+            },
+            {
+              "text": "lune",
+              "answer": "la",
+              "options": [
+                "le",
+                "la"
+              ],
+              "picture": "lune.webp",
+              "audio": "5c7f259c35a05f39"
+            },
+            {
+              "text": "colle",
+              "answer": "la",
+              "options": [
+                "le",
+                "la"
+              ],
+              "picture": "colle.webp",
+              "audio": "d5efe2ab2b95dd70"
+            },
+            {
+              "text": "plumier",
+              "answer": "le",
+              "options": [
+                "le",
+                "la"
+              ],
+              "picture": "plumier.webp",
+              "audio": "2a72902dab689810"
+            },
+            {
+              "text": "cartable",
+              "answer": "le",
+              "options": [
+                "le",
+                "la"
+              ],
+              "picture": "bag.webp",
+              "audio": "622ffabe5404fa13"
+            }
+          ]
+        },
+        {
+          "id": "4-11",
+          "title": "La phrase et le dessin",
+          "kind": "sentence",
+          "prompt": "Quelle phrase correspond au dessin ?",
+          "audio": "b353df3fc0e55e8e",
+          "items": [
+            {
+              "scene": "witch",
+              "options": [
+                "Lola a lu le livre de Sacha.",
+                "La sorcière lit la formule.",
+                "Ali a le crayon de Léa."
+              ],
+              "answer": "La sorcière lit la formule.",
+              "text": "",
+              "audio": "b353df3fc0e55e8e",
+              "optionAudio": [
+                "fcc485210fea3e2f",
+                "03a0953b319aaf93",
+                "bc7a3e3d88fbd181"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "4-12",
+          "title": "Les phrases",
+          "kind": "read",
+          "prompt": "Lis, puis écoute si tu veux.",
+          "audio": "691a8f0d3ebaf0bd",
+          "items": [
+            {
+              "text": "Sacha a lu le livre.",
+              "audio": "af8c45c46d4a51f5"
+            },
+            {
+              "text": "Léo a un plumier.",
+              "audio": "28a3f81e3c479dc1"
+            },
+            {
+              "text": "Lola lit la formule.",
+              "audio": "6ce4cec61d0f8eec"
+            },
+            {
+              "text": "Oli a un cartable orange.",
+              "audio": "e4024165aa241bf6"
+            }
+          ]
+        },
+        {
+          "id": "4-13",
+          "title": "La sorcière Aglaé",
+          "kind": "read",
+          "prompt": "Lis, puis écoute si tu veux.",
+          "audio": "691a8f0d3ebaf0bd",
+          "items": [
+            {
+              "text": "Ce soir, c’est la pleine lune.",
+              "audio": "4c2991a21bc948ae"
+            },
+            {
+              "text": "Les enfants vont chez Aglaé.",
+              "audio": "c864a0a7153815be"
+            },
+            {
+              "text": "Que fais-tu, Aglaé ?",
+              "audio": "9d6c8ab90ed328bc"
+            },
+            {
+              "text": "Je prends mon livre de magie.",
+              "audio": "99e3bb699b89e76e"
+            },
+            {
+              "text": "Je recherche une formule magique pour faire apparaître un potiron.",
+              "audio": "2587a559fb9583bf"
+            },
+            {
+              "text": "Abracadabra !",
+              "audio": "77d30bec949b8e88"
+            },
+            {
+              "text": "Je découpe des yeux et une bouche dans le potiron.",
+              "audio": "2a8e2da13ceea9ae"
+            },
+            {
+              "text": "Hi ! Hi ! Hi !",
+              "audio": "73cf58d0dacec56c"
+            }
+          ]
+        },
+        {
+          "id": "4-0-images",
+          "title": "Lis et trouve l’image",
+          "kind": "images",
+          "prompt": "Lis le mot et trouve son image.",
+          "audio": "86592b4f6d6c7f42",
+          "items": [
+            {
+              "text": "sorcière",
+              "picture": "sorciere.webp",
+              "options": [
+                "sorcière",
+                "lune",
+                "livre",
+                "magie"
+              ],
+              "answer": "sorcière",
+              "audio": "ddf613e182f8c5a3",
+              "optionPictures": [
+                "sorciere.webp",
+                "lune.webp",
+                "livre.webp",
+                "magie.webp"
+              ]
+            },
+            {
+              "text": "lune",
+              "picture": "lune.webp",
+              "options": [
+                "lune",
+                "sorcière",
+                "livre",
+                "magie"
+              ],
+              "answer": "lune",
+              "audio": "5c7f259c35a05f39",
+              "optionPictures": [
+                "lune.webp",
+                "sorciere.webp",
+                "livre.webp",
+                "magie.webp"
+              ]
+            },
+            {
+              "text": "livre",
+              "picture": "livre.webp",
+              "options": [
+                "livre",
+                "sorcière",
+                "lune",
+                "magie"
+              ],
+              "answer": "livre",
+              "audio": "c8f071fcb45fc339",
+              "optionPictures": [
+                "livre.webp",
+                "sorciere.webp",
+                "lune.webp",
+                "magie.webp"
+              ]
+            },
+            {
+              "text": "magie",
+              "picture": "magie.webp",
+              "options": [
+                "magie",
+                "sorcière",
+                "lune",
+                "livre"
+              ],
+              "answer": "magie",
+              "audio": "987c1f00a348db0f",
+              "optionPictures": [
+                "magie.webp",
+                "sorciere.webp",
+                "lune.webp",
+                "livre.webp"
+              ]
+            },
+            {
+              "text": "formule",
+              "picture": "formule.webp",
+              "options": [
+                "formule",
+                "sorcière",
+                "lune",
+                "livre"
+              ],
+              "answer": "formule",
+              "audio": "a28446cb08a87f66",
+              "optionPictures": [
+                "formule.webp",
+                "sorciere.webp",
+                "lune.webp",
+                "livre.webp"
+              ]
+            },
+            {
+              "text": "potiron",
+              "picture": "potiron.webp",
+              "options": [
+                "potiron",
+                "sorcière",
+                "lune",
+                "livre"
+              ],
+              "answer": "potiron",
+              "audio": "3abad6bae7e2c881",
+              "optionPictures": [
+                "potiron.webp",
+                "sorciere.webp",
+                "lune.webp",
+                "livre.webp"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "4-letter-l",
+          "title": "La lettre l",
+          "kind": "letter",
+          "prompt": "Retrouve la même lettre.",
+          "audio": "945119b664bd3942",
+          "items": [
+            {
+              "text": "l",
+              "answer": "l",
+              "options": [
+                "l",
+                "i",
+                "u",
+                "a"
+              ],
+              "audio": "13e56ace35043e30",
+              "form": 0
+            },
+            {
+              "text": "l",
+              "answer": "l",
+              "options": [
+                "l",
+                "i",
+                "u",
+                "a"
+              ],
+              "audio": "13e56ace35043e30",
+              "form": 1
+            },
+            {
+              "text": "l",
+              "answer": "l",
+              "options": [
+                "l",
+                "i",
+                "u",
+                "a"
+              ],
+              "audio": "13e56ace35043e30",
+              "form": 2
+            },
+            {
+              "text": "l",
+              "answer": "l",
+              "options": [
+                "l",
+                "i",
+                "u",
+                "a"
+              ],
+              "audio": "13e56ace35043e30",
+              "form": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "La soupe au potiron",
+      "icon": "🥣",
+      "activities": [
+        {
+          "id": "5-0",
+          "title": "Les mots et les images",
+          "kind": "picture",
+          "prompt": "Trouve le mot qui va avec l’image.",
+          "audio": "d2595ff5bd12a31b",
+          "items": [
+            {
+              "text": "recette",
+              "picture": "recette.webp",
+              "options": [
+                "recette",
+                "serpent",
+                "soupe",
+                "eau"
+              ],
+              "answer": "recette",
+              "audio": "809ab6881c409fe7"
+            },
+            {
+              "text": "serpent",
+              "picture": "serpent.webp",
+              "options": [
+                "serpent",
+                "recette",
+                "soupe",
+                "eau"
+              ],
+              "answer": "serpent",
+              "audio": "b6ef5d1ff0d73da9"
+            },
+            {
+              "text": "soupe",
+              "picture": "soupe.webp",
+              "options": [
+                "soupe",
+                "recette",
+                "serpent",
+                "eau"
+              ],
+              "answer": "soupe",
+              "audio": "dca7572e4ffd7789"
+            },
+            {
+              "text": "eau",
+              "picture": "eau.webp",
+              "options": [
+                "eau",
+                "recette",
+                "serpent",
+                "soupe"
+              ],
+              "answer": "eau",
+              "audio": "c9b12f5e43ffbe57"
+            },
+            {
+              "text": "casserole",
+              "picture": "casserole.webp",
+              "options": [
+                "casserole",
+                "recette",
+                "serpent",
+                "soupe"
+              ],
+              "answer": "casserole",
+              "audio": "5dab1dae0a4a97ee"
+            },
+            {
+              "text": "minute",
+              "picture": "minute.webp",
+              "options": [
+                "minute",
+                "recette",
+                "serpent",
+                "soupe"
+              ],
+              "answer": "minute",
+              "audio": "28cdd20eaf134a05"
+            }
+          ]
+        },
+        {
+          "id": "5-1",
+          "title": "Les deux écritures",
+          "kind": "scripts",
+          "prompt": "Retrouve le même mot en écriture attachée.",
+          "audio": "3aeb96060c86484d",
+          "items": [
+            {
+              "text": "recette",
+              "answer": "recette",
+              "options": [
+                "recette",
+                "serpent",
+                "soupe",
+                "eau"
+              ],
+              "audio": "809ab6881c409fe7"
+            },
+            {
+              "text": "serpent",
+              "answer": "serpent",
+              "options": [
+                "serpent",
+                "recette",
+                "soupe",
+                "eau"
+              ],
+              "audio": "b6ef5d1ff0d73da9"
+            },
+            {
+              "text": "soupe",
+              "answer": "soupe",
+              "options": [
+                "soupe",
+                "recette",
+                "serpent",
+                "eau"
+              ],
+              "audio": "dca7572e4ffd7789"
+            },
+            {
+              "text": "eau",
+              "answer": "eau",
+              "options": [
+                "eau",
+                "recette",
+                "serpent",
+                "soupe"
+              ],
+              "audio": "c9b12f5e43ffbe57"
+            },
+            {
+              "text": "casserole",
+              "answer": "casserole",
+              "options": [
+                "casserole",
+                "recette",
+                "serpent",
+                "soupe"
+              ],
+              "audio": "5dab1dae0a4a97ee"
+            },
+            {
+              "text": "minute",
+              "answer": "minute",
+              "options": [
+                "minute",
+                "recette",
+                "serpent",
+                "soupe"
+              ],
+              "audio": "28cdd20eaf134a05"
+            }
+          ]
+        },
+        {
+          "id": "5-2",
+          "title": "Les syllabes de r",
+          "kind": "read",
+          "prompt": "Lis, puis écoute si tu veux.",
+          "audio": "691a8f0d3ebaf0bd",
+          "items": [
+            {
+              "text": "r + a = ra",
+              "audio": "79b966729aaaac8a"
+            },
+            {
+              "text": "r + i = ri",
+              "audio": "ac9b7fc6e1fc2097"
+            },
+            {
+              "text": "r + u = ru",
+              "audio": "8dc1bd7aed0ff320"
+            },
+            {
+              "text": "r + o = ro",
+              "audio": "a237af839a3b66c5"
+            },
+            {
+              "text": "r + e = re",
+              "audio": "5008a0b60e7a2d70"
+            },
+            {
+              "text": "ra",
+              "audio": "37e7702e5ce449c1"
+            },
+            {
+              "text": "ri",
+              "audio": "396a14ab206e2b44"
+            },
+            {
+              "text": "ru",
+              "audio": "ed5ad332c1060437"
+            },
+            {
+              "text": "ro",
+              "audio": "7ef9ec0cf2c4faca"
+            },
+            {
+              "text": "re",
+              "audio": "3ac1ecbd2220c675"
+            },
+            {
+              "text": "ré",
+              "audio": "0c1e5965f492f2c4"
+            }
+          ]
+        },
+        {
+          "id": "5-3",
+          "title": "Écoute les syllabes : r",
+          "kind": "listen",
+          "prompt": "Écoute et trouve la syllabe.",
+          "audio": "264ebabbe4d43fa8",
+          "items": [
+            {
+              "text": "ra",
+              "answer": "ra",
+              "options": [
+                "ra",
+                "ri",
+                "ru",
+                "ro"
+              ],
+              "audio": "37e7702e5ce449c1"
+            },
+            {
+              "text": "ri",
+              "answer": "ri",
+              "options": [
+                "ri",
+                "ra",
+                "ru",
+                "ro"
+              ],
+              "audio": "396a14ab206e2b44"
+            },
+            {
+              "text": "ru",
+              "answer": "ru",
+              "options": [
+                "ru",
+                "ra",
+                "ri",
+                "ro"
+              ],
+              "audio": "ed5ad332c1060437"
+            },
+            {
+              "text": "ro",
+              "answer": "ro",
+              "options": [
+                "ro",
+                "ra",
+                "ri",
+                "ru"
+              ],
+              "audio": "7ef9ec0cf2c4faca"
+            },
+            {
+              "text": "re",
+              "answer": "re",
+              "options": [
+                "re",
+                "ra",
+                "ri",
+                "ru"
+              ],
+              "audio": "3ac1ecbd2220c675"
+            },
+            {
+              "text": "ré",
+              "answer": "ré",
+              "options": [
+                "ré",
+                "ra",
+                "ri",
+                "ru"
+              ],
+              "audio": "0c1e5965f492f2c4"
+            }
+          ]
+        },
+        {
+          "id": "5-4",
+          "title": "Les syllabes de s",
+          "kind": "read",
+          "prompt": "Lis, puis écoute si tu veux.",
+          "audio": "691a8f0d3ebaf0bd",
+          "items": [
+            {
+              "text": "s + a = sa",
+              "audio": "71e4e33d1f0d5ba4"
+            },
+            {
+              "text": "s + i = si",
+              "audio": "19ba46051887664d"
+            },
+            {
+              "text": "s + u = su",
+              "audio": "0d903d9bb42a3d7d"
+            },
+            {
+              "text": "s + o = so",
+              "audio": "25f032a630f37d1c"
+            },
+            {
+              "text": "s + e = se",
+              "audio": "801970f0da7ef8a3"
+            },
+            {
+              "text": "sa",
+              "audio": "4cf6829aa93728e8"
+            },
+            {
+              "text": "si",
+              "audio": "97a62ad21d79c01c"
+            },
+            {
+              "text": "su",
+              "audio": "0a64ce10853f25cb"
+            },
+            {
+              "text": "so",
+              "audio": "a1d9890884c1b4b9"
+            },
+            {
+              "text": "se",
+              "audio": "ad9a67fefa847de8"
+            },
+            {
+              "text": "sé",
+              "audio": "08c2e548dcbb43ee"
+            }
+          ]
+        },
+        {
+          "id": "5-5",
+          "title": "Écoute les syllabes : s",
+          "kind": "listen",
+          "prompt": "Écoute et trouve la syllabe.",
+          "audio": "264ebabbe4d43fa8",
+          "items": [
+            {
+              "text": "sa",
+              "answer": "sa",
+              "options": [
+                "sa",
+                "si",
+                "su",
+                "so"
+              ],
+              "audio": "4cf6829aa93728e8"
+            },
+            {
+              "text": "si",
+              "answer": "si",
+              "options": [
+                "si",
+                "sa",
+                "su",
+                "so"
+              ],
+              "audio": "97a62ad21d79c01c"
+            },
+            {
+              "text": "su",
+              "answer": "su",
+              "options": [
+                "su",
+                "sa",
+                "si",
+                "so"
+              ],
+              "audio": "0a64ce10853f25cb"
+            },
+            {
+              "text": "so",
+              "answer": "so",
+              "options": [
+                "so",
+                "sa",
+                "si",
+                "su"
+              ],
+              "audio": "a1d9890884c1b4b9"
+            },
+            {
+              "text": "se",
+              "answer": "se",
+              "options": [
+                "se",
+                "sa",
+                "si",
+                "su"
+              ],
+              "audio": "ad9a67fefa847de8"
+            },
+            {
+              "text": "sé",
+              "answer": "sé",
+              "options": [
+                "sé",
+                "sa",
+                "si",
+                "su"
+              ],
+              "audio": "08c2e548dcbb43ee"
+            }
+          ]
+        },
+        {
+          "id": "5-6",
+          "title": "Les syllabes mélangées",
+          "kind": "read",
+          "prompt": "Lis, puis écoute si tu veux.",
+          "audio": "691a8f0d3ebaf0bd",
+          "items": [
+            {
+              "text": "la",
+              "audio": "b737ca7ee563ae80"
+            },
+            {
+              "text": "le",
+              "audio": "61098a4bf2a5e216"
+            },
+            {
+              "text": "lu",
+              "audio": "80c0fcbbfa9d03d8"
+            },
+            {
+              "text": "re",
+              "audio": "3ac1ecbd2220c675"
+            },
+            {
+              "text": "ri",
+              "audio": "396a14ab206e2b44"
+            },
+            {
+              "text": "ro",
+              "audio": "7ef9ec0cf2c4faca"
+            },
+            {
+              "text": "li",
+              "audio": "00a9e4255a5b6306"
+            },
+            {
+              "text": "ra",
+              "audio": "37e7702e5ce449c1"
+            },
+            {
+              "text": "ru",
+              "audio": "ed5ad332c1060437"
+            },
+            {
+              "text": "lo",
+              "audio": "9294ab38039f60d2"
+            },
+            {
+              "text": "ré",
+              "audio": "0c1e5965f492f2c4"
+            },
+            {
+              "text": "si",
+              "audio": "97a62ad21d79c01c"
+            },
+            {
+              "text": "so",
+              "audio": "a1d9890884c1b4b9"
+            },
+            {
+              "text": "se",
+              "audio": "ad9a67fefa847de8"
+            }
+          ]
+        },
+        {
+          "id": "5-7",
+          "title": "Les mots avec r",
+          "kind": "read",
+          "prompt": "Lis, puis écoute si tu veux.",
+          "audio": "691a8f0d3ebaf0bd",
+          "items": [
+            {
+              "text": "la rue",
+              "audio": "77745af55bd66e09"
+            },
+            {
+              "text": "la ruelle",
+              "audio": "3b93de38f561106f"
+            },
+            {
+              "text": "l’orée",
+              "audio": "b7f0f85d78e8ea99"
+            },
+            {
+              "text": "l’or",
+              "audio": "0febadf788d4d9ea"
+            },
+            {
+              "text": "le rat",
+              "audio": "06c4a12f84972402"
+            },
+            {
+              "text": "rare",
+              "audio": "50270c12c086cb36"
+            },
+            {
+              "text": "le rire",
+              "audio": "513b366c39987d4d"
+            },
+            {
+              "text": "le riz",
+              "audio": "bd0e40ff051e7086"
+            }
+          ]
+        },
+        {
+          "id": "5-8",
+          "title": "Les mots avec s",
+          "kind": "read",
+          "prompt": "Lis, puis écoute si tu veux.",
+          "audio": "691a8f0d3ebaf0bd",
+          "items": [
+            {
+              "text": "la salle",
+              "audio": "d8f4a58d2cbc2104"
+            },
+            {
+              "text": "la rose",
+              "audio": "2dc75155dd4b6b74"
+            },
+            {
+              "text": "rose",
+              "audio": "618d663af0f1ec88"
+            },
+            {
+              "text": "le sel",
+              "audio": "8f86184079971ebd"
+            },
+            {
+              "text": "l’os",
+              "audio": "dc3307eeee40ca43"
+            },
+            {
+              "text": "lisse",
+              "audio": "28bd765e6a316e92"
+            },
+            {
+              "text": "le sol",
+              "audio": "bfcf291981197847"
+            },
+            {
+              "text": "la serrure",
+              "audio": "a98118130d1dc355"
+            }
+          ]
+        },
+        {
+          "id": "5-9",
+          "title": "Les phrases avec r",
+          "kind": "read",
+          "prompt": "Lis, puis écoute si tu veux.",
+          "audio": "691a8f0d3ebaf0bd",
+          "items": [
+            {
+              "text": "Il lira.",
+              "audio": "e23e63d6433a3529"
+            },
+            {
+              "text": "Elle relie.",
+              "audio": "7507cc7c83450622"
+            },
+            {
+              "text": "Il a ri.",
+              "audio": "f5873bb15743cb8e"
+            },
+            {
+              "text": "Elle ira.",
+              "audio": "eeb1b9ce11880247"
+            },
+            {
+              "text": "Elle a ri.",
+              "audio": "21b30ec0b1f1f0f8"
+            },
+            {
+              "text": "Elle a lu la recette du serpent magique.",
+              "audio": "212bd1d369a913b8"
+            },
+            {
+              "text": "La rue relie la forêt à l’école.",
+              "audio": "ab1663158c74d6a7"
+            }
+          ]
+        },
+        {
+          "id": "5-10",
+          "title": "Les phrases avec s",
+          "kind": "read",
+          "prompt": "Lis, puis écoute si tu veux.",
+          "audio": "691a8f0d3ebaf0bd",
+          "items": [
+            {
+              "text": "Elle ose.",
+              "audio": "210abfe12be94de0"
+            },
+            {
+              "text": "Elle a sali.",
+              "audio": "754c6c0f9e0f295d"
+            },
+            {
+              "text": "Il a usé.",
+              "audio": "c861f83dc8b07a3b"
+            },
+            {
+              "text": "Il se rase.",
+              "audio": "41d7964774eb9ea6"
+            }
+          ]
+        },
+        {
+          "id": "5-11",
+          "title": "La route",
+          "kind": "sentence",
+          "prompt": "Quelle phrase correspond au dessin ?",
+          "audio": "b353df3fc0e55e8e",
+          "items": [
+            {
+              "scene": "road",
+              "options": [
+                "Elle a ri.",
+                "Elle a lu la recette du serpent magique.",
+                "La rue relie la forêt à l’école."
+              ],
+              "answer": "La rue relie la forêt à l’école.",
+              "text": "",
+              "audio": "b353df3fc0e55e8e",
+              "optionAudio": [
+                "21b30ec0b1f1f0f8",
+                "212bd1d369a913b8",
+                "ab1663158c74d6a7"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "5-12",
+          "title": "La bonne phrase",
+          "kind": "sentence",
+          "prompt": "Quelle phrase correspond au dessin ?",
+          "audio": "b353df3fc0e55e8e",
+          "items": [
+            {
+              "scene": "shave",
+              "options": [
+                "Elle ose.",
+                "Elle a sali.",
+                "Il a usé.",
+                "Il se rase."
+              ],
+              "answer": "Il se rase.",
+              "text": "",
+              "audio": "b353df3fc0e55e8e",
+              "optionAudio": [
+                "210abfe12be94de0",
+                "754c6c0f9e0f295d",
+                "c861f83dc8b07a3b",
+                "41d7964774eb9ea6"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "5-13",
+          "title": "Les ingrédients",
+          "kind": "read",
+          "prompt": "Lis, puis écoute si tu veux.",
+          "audio": "691a8f0d3ebaf0bd",
+          "items": [
+            {
+              "text": "Un potiron de deux kilos.",
+              "audio": "73795435c3e9cf23"
+            },
+            {
+              "text": "Cinq cubes de bouillon.",
+              "audio": "c4056f1a832212c8"
+            },
+            {
+              "text": "Quatre oignons.",
+              "audio": "cc51c93cb17c201e"
+            },
+            {
+              "text": "Du beurre.",
+              "audio": "c1ae288161d7a95b"
+            },
+            {
+              "text": "Du sel.",
+              "audio": "f93a7ae8e60d8ec8"
+            }
+          ]
+        },
+        {
+          "id": "5-14",
+          "title": "La recette",
+          "kind": "read",
+          "prompt": "Lis, puis écoute si tu veux.",
+          "audio": "691a8f0d3ebaf0bd",
+          "items": [
+            {
+              "text": "Enlève la peau et les pépins du potiron.",
+              "audio": "e6117d21a2ac6977"
+            },
+            {
+              "text": "Découpe le potiron en morceaux.",
+              "audio": "01ff706ea9748b2b"
+            },
+            {
+              "text": "Fais fondre le beurre et les oignons dans une casserole.",
+              "audio": "81ca6d8ce017f2f9"
+            },
+            {
+              "text": "Ajoute dans la casserole les morceaux de potiron, de l’eau, du sel et les cubes de bouillon.",
+              "audio": "69a34c7171a6e4e8"
+            },
+            {
+              "text": "Laisse cuire quinze minutes.",
+              "audio": "812947c1b4efc299"
+            },
+            {
+              "text": "Passe la soupe au mixeur.",
+              "audio": "d091cdd424981f6e"
+            },
+            {
+              "text": "Bon appétit !",
+              "audio": "2d26c47fd1e96a34"
+            }
+          ]
+        },
+        {
+          "id": "5-0-images",
+          "title": "Lis et trouve l’image",
+          "kind": "images",
+          "prompt": "Lis le mot et trouve son image.",
+          "audio": "86592b4f6d6c7f42",
+          "items": [
+            {
+              "text": "recette",
+              "picture": "recette.webp",
+              "options": [
+                "recette",
+                "serpent",
+                "soupe",
+                "eau"
+              ],
+              "answer": "recette",
+              "audio": "809ab6881c409fe7",
+              "optionPictures": [
+                "recette.webp",
+                "serpent.webp",
+                "soupe.webp",
+                "eau.webp"
+              ]
+            },
+            {
+              "text": "serpent",
+              "picture": "serpent.webp",
+              "options": [
+                "serpent",
+                "recette",
+                "soupe",
+                "eau"
+              ],
+              "answer": "serpent",
+              "audio": "b6ef5d1ff0d73da9",
+              "optionPictures": [
+                "serpent.webp",
+                "recette.webp",
+                "soupe.webp",
+                "eau.webp"
+              ]
+            },
+            {
+              "text": "soupe",
+              "picture": "soupe.webp",
+              "options": [
+                "soupe",
+                "recette",
+                "serpent",
+                "eau"
+              ],
+              "answer": "soupe",
+              "audio": "dca7572e4ffd7789",
+              "optionPictures": [
+                "soupe.webp",
+                "recette.webp",
+                "serpent.webp",
+                "eau.webp"
+              ]
+            },
+            {
+              "text": "eau",
+              "picture": "eau.webp",
+              "options": [
+                "eau",
+                "recette",
+                "serpent",
+                "soupe"
+              ],
+              "answer": "eau",
+              "audio": "c9b12f5e43ffbe57",
+              "optionPictures": [
+                "eau.webp",
+                "recette.webp",
+                "serpent.webp",
+                "soupe.webp"
+              ]
+            },
+            {
+              "text": "casserole",
+              "picture": "casserole.webp",
+              "options": [
+                "casserole",
+                "recette",
+                "serpent",
+                "soupe"
+              ],
+              "answer": "casserole",
+              "audio": "5dab1dae0a4a97ee",
+              "optionPictures": [
+                "casserole.webp",
+                "recette.webp",
+                "serpent.webp",
+                "soupe.webp"
+              ]
+            },
+            {
+              "text": "minute",
+              "picture": "minute.webp",
+              "options": [
+                "minute",
+                "recette",
+                "serpent",
+                "soupe"
+              ],
+              "answer": "minute",
+              "audio": "28cdd20eaf134a05",
+              "optionPictures": [
+                "minute.webp",
+                "recette.webp",
+                "serpent.webp",
+                "soupe.webp"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "5-letter-r",
+          "title": "La lettre r",
+          "kind": "letter",
+          "prompt": "Retrouve la même lettre.",
+          "audio": "945119b664bd3942",
+          "items": [
+            {
+              "text": "r",
+              "answer": "r",
+              "options": [
+                "r",
+                "i",
+                "u",
+                "a"
+              ],
+              "audio": "3f26531965e03dcf",
+              "form": 0
+            },
+            {
+              "text": "r",
+              "answer": "r",
+              "options": [
+                "r",
+                "i",
+                "u",
+                "a"
+              ],
+              "audio": "3f26531965e03dcf",
+              "form": 1
+            },
+            {
+              "text": "r",
+              "answer": "r",
+              "options": [
+                "r",
+                "i",
+                "u",
+                "a"
+              ],
+              "audio": "3f26531965e03dcf",
+              "form": 2
+            },
+            {
+              "text": "r",
+              "answer": "r",
+              "options": [
+                "r",
+                "i",
+                "u",
+                "a"
+              ],
+              "audio": "3f26531965e03dcf",
+              "form": 3
+            }
+          ]
+        },
+        {
+          "id": "5-letter-s",
+          "title": "La lettre s",
+          "kind": "letter",
+          "prompt": "Retrouve la même lettre.",
+          "audio": "945119b664bd3942",
+          "items": [
+            {
+              "text": "s",
+              "answer": "s",
+              "options": [
+                "s",
+                "i",
+                "u",
+                "a"
+              ],
+              "audio": "f7015dbdb27bfe8f",
+              "form": 0
+            },
+            {
+              "text": "s",
+              "answer": "s",
+              "options": [
+                "s",
+                "i",
+                "u",
+                "a"
+              ],
+              "audio": "f7015dbdb27bfe8f",
+              "form": 1
+            },
+            {
+              "text": "s",
+              "answer": "s",
+              "options": [
+                "s",
+                "i",
+                "u",
+                "a"
+              ],
+              "audio": "f7015dbdb27bfe8f",
+              "form": 2
+            },
+            {
+              "text": "s",
+              "answer": "s",
+              "options": [
+                "s",
+                "i",
+                "u",
+                "a"
+              ],
+              "audio": "f7015dbdb27bfe8f",
+              "form": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "audio": {
+    "f0f772e182a4941e": "école",
+    "622ffabe5404fa13": "cartable",
+    "6105d6cc76af4003": "image",
+    "2a72902dab689810": "plumier",
+    "d2595ff5bd12a31b": "Trouve le mot qui va avec l’image.",
+    "3aeb96060c86484d": "Retrouve le même mot en écriture attachée.",
+    "ff80029818dff4c8": "Retrouve la lettre i",
+    "945119b664bd3942": "Retrouve la même lettre.",
+    "df7f2e2e21036bc2": "Trouve tous les mots avec la lettre i",
+    "c3f95daf1627087e": "Trouve tous les mots avec cette lettre.",
+    "3926882fe34d00d1": "C’est la rentrée des classes.",
+    "8cf669715f115c31": "Sacha va à l’école.",
+    "3ff57db02cea4626": "Il a un cartable et un plumier.",
+    "9da72bf74b580aac": "Sur son cartable, Sacha a collé une image d’un chien.",
+    "691a8f0d3ebaf0bd": "Lis, puis écoute si tu veux.",
+    "d8b1858e24ae6176": "crayon",
+    "1b4c9133da73a711": "orange",
+    "e71e95abead2e4a8": "ciseaux",
+    "e8278c764a473513": "usine",
+    "d5efe2ab2b95dd70": "colle",
+    "1fcf6e103866824c": "Retrouve la lettre o",
+    "6a2b548eeee792d8": "Trouve tous les mots avec la lettre o",
+    "ac545808d0baeafa": "Retrouve la lettre u",
+    "f3d30c470aa4b5a8": "Trouve tous les mots avec la lettre u",
+    "26dcc255a65ddb63": "classe",
+    "ff200def7f979d4c": "Un plumier, c’est très utile !",
+    "dba7fb2cda19555e": "Il y a un crayon d’écriture et un taille-crayon.",
+    "ff634babb3f9b7b0": "Il y a des ciseaux et un tube de colle.",
+    "42266d665f82e1ea": "Il y a aussi des crayons de couleur.",
+    "e00c9c76cba9a1b5": "Zut ! J’ai perdu mon crayon orange !",
+    "768ec2a4c0a202f3": "Je ne sais pas colorier mon usine !",
+    "7fe8ae065f19e174": "automne",
+    "7e9de0794872a859": "renard",
+    "5b81c7c3bb698fbf": "arbre",
+    "71c78baeca5a894a": "tête",
+    "fb9563a52a478bd5": "marron",
+    "404ef6b73be77ec4": "forêt",
+    "1897ac890f94ed41": "écharpe",
+    "11832fb68d1939d2": "Retrouve la lettre a",
+    "02ac4dc38b12a2c6": "Trouve tous les mots avec la lettre a",
+    "33d819b2e724cbb6": "Retrouve la lettre e",
+    "430be81705f58393": "Trouve tous les mots avec la lettre e",
+    "94702ddb34c3daa4": "Retrouve la lettre é",
+    "24ff3d5b8a3d097f": "Trouve tous les mots avec la lettre é",
+    "0e93402e52e6dc75": "C’est l’automne.",
+    "19ca99d8d324cb12": "Un renard se balade dans la forêt.",
+    "97760ff44adf1efa": "Il s’arrête près d’un arbre.",
+    "9bc6befb777c6bbc": "Il renifle une feuille orange.",
+    "3593250fd9e9ba35": "TOC ! Un marron tombe sur la tête du renard.",
+    "ddf613e182f8c5a3": "sorcière",
+    "5c7f259c35a05f39": "lune",
+    "c8f071fcb45fc339": "livre",
+    "987c1f00a348db0f": "magie",
+    "a28446cb08a87f66": "formule",
+    "3abad6bae7e2c881": "potiron",
+    "95c4dc0fa25af32a": "Retrouve la lettre è",
+    "201ad432da56d586": "Trouve tous les mots avec la lettre è",
+    "1bcd9cc8d34c0be8": "Retrouve la lettre ê",
+    "f4d49258d2c5cfd9": "Trouve tous les mots avec la lettre ê",
+    "c9e4ff24de543828": "l + a = la",
+    "cdc3152df40c7123": "l + i = li",
+    "796bacad8037f389": "l + u = lu",
+    "3d411b9b89a97e88": "l + o = lo",
+    "f8d383f11ba905ff": "l + e = le",
+    "b737ca7ee563ae80": "la",
+    "00a9e4255a5b6306": "li",
+    "80c0fcbbfa9d03d8": "lu",
+    "9294ab38039f60d2": "lo",
+    "61098a4bf2a5e216": "le",
+    "9337093d1debba45": "lé",
+    "264ebabbe4d43fa8": "Écoute et trouve la syllabe.",
+    "18ae79fac1952555": "elle",
+    "a0fb903525dc10dc": "il",
+    "0ffb02665035bfe5": "Lola",
+    "862ef3927a7c8acf": "Ali",
+    "8a7166f2d8906e13": "Léa",
+    "2ad6be3141bdc6b0": "Lulu",
+    "d0b6e705c11c35cd": "Léo",
+    "d7d0cdb05221d8b4": "Lili",
+    "7362967ee5afb470": "Oli",
+    "a9b666df39b6c3e1": "Ulla",
+    "7219580ccd2e95d6": "Choisis le ou la.",
+    "b353df3fc0e55e8e": "Quelle phrase correspond au dessin ?",
+    "af8c45c46d4a51f5": "Sacha a lu le livre.",
+    "28a3f81e3c479dc1": "Léo a un plumier.",
+    "6ce4cec61d0f8eec": "Lola lit la formule.",
+    "e4024165aa241bf6": "Oli a un cartable orange.",
+    "4c2991a21bc948ae": "Ce soir, c’est la pleine lune.",
+    "c864a0a7153815be": "Les enfants vont chez Aglaé.",
+    "9d6c8ab90ed328bc": "Que fais-tu, Aglaé ?",
+    "99e3bb699b89e76e": "Je prends mon livre de magie.",
+    "2587a559fb9583bf": "Je recherche une formule magique pour faire apparaître un potiron.",
+    "77d30bec949b8e88": "Abracadabra !",
+    "2a8e2da13ceea9ae": "Je découpe des yeux et une bouche dans le potiron.",
+    "73cf58d0dacec56c": "Hi ! Hi ! Hi !",
+    "809ab6881c409fe7": "recette",
+    "b6ef5d1ff0d73da9": "serpent",
+    "dca7572e4ffd7789": "soupe",
+    "c9b12f5e43ffbe57": "eau",
+    "5dab1dae0a4a97ee": "casserole",
+    "28cdd20eaf134a05": "minute",
+    "8491c526ccb804a7": "r + a = ra",
+    "1d683e3e44e3e061": "r + i = ri",
+    "43859462eceda7f6": "r + u = ru",
+    "29fd87ebf1d9aa7d": "r + o = ro",
+    "2750e044bebff4a7": "r + e = re",
+    "37e7702e5ce449c1": "ra",
+    "396a14ab206e2b44": "ri",
+    "ed5ad332c1060437": "ru",
+    "7ef9ec0cf2c4faca": "ro",
+    "3ac1ecbd2220c675": "re",
+    "0c1e5965f492f2c4": "ré",
+    "6a97df994f107909": "s + a = sa",
+    "f86788d8e744cbf9": "s + i = si",
+    "c0cba3d963453e14": "s + u = su",
+    "40cce52d6fc313a6": "s + o = so",
+    "1e91b5b297dc3076": "s + e = se",
+    "4cf6829aa93728e8": "sa",
+    "97a62ad21d79c01c": "si",
+    "0a64ce10853f25cb": "su",
+    "a1d9890884c1b4b9": "so",
+    "ad9a67fefa847de8": "se",
+    "08c2e548dcbb43ee": "sé",
+    "77745af55bd66e09": "la rue",
+    "3b93de38f561106f": "la ruelle",
+    "b7f0f85d78e8ea99": "l’orée",
+    "0febadf788d4d9ea": "l’or",
+    "06c4a12f84972402": "le rat",
+    "50270c12c086cb36": "rare",
+    "513b366c39987d4d": "le rire",
+    "bd0e40ff051e7086": "le riz",
+    "d8f4a58d2cbc2104": "la salle",
+    "2dc75155dd4b6b74": "la rose",
+    "618d663af0f1ec88": "rose",
+    "8f86184079971ebd": "le sel",
+    "dc3307eeee40ca43": "l’os",
+    "28bd765e6a316e92": "lisse",
+    "bfcf291981197847": "le sol",
+    "a98118130d1dc355": "la serrure",
+    "e23e63d6433a3529": "Il lira.",
+    "7507cc7c83450622": "Elle relie.",
+    "f5873bb15743cb8e": "Il a ri.",
+    "eeb1b9ce11880247": "Elle ira.",
+    "21b30ec0b1f1f0f8": "Elle a ri.",
+    "212bd1d369a913b8": "Elle a lu la recette du serpent magique.",
+    "ab1663158c74d6a7": "La rue relie la forêt à l’école.",
+    "210abfe12be94de0": "Elle ose.",
+    "754c6c0f9e0f295d": "Elle a sali.",
+    "c861f83dc8b07a3b": "Il a usé.",
+    "41d7964774eb9ea6": "Il se rase.",
+    "73795435c3e9cf23": "Un potiron de deux kilos.",
+    "c4056f1a832212c8": "Cinq cubes de bouillon.",
+    "cc51c93cb17c201e": "Quatre oignons.",
+    "c1ae288161d7a95b": "Du beurre.",
+    "f93a7ae8e60d8ec8": "Du sel.",
+    "e6117d21a2ac6977": "Enlève la peau et les pépins du potiron.",
+    "01ff706ea9748b2b": "Découpe le potiron en morceaux.",
+    "81ca6d8ce017f2f9": "Fais fondre le beurre et les oignons dans une casserole.",
+    "69a34c7171a6e4e8": "Ajoute dans la casserole les morceaux de potiron, de l’eau, du sel et les cubes de bouillon.",
+    "812947c1b4efc299": "Laisse cuire quinze minutes.",
+    "d091cdd424981f6e": "Passe la soupe au mixeur.",
+    "2d26c47fd1e96a34": "Bon appétit !",
+    "ea89aaddcaa3d175": "l avec a, cela fait la",
+    "352ca55e38cec3b1": "l avec i, cela fait li",
+    "f45817657cc0abe9": "l avec u, cela fait lu",
+    "cc6717aaefad7f65": "l avec o, cela fait lo",
+    "5aee2aa31c19d480": "l avec e, cela fait le",
+    "fcc485210fea3e2f": "Lola a lu le livre de Sacha.",
+    "03a0953b319aaf93": "La sorcière lit la formule.",
+    "bc7a3e3d88fbd181": "Ali a le crayon de Léa.",
+    "79b966729aaaac8a": "r avec a, cela fait ra",
+    "ac9b7fc6e1fc2097": "r avec i, cela fait ri",
+    "8dc1bd7aed0ff320": "r avec u, cela fait ru",
+    "a237af839a3b66c5": "r avec o, cela fait ro",
+    "5008a0b60e7a2d70": "r avec e, cela fait re",
+    "71e4e33d1f0d5ba4": "s avec a, cela fait sa",
+    "19ba46051887664d": "s avec i, cela fait si",
+    "0d903d9bb42a3d7d": "s avec u, cela fait su",
+    "25f032a630f37d1c": "s avec o, cela fait so",
+    "801970f0da7ef8a3": "s avec e, cela fait se",
+    "8f00c7e3d29ac92b": "Essaie encore.",
+    "0da3c6137b821fb3": "Bravo Lola !",
+    "036e7eec2809daae": "Choisis une leçon.",
+    "4100cc7683214053": "Écoute, lis et joue. Tu peux réécouter avec le haut-parleur.",
+    "86592b4f6d6c7f42": "Lis le mot et trouve son image.",
+    "13e56ace35043e30": "Retrouve la lettre l",
+    "3f26531965e03dcf": "Retrouve la lettre r",
+    "f7015dbdb27bfe8f": "Retrouve la lettre s"
+  }
+}

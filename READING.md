@@ -39,3 +39,14 @@ Illustrations originales générées pour le jeu : entrée féerique, cartable o
 ## Vérification
 
 Lint et build TypeScript/Vite. Parcours Chromium et WebKit : démarrage avec audio décodé/joué, cartable déplacé, erreur sans progression, vingt-huit paires image/mot, police chargée, clic/toucher/clavier, nouvelle partie et sortie. Vérification visuelle à 1440×900, 768×1024, 390×844, 320×568 et 844×390. Contrôle de non-régression des dix pages et narrations de l'histoire. Les navigateurs simulés ne remplacent pas une validation sur iPad physique.
+
+
+## Cahier complet — 21 septembre 2026
+
+L’entrée « Le cartable magique » ouvre désormais « Mes lectures », avec le cartable existant et « Tous les exercices ». Les cinq leçons du manuel sont regroupées en 62 activités, soit 341 étapes : lexique image → mot et mot → image, correspondance imprimerie/cursive, lettres i/o/u/a/e/é/è/ê/l/r/s dans leurs quatre formes, recherche de lettres dans les mots, syllabes l/r/s et mélangées, prénoms, le/la, mots et phrases à lire, phrases associées à trois scènes, cinq lectures dont ingrédients et recette.
+
+Les séries répétitives du manuel sont regroupées, sans reproduire chaque répétition typographique. Les recherches portent sur la lettre exacte du nom sans son article : é, è et ê ne sont pas confondus avec e. Orange reste une couleur. Les textes fournis par l’utilisateur sont conservés dans `app/readingExercises.json`, les photos restent privées. Les scènes sont des compositions originales à partir des ressources existantes et un dessin vectoriel d’un homme qui se rase.
+
+Les exercices à choix valident les réponses et permettent de réessayer sans pénalité. Une étoile et une progression locale sont enregistrées par activité (`lola:workbook:completed`). Les lectures avancent librement : aucun microphone ni prétendue évaluation de prononciation. En mode silencieux ou si le son échoue, la syllabe à retrouver est visible. Toutes les cartes textuelles sont en imprimerie et Borel ; la correspondance des écritures sépare volontairement le modèle imprimé et les choix cursifs.
+
+188 enregistrements français immuables sous `public/assets/exercises/audio`, identifiés par le hash du texte. Génération : `python scripts/generate-exercises-audio.py` avec Denise, −8 %, hauteur naturelle et normalisation −20 LUFS. Ne pas modifier un texte sans recalculer son identifiant audio et régénérer le fichier. Les commandes de volume/arrêt communes restent actives.
