@@ -1,3 +1,4 @@
+import { setEducationVisible } from './educationScore';
 import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { ChevronLeft, Crown, Dog, Gamepad2, Map, Moon, Palette, Pause, Rabbit, Search, Sparkles, TrafficCone, Volume2, VolumeX } from 'lucide-react';
 import { TrafficLightGame } from './TrafficLightGame';
@@ -23,6 +24,7 @@ type GameScreen = 'home' | 'traffic' | 'maze-menu' | 'maze' | 'coloring' | 'ecla
 
 export default function Home() {
   const [screen, setScreen] = useState<GameScreen>('home');
+  useEffect(() => setEducationVisible(['home','math','letters','reading'].includes(screen)), [screen]);
   const [entered, setEntered] = useState(false);
   const [motionPaused, setMotionPaused] = useState(() => readSaved<boolean>('home-motion-paused', false) === true);
   useEffect(() => saveValue('home-motion-paused', motionPaused), [motionPaused]);

@@ -1,3 +1,4 @@
+import { recordEducationAnswer } from './educationScore';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, BookOpen, Check, ChevronLeft, Lightbulb, Pencil, RotateCcw, Volume2 } from 'lucide-react';
 import { TracePad } from './TracePad';
@@ -90,6 +91,7 @@ function LetterRound({ mode, level, onWin, onNext }: { mode: Mode; level: number
   const success = () => {
     if (winRecorded.current) return;
     winRecorded.current = true;
+    recordEducationAnswer(true);
     setWon(true);
     setMessage(mode === 'write' ? `Bravo Lola ! Tu as tracé tout le mot ${word.text.toLowerCase()} !` : 'Bravo Lola ! Tu as trouvé le mot !');
     onWin();
@@ -112,6 +114,7 @@ function LetterRound({ mode, level, onWin, onNext }: { mode: Mode; level: number
   const pick = (id: number, letter: string) => {
     if (won || lost || picked.includes(id)) return;
     if (letter !== word.text[picked.length]) {
+      recordEducationAnswer(false);
       stopRecording();
       playSfx(errors === 2 ? 'letter-lost' : 'letter-wrong');
       setErrors(errors + 1);
@@ -146,7 +149,7 @@ function LetterRound({ mode, level, onWin, onNext }: { mode: Mode; level: number
           {lost && <button className="letters-next" onClick={() => { setErrors(0); setPicked([]); setMessage('Nouvel essai !'); playSfx('select'); }}>Réessayer ce mot <RotateCcw /></button>}
           {hint && <p className="letters-model">{word.text} <span>{word.text.toLowerCase()}</span></p>}
         </>}
-        {mode === 'read' && <div className="letters-choices">{choices.map(choice => <button key={choice.text} disabled={won} className={won && choice === word ? 'is-correct' : ''} onClick={() => { stopRecording(); playSfx(choice === word ? 'win' : 'letter-wrong'); if (choice === word) success(); else setMessage('Pas encore. Écoute le mot et essaie à nouveau.'); }}>{choice.text.toLowerCase()}</button>)}</div>}
+        {mode === 'read' && <div className="letters-choices">{choices.map(choice => <button key={choice.text} disabled={won} className={won && choice === word ? 'is-correct' : ''} onClick={() => { stopRecording(); playSfx(choice === word ? 'win' : 'letter-wrong'); if (choice === word) success(); else { recordEducationAnswer(false); setMessage('Pas encore. Écoute le mot et essaie à nouveau.'); } }}>{choice.text.toLowerCase()}</button>)}</div>}
         {mode === 'write' && <>
           <ol className="letters-trace-picker" aria-label="Les lettres du mot">{word.text.split('').map((letter, index) => <li key={index} className={completedLetters.includes(index) ? 'is-complete' : ''} aria-current={traceLetter === index ? 'step' : undefined} aria-label={`Lettre ${index + 1} : ${letter}${completedLetters.includes(index) ? ', réussie' : traceLetter === index ? ', à tracer' : ', à venir'}`}><span>{letter}</span>{completedLetters.includes(index) && <Check aria-hidden="true" />}</li>)}</ol>
           <p className="letters-trace-progress">{won ? 'Toutes les lettres sont réussies !' : `Lettre ${traceLetter + 1} sur ${word.text.length} · Suis le modèle avec ton doigt.`}</p>

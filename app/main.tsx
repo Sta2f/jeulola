@@ -19,6 +19,7 @@ import './construction.css';
 import './reading.css';
 import './schoolbag.css';
 import './exercises.css';
+import './education.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { recordEducationAnswer } from './educationScore';
+import { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, Volume2 } from 'lucide-react';
 import { readSaved, saveValue } from './preferences';
 import { useGameAudio } from './useGameAudio';
@@ -38,6 +39,7 @@ function MathRound({ level, mode, onWin, onNext }: { level: number; mode: Mode; 
   const [q] = useState(() => question(level, mode));
   const [errors, setErrors] = useState(0);
   const [won, setWon] = useState(false);
+  const answered = useRef(false);
   const [message, setMessage] = useState('Choisis le bon nombre. Tu as 3 chances !');
   const { playSfx } = useGameAudio('traffic', false);
   const { playRecording, stopRecording } = useRecordedAudio();
@@ -48,10 +50,10 @@ function MathRound({ level, mode, onWin, onNext }: { level: number; mode: Mode; 
     void playRecording(questionAudio);
   };
   const choose = (value: number) => {
-    if (lost || won) return;
+    if (lost || won || answered.current) return;
     stopRecording();
-    if (value === q.answer) { setWon(true); setMessage('Bravo Lola ! Une étoile pour ton jardin !'); playSfx('win'); void playRecording('/assets/audio/voices/math-bravo.mp3'); onWin(); }
-    else { setErrors(errors + 1); playSfx(errors === 2 ? 'lost' : 'wrong'); setMessage(errors === 2 ? 'Les 3 chances sont utilisées. Compte les fleurs puis réessaie !' : 'Pas tout à fait. Compte doucement les fleurs !'); }
+    if (value === q.answer) { answered.current = true; recordEducationAnswer(true); setWon(true); setMessage('Bravo Lola ! Une étoile pour ton jardin !'); playSfx('win'); void playRecording('/assets/audio/voices/math-bravo.mp3'); onWin(); }
+    else { recordEducationAnswer(false); setErrors(errors + 1); playSfx(errors === 2 ? 'lost' : 'wrong'); setMessage(errors === 2 ? 'Les 3 chances sont utilisées. Compte les fleurs puis réessaie !' : 'Pas tout à fait. Compte doucement les fleurs !'); }
   };
   return <section className={`math-card ${won ? 'math-won' : ''}`} aria-label="Le calcul à résoudre">
     <div className="math-round-top"><span aria-live="polite">{3 - errors} chances restantes</span><span aria-hidden="true">{won ? '✨ 🌟 ✨' : '🧚 🌷 🦋'}</span></div>

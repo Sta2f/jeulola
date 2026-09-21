@@ -1,3 +1,4 @@
+import { recordEducationAnswer } from './educationScore';
 /* oxlint-disable next/no-img-element, jsx-a11y/prefer-tag-over-role -- Local images and composed illustrations with accessible descriptions. */
 import { useState } from 'react';
 import { ArrowLeft, Volume2, Check, ChevronRight, RotateCcw } from 'lucide-react';
@@ -41,10 +42,10 @@ export function ReadingGame({ onBack }: { onBack: () => void }) {
  const choose=(value:string)=>{
   if(!activity||!item||done)return;
   const correct=activity.kind==='find'?item.answers?.includes(value):item.answer===value;
-  if(!correct){setWrong(value);speak(audioFor('Essaie encore.'));return;}
+  if(!correct){recordEducationAnswer(false);setWrong(value);speak(audioFor('Essaie encore.'));return;}
   setWrong('');
   const next=[...new Set([...selected,value])];setSelected(next);
-  if(activity.kind!=='find'||next.length===item.answers?.length){setDone(true);speak(audioFor('Bravo Lola !'));}
+  if(activity.kind!=='find'||next.length===item.answers?.length){recordEducationAnswer(true);setDone(true);speak(audioFor('Bravo Lola !'));}
  };
  const next=()=>{
   stopRecording();

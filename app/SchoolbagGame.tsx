@@ -1,3 +1,4 @@
+import { recordEducationAnswer } from './educationScore';
 /* oxlint-disable next/no-img-element -- Local optimized game sprites in a Vite app. */
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react';
 import { ArrowLeft, HelpCircle, Play, RotateCcw, Star, Volume2 } from 'lucide-react';
@@ -83,6 +84,7 @@ export function SchoolbagGame({ onBack }: { onBack: () => void }) {
     if (!started || lock.current || phase === 'done' || !target.current) return;
     const correct = phase === 'door' ? card.kind === 'bag' : card.kind === phase && card.id === current.id;
     setSelected(null); setDragging(null); press.current = null;
+    if (phase !== 'door') recordEducationAnswer(correct);
     if (!correct) {
       setWrong(card.id); speak('retry');
       later(() => setWrong(''), 600);
