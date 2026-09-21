@@ -6,11 +6,15 @@ Après « Jouer », une explication enregistrée accompagne le début du jeu. Lo
 
 ## Suite du 21 septembre 2026
 
-Les cinq mots du lexique « Le crayon orange » sont ajoutés : **crayon, orange, ciseaux, usine, colle**. Orange désigne la couleur, représentée par un disque uni comme dans le livre. Les quatre premiers mots restent disponibles : la partie comporte seize paires image/mot. Quatre choix au maximum par étape, cible toujours présente. Un compteur compact remplace la rangée d'étoiles pour rester lisible sur téléphone. Dix nouvelles consignes enregistrées avec les mêmes paramètres français. Les exercices de repérage des lettres i, o et u des photos ne sont pas ajoutés à cette activité de mots.
+Les cinq mots du lexique « Le crayon orange » sont ajoutés : **crayon, orange, ciseaux, usine, colle**. Orange désigne la couleur, représentée par un disque uni comme dans le livre. Les quatre premiers mots restent disponibles : la partie comporte vingt-deux paires image/mot. Quatre choix au maximum par étape, cible toujours présente. Un compteur compact remplace la rangée d'étoiles pour rester lisible sur téléphone. Dix nouvelles consignes enregistrées avec les mêmes paramètres français. Les exercices de repérage des lettres i, o et u des photos ne sont pas ajoutés à cette activité de mots.
 
 ## Suite de l’automne
 
 Sept mots du lexique et des mots-clés « C’est l’automne » rejoignent la partie : **automne, renard, arbre, tête, marron, forêt, écharpe**. Seize mots au total, toujours quatre choix par étape. Les accents restent présents dans les deux écritures. Les visuels distinguent la saison (feuilles orange qui tombent), un arbre isolé et une forêt verte. Marron désigne le fruit. Quatorze nouvelles consignes françaises ; les anciennes restent intactes. Les photos du manuel restent privées.
+
+## Suite de la sorcière
+
+Six mots du lexique « La sorcière Aglaé » : **sorcière, lune, livre, magie, formule, potiron**. Vingt-deux mots au total. La magie est représentée par une baguette qui lance des étoiles ; la formule par un parchemin « Abracadabra ! ». Le potiron est entier, sans visage découpé. Douze nouvelles consignes françaises et six visuels originaux. Les exercices de repérage de lettres restent hors de cette activité.
 
 ## Ajouter des mots avec Codex
 
@@ -30,4 +34,4 @@ Illustrations originales générées pour le jeu : entrée féerique, cartable o
 
 ## Vérification
 
-Lint et build TypeScript/Vite. Parcours Chromium et WebKit : démarrage avec audio décodé/joué, cartable déplacé, erreur sans progression, seize paires image/mot, police chargée, clic/toucher/clavier, nouvelle partie et sortie. Vérification visuelle à 1440×900, 768×1024, 390×844, 320×568 et 844×390. Contrôle de non-régression des dix pages et narrations de l'histoire. Les navigateurs simulés ne remplacent pas une validation sur iPad physique.
+Lint et build TypeScript/Vite. Parcours Chromium et WebKit : démarrage avec audio décodé/joué, cartable déplacé, erreur sans progression, vingt-deux paires image/mot, police chargée, clic/toucher/clavier, nouvelle partie et sortie. Vérification visuelle à 1440×900, 768×1024, 390×844, 320×568 et 844×390. Contrôle de non-régression des dix pages et narrations de l'histoire. Les navigateurs simulés ne remplacent pas une validation sur iPad physique.

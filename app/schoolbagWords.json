@@ -22,6 +22,12 @@
     { "id": "tete", "text": "tête", "picture": "tete.webp", "imagePrompt": "Mets l’image de la tête dans le cartable.", "wordPrompt": "Maintenant, mets le mot tête dans le cartable." },
     { "id": "marron", "text": "marron", "picture": "marron.webp", "imagePrompt": "Mets l’image du marron dans le cartable.", "wordPrompt": "Maintenant, mets le mot marron dans le cartable." },
     { "id": "foret", "text": "forêt", "picture": "foret.webp", "imagePrompt": "Mets l’image de la forêt dans le cartable.", "wordPrompt": "Maintenant, mets le mot forêt dans le cartable." },
-    { "id": "echarpe", "text": "écharpe", "picture": "echarpe.webp", "imagePrompt": "Mets l’image de l’écharpe dans le cartable.", "wordPrompt": "Maintenant, mets le mot écharpe dans le cartable." }
+    { "id": "echarpe", "text": "écharpe", "picture": "echarpe.webp", "imagePrompt": "Mets l’image de l’écharpe dans le cartable.", "wordPrompt": "Maintenant, mets le mot écharpe dans le cartable." },
+    { "id": "sorciere", "text": "sorcière", "picture": "sorciere.webp", "imagePrompt": "Mets l’image de la sorcière dans le cartable.", "wordPrompt": "Maintenant, mets le mot sorcière dans le cartable." },
+    { "id": "lune", "text": "lune", "picture": "lune.webp", "imagePrompt": "Mets l’image de la lune dans le cartable.", "wordPrompt": "Maintenant, mets le mot lune dans le cartable." },
+    { "id": "livre", "text": "livre", "picture": "livre.webp", "imagePrompt": "Mets l’image du livre dans le cartable.", "wordPrompt": "Maintenant, mets le mot livre dans le cartable." },
+    { "id": "magie", "text": "magie", "picture": "magie.webp", "imagePrompt": "Mets l’image de la magie dans le cartable.", "wordPrompt": "Maintenant, mets le mot magie dans le cartable." },
+    { "id": "formule", "text": "formule", "picture": "formule.webp", "imagePrompt": "Mets l’image de la formule magique dans le cartable.", "wordPrompt": "Maintenant, mets le mot formule dans le cartable." },
+    { "id": "potiron", "text": "potiron", "picture": "potiron.webp", "imagePrompt": "Mets l’image du potiron dans le cartable.", "wordPrompt": "Maintenant, mets le mot potiron dans le cartable." }
   ]
 }
