@@ -10,6 +10,11 @@
     { "id": "plumier", "text": "plumier", "picture": "plumier.webp", "imagePrompt": "Mets l’image du plumier dans le cartable.", "wordPrompt": "Maintenant, mets le mot plumier dans le cartable." },
     { "id": "image", "text": "image", "picture": "image.webp", "imagePrompt": "Mets l’image encadrée dans le cartable.", "wordPrompt": "Maintenant, mets le mot image dans le cartable." },
     { "id": "ecole", "text": "école", "picture": "ecole.webp", "imagePrompt": "Mets l’image de l’école dans le cartable.", "wordPrompt": "Maintenant, mets le mot école dans le cartable." },
-    { "id": "cartable", "text": "cartable", "picture": "bag.webp", "imagePrompt": "Mets l’image du cartable dans le cartable.", "wordPrompt": "Maintenant, mets le mot cartable dans le cartable." }
+    { "id": "cartable", "text": "cartable", "picture": "bag.webp", "imagePrompt": "Mets l’image du cartable dans le cartable.", "wordPrompt": "Maintenant, mets le mot cartable dans le cartable." },
+    { "id": "crayon", "text": "crayon", "picture": "crayon.webp", "imagePrompt": "Mets l’image du crayon dans le cartable.", "wordPrompt": "Maintenant, mets le mot crayon dans le cartable." },
+    { "id": "orange", "text": "orange", "picture": "orange.svg", "imagePrompt": "Mets la couleur orange dans le cartable.", "wordPrompt": "Maintenant, mets le mot orange dans le cartable." },
+    { "id": "ciseaux", "text": "ciseaux", "picture": "ciseaux.webp", "imagePrompt": "Mets l’image des ciseaux dans le cartable.", "wordPrompt": "Maintenant, mets le mot ciseaux dans le cartable." },
+    { "id": "usine", "text": "usine", "picture": "usine.webp", "imagePrompt": "Mets l’image de l’usine dans le cartable.", "wordPrompt": "Maintenant, mets le mot usine dans le cartable." },
+    { "id": "colle", "text": "colle", "picture": "colle.webp", "imagePrompt": "Mets l’image de la colle dans le cartable.", "wordPrompt": "Maintenant, mets le mot colle dans le cartable." }
   ]
 }

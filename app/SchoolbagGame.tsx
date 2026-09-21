@@ -142,13 +142,13 @@ export function SchoolbagGame({ onBack }: { onBack: () => void }) {
     onClick={event => { if (suppressClick.current && event.detail !== 0) return; if (lock.current) return; selectedBox.current = event.currentTarget.getBoundingClientRect(); setSelected(selected?.id === card.id ? null : card); }}
   ><CardFace card={card} /></button>;
 
-  return <main className="schoolbag-game" data-phase={phase} data-target-word={current.id} data-busy={busy} data-hidden={hidden} style={{ '--magic-power': 1 + index * .15 } as CSSProperties}>
+  return <main className="schoolbag-game" data-phase={phase} data-target-word={current.id} data-busy={busy} data-hidden={hidden} style={{ '--magic-power': 1 + .45 * index / Math.max(1, words.words.length - 1) } as CSSProperties}>
     <header className="bag-header"><button aria-label="Les jeux" onClick={() => { stopRecording(); stopAudio(); onBack(); }}><ArrowLeft /></button><h1>Le cartable magique</h1><div><button aria-label="Réécouter les règles" onClick={() => { if (!started) setStarted(true); startAudio(); speak('intro'); }}><HelpCircle /></button><button aria-label="Réécouter la consigne" onClick={() => { if (!started) start(); else speak(instructionKey(phase)); }}><Volume2 /></button></div></header>
     <section className="bag-stage" aria-label="La porte magique">
       <div className="bag-stars" aria-hidden="true">{Array.from({ length: 28 }, (_, i) => <i key={i} style={{ left: `${4 + (i * 31) % 93}%`, top: `${5 + (i * 17) % 83}%`, '--delay': `${-i * .47}s`, '--duration': `${4 + i % 5}s` } as CSSProperties}>✦</i>)}</div>
       <div className="bag-fairy" aria-hidden="true"><HomeEnchantment /></div>
       {started && <div className="bag-command"><span aria-hidden="true">{caption}</span><span className="bag-sr-only" aria-live="polite">{instruction}</span></div>}
-      <div className="bag-progress" aria-label={`${phase === 'done' ? words.words.length : index} mots sur ${words.words.length}`}>{words.words.map((word, i) => <Star key={word.id} className={phase === 'done' || i < index ? 'is-lit' : ''} aria-hidden="true" />)}</div>
+      <div className="bag-progress" aria-label={`${phase === 'done' ? words.words.length : index} mots sur ${words.words.length}`}><Star className={phase === 'done' || index > 0 ? 'is-lit' : ''} aria-hidden="true" /><span aria-hidden="true">{phase === 'done' ? words.words.length : index} / {words.words.length}</span></div>
       <div className="bag-portal" aria-hidden="true"><img src={asset('ecole.webp')} alt="" /></div>
       <img className={`bag-eclair ${busy || phase === 'done' ? 'is-happy' : ''}`} src="/assets/eclair-chihuahua-cutout.webp" alt="Éclair" draggable={false} />
       <button ref={target} className={`bag-drop ${selected || dragging ? 'is-waiting' : ''} ${busy ? 'is-catching' : ''}`} aria-label={phase === 'door' ? 'Devant la porte' : 'Dans le cartable'} disabled={!started || busy || phase === 'done'} onClick={() => { if (selected) finishDrop(selected); }}>

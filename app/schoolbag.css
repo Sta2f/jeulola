@@ -11,7 +11,7 @@
 .bag-stage { position:relative;isolation:isolate;min-height:0;width:100%;max-width:1500px;margin:auto;height:100%;overflow:hidden;border-radius:26px;background:#d8b6db url('/assets/schoolbag/hall.webp') center 78%/cover no-repeat;box-shadow:0 0 0 2px #fff9e4,0 7px 24px #86589b20; }
 .bag-command { position:absolute;z-index:6;left:50%;top:16px;transform:translateX(-50%);max-width:80%;padding:10px 24px;border-radius:30px;background:#fffbf0ed;box-shadow:0 3px 16px #63466430;border:2px solid #f6df92;color:#58365f;font-size:clamp(18px,2.4vw,27px);font-weight:700;white-space:nowrap; }
 .bag-sr-only { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
-.bag-progress { position:absolute;z-index:3;top:20px;right:18px;display:flex;gap:7px;background:#fffbf0db;padding:8px 10px;border-radius:24px; }
+.bag-progress { position:absolute;z-index:3;top:20px;right:18px;display:flex;align-items:center;gap:7px;background:#fffbf0db;padding:8px 10px;border-radius:24px;font-size:16px;font-weight:700;font-variant-numeric:tabular-nums; }
 .bag-progress svg { width:24px;height:24px;stroke:#94728b;fill:#e7dbe8;transition:fill .5s,filter .5s; }.bag-progress .is-lit { fill:#ffd660;stroke:#a57534;filter:drop-shadow(0 0 8px #ffe0a0); }
 .bag-drop { position:absolute;z-index:4;left:55%;bottom:9%;transform:translateX(-50%);width:clamp(155px,26vh,245px);height:clamp(160px,29vh,268px);padding:0;border:0;background:transparent;touch-action:none; }
 [data-phase=door] .bag-drop { bottom:10%;height:110px; }
